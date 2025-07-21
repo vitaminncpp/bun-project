@@ -1,32 +1,22 @@
-import {
-  DataType,
-  Default,
-  PrimaryKey,
-  Model,
-  Column,
-  ForeignKey,
-  BelongsTo,
-  Table,
-} from "sequelize-typescript";
-import { Role } from "./Role.entity";
+import { mysqlTable, varchar, mysqlEnum } from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { roles } from "./Role.entity";
 import { Action } from "../policies/actions.policy";
+import { randomUUID } from "crypto";
 
-@Table({ modelName: "role_actions", timestamps: false })
-export class RoleAction extends Model<RoleAction> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.STRING)
-  id!: string;
+export const roleActions = mysqlTable("role_actions", {
+  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
+  roleId: varchar("roleId", { length: 36 }).notNull(),
+  action: mysqlEnum(
+    "action",
+    Object.values(Action) as [string, ...string[]]
+  ).notNull(),
+  description: varchar("description", { length: 255 }),
+});
 
-  @ForeignKey(() => Role)
-  @Column({ type: DataType.STRING, allowNull: false })
-  roleId!: string;
-
-  @Column({ type: DataType.ENUM(...Object.values(Action)), allowNull: false })
-  action!: string;
-  @Column({ type: DataType.STRING, allowNull: true })
-  description?: string;
-
-  @BelongsTo(() => Role, { foreignKey: "roleId" })
-  role!: Role;
-}
+export const roleActionsRelations = relations(roleActions, ({ one }) => ({
+  role: one(roles, {
+    fields: [roleActions.roleId],
+    references: [roles.id],
+  }),
+}));

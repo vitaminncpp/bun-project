@@ -1,20 +1,16 @@
 import { Hono } from "hono";
 import routes from "./src/routers/router";
 import APIEndpoints from "./src/constants/apiEndpoints";
-import { Server } from "socket.io";
-import { createServer } from "http2";
-import { serve, createAdaptorServer } from "@hono/node-server";
+import { Server, Socket } from "socket.io";
+import { createAdaptorServer } from "@hono/node-server";
 import Constants from "./src/constants/constants";
+import { db } from "./src/database/database.connection";
 
 const app = new Hono();
 app.route(APIEndpoints.API!, routes);
 
 const httpServer = createAdaptorServer(app);
-
-// const bunServer = Bun.serve({
-//   fetch: app.fetch,
-//   port: 4000,
-// });
+let i = 0;
 
 const io = new Server(httpServer, {
   cors: {
@@ -22,7 +18,12 @@ const io = new Server(httpServer, {
   },
 });
 
-io.on(Constants.CONNECTION, () => {
+console.log(process.env);
+
+io.on(Constants.CONNECTION, (socket: Socket) => {
+  setInterval(() => {
+    socket.emit("hello", "Hello from socket " + i++);
+  }, 300);
   console.log("socket.io");
 });
 

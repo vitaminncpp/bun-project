@@ -1,52 +1,24 @@
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  BelongsToMany,
-  DataType,
-  HasMany,
-  Default,
-  HasOne,
-} from "sequelize-typescript";
+import { mysqlTable, varchar, boolean } from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { userRoles } from "./UserRole.entity";
+import { games } from "./Game.entity";
+import { profiles } from "./Profile.entity";
+import { randomUUID } from "crypto";
 
-import { Role } from "./Role.entity";
-import { UserRole } from "./UserRole.entity";
-import { Game } from "./Game.entity";
-import { Profile } from "./Profile.entity";
+export const users = mysqlTable("users", {
+  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
+  username: varchar("username", { length: 255 }).notNull().unique(),
+  name: varchar("name", { length: 255 }).notNull(),
+  password: varchar("password", { length: 255 }).notNull(),
+  isDeleted: boolean("is_deleted").notNull().default(false),
+});
 
-@Table({ modelName: "users" })
-export class User extends Model<User> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.STRING)
-  id!: string;
-
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
-  username!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  name!: string;
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  password!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    defaultValue: false,
-    allowNull: false,
-  })
-  isDeleted!: boolean;
-
-  @BelongsToMany(() => Role, () => UserRole)
-  roles!: Role[];
-
-  @HasMany(() => Game, "playerW")
-  gamesW!: Game[];
-
-  @HasMany(() => Game, "playerB")
-  gamesB!: Game[];
-
-  @HasOne(() => Profile, "userId")
-  profile!: Profile;
-}
+export const usersRelations = relations(users, ({ many, one }) => ({
+  roles: many(userRoles),
+  gamesW: many(games, { relationName: "playerW" }),
+  gamesB: many(games, { relationName: "playerB" }),
+  profile: one(profiles, {
+    fields: [users.id],
+    references: [profiles.userId],
+  }),
+}));

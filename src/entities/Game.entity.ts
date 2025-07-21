@@ -1,68 +1,50 @@
 import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-  Default,
-  HasMany,
-} from "sequelize-typescript";
-import { User as UserEntity } from "./User.entity";
+  mysqlTable,
+  varchar,
+  int,
+  mysqlEnum,
+  datetime,
+} from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { users } from "./User.entity";
+import { moves } from "./Move.entity";
 import { GameResult, GameSatus } from "../lib/chess/games.enum";
-import { Move } from "./Move.entity";
+import { randomUUID } from "crypto";
 
-@Table({ modelName: "games", timestamps: true })
-export class Game extends Model<Game> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.STRING)
-  id!: string;
+export const games = mysqlTable("games", {
+  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
+  playerW: varchar("playerW", { length: 36 }).notNull(),
+  playerB: varchar("playerB", { length: 36 }).notNull(),
+  status: mysqlEnum("status", Object.values(GameSatus) as [string, ...string[]])
+    .notNull()
+    .default(GameSatus.PENDING),
+  result: mysqlEnum(
+    "result",
+    Object.values(GameResult) as [string, ...string[]]
+  )
+    .notNull()
+    .default(GameResult.PENDING),
+  ratingChangeW: int("ratingChangeW").notNull().default(0),
+  ratingChangeB: int("ratingChangeB").notNull().default(0),
+  startedAt: datetime("startedAt", { mode: "date" })
+    .notNull()
+    .$default(() => new Date()),
+  endedAt: datetime("endedAt", { mode: "date" })
+    .notNull()
+    .$default(() => new Date()),
+  timeControl: int("timeControl").notNull(),
+});
 
-  @ForeignKey(() => UserEntity)
-  @Column({ type: DataType.STRING, allowNull: false })
-  playerW!: string;
-
-  @ForeignKey(() => UserEntity)
-  @Column({ type: DataType.STRING, allowNull: false })
-  playerB!: string;
-
-  @BelongsTo(() => UserEntity, { as: "whitePlayer", foreignKey: "playerW" })
-  whitePlayer!: UserEntity;
-
-  @BelongsTo(() => UserEntity, { as: "blackPlayer", foreignKey: "playerB" })
-  blackPlayer!: UserEntity;
-
-  @Column({
-    type: DataType.ENUM(...Object.values(GameSatus)),
-    allowNull: false,
-    defaultValue: GameSatus.PENDING,
-  })
-  status!: GameSatus;
-
-  @HasMany(() => Move, { foreignKey: "gameId" })
-  move!: Move[];
-
-  @Column({
-    type: DataType.ENUM(...Object.values(GameResult)),
-    allowNull: false,
-    defaultValue: GameResult.PENDING,
-  })
-  result!: GameResult;
-
-  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  ratingChangeW!: number;
-
-  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
-  ratingChangeB!: number;
-
-  @Column({ type: DataType.DATE, allowNull: false, defaultValue: DataType.NOW })
-  startedAt!: Date;
-
-  @Column({ type: DataType.DATE, allowNull: false, defaultValue: DataType.NOW })
-  endedAt!: Date;
-
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  timeControl!: number;
-}
+export const gamesRelations = relations(games, ({ one, many }) => ({
+  whitePlayer: one(users, {
+    fields: [games.playerW],
+    references: [users.id],
+    relationName: "playerW",
+  }),
+  blackPlayer: one(users, {
+    fields: [games.playerB],
+    references: [users.id],
+    relationName: "playerB",
+  }),
+  move: many(moves),
+}));

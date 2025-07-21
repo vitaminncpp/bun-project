@@ -1,40 +1,17 @@
-import {
-  Table,
-  Column,
-  Model,
-  PrimaryKey,
-  BelongsToMany,
-  DataType,
-  Default,
-  HasMany,
-} from "sequelize-typescript";
-import { User } from "./User.entity";
-import { UserRole } from "./UserRole.entity";
-import { RoleAction } from "./RoleAction.entity";
+import { mysqlTable, varchar, boolean } from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { userRoles } from "./UserRole.entity";
+import { roleActions } from "./RoleAction.entity";
+import { randomUUID } from "crypto";
 
-@Table({ modelName: "roles" })
-export class Role extends Model<Role> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.STRING)
-  id!: string;
+export const roles = mysqlTable("roles", {
+  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
+  rolename: varchar("rolename", { length: 255 }).notNull().unique(),
+  description: varchar("description", { length: 255 }),
+  isDeleted: boolean("isDeleted").notNull().default(false),
+});
 
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
-  rolename!: string;
-
-  @Column({ type: DataType.STRING, allowNull: true })
-  description?: string;
-
-  @Column({
-    type: DataType.STRING,
-    defaultValue: false,
-    allowNull: false,
-  })
-  isDeleted!: boolean;
-
-  @BelongsToMany(() => User, () => UserRole)
-  users!: Role[];
-
-  @HasMany(() => RoleAction, "roleId")
-  actions!: RoleAction;
-}
+export const rolesRelations = relations(roles, ({ many }) => ({
+  users: many(userRoles),
+  actions: many(roleActions),
+}));

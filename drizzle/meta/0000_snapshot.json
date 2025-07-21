@@ -1,0 +1,725 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "mysql",
+  "tables": {
+    "games": {
+      "name": "games",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "playerW": {
+          "autoincrement": false,
+          "name": "playerW",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "playerB": {
+          "autoincrement": false,
+          "name": "playerB",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "default": "'PENDING'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('PENDING','ACTIVE','FINISHED','ABORTED','INVALID','CANCELED')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "result": {
+          "default": "'PENDING'",
+          "autoincrement": false,
+          "name": "result",
+          "type": "enum('WHITE_WIN','BLACK_WIN','DRAW','WHITE_WIN_BY_RESIGNATION','BLACK_WIN_BY_RESIGNATION','WHITE_WIN_ON_TIME','BLACK_WIN_ON_TIME','DRAW_INSUFFICIENT_MATERIAL','DRAW_STALEMATE','DRAW_THREEFOLD_REPETITION','DRAW_FIFTY_MOVE_RULE','DRAW_AGREEMENT','ABORTED','PENDING')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ratingChangeW": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "ratingChangeW",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ratingChangeB": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "ratingChangeB",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startedAt": {
+          "autoincrement": false,
+          "name": "startedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endedAt": {
+          "autoincrement": false,
+          "name": "endedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timeControl": {
+          "autoincrement": false,
+          "name": "timeControl",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updatedAt": {
+          "autoincrement": false,
+          "name": "updatedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "games_id": {
+          "name": "games_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "playerW": {
+          "name": "playerW",
+          "columns": [
+            "playerW"
+          ],
+          "isUnique": false
+        },
+        "playerB": {
+          "name": "playerB",
+          "columns": [
+            "playerB"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "games_ibfk_1": {
+          "name": "games_ibfk_1",
+          "tableFrom": "games",
+          "tableTo": "users",
+          "columnsFrom": [
+            "playerW"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "games_ibfk_2": {
+          "name": "games_ibfk_2",
+          "tableFrom": "games",
+          "tableTo": "users",
+          "columnsFrom": [
+            "playerB"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "moves": {
+      "name": "moves",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gameId": {
+          "autoincrement": false,
+          "name": "gameId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moveNumber": {
+          "autoincrement": false,
+          "name": "moveNumber",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player": {
+          "autoincrement": false,
+          "name": "player",
+          "type": "enum('WHITE','BLACK')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fromFile": {
+          "autoincrement": false,
+          "name": "fromFile",
+          "type": "enum('a','b','c','d','e','f','g','h')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fromRank": {
+          "autoincrement": false,
+          "name": "fromRank",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "toFile": {
+          "autoincrement": false,
+          "name": "toFile",
+          "type": "enum('a','b','c','d','e','f','g','h')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "toRank": {
+          "autoincrement": false,
+          "name": "toRank",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "piece": {
+          "autoincrement": false,
+          "name": "piece",
+          "type": "enum('PAWN','KNIGHT','BISHOP','ROOK','QUEEN','KING')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moveType": {
+          "autoincrement": false,
+          "name": "moveType",
+          "type": "enum('REGULAR','CAPTURE','CASTLE','EN_PASSANT','CHECK','CHECKMATE')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "capturedPiece": {
+          "autoincrement": false,
+          "name": "capturedPiece",
+          "type": "enum('PAWN','KNIGHT','BISHOP','ROOK','QUEEN','KING')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "promotion": {
+          "autoincrement": false,
+          "name": "promotion",
+          "type": "enum('PAWN','KNIGHT','BISHOP','ROOK','QUEEN','KING')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notation": {
+          "autoincrement": false,
+          "name": "notation",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updatedAt": {
+          "autoincrement": false,
+          "name": "updatedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "moves_id": {
+          "name": "moves_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "gameId": {
+          "name": "gameId",
+          "columns": [
+            "gameId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "moves_ibfk_1": {
+          "name": "moves_ibfk_1",
+          "tableFrom": "moves",
+          "tableTo": "games",
+          "columnsFrom": [
+            "gameId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "profiles": {
+      "name": "profiles",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "autoincrement": false,
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating": {
+          "default": 400,
+          "autoincrement": false,
+          "name": "rating",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gamesPlayed": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "gamesPlayed",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wins": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "wins",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "losses": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "losses",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "draws": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "draws",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bio": {
+          "autoincrement": false,
+          "name": "bio",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatarUrl": {
+          "autoincrement": false,
+          "name": "avatarUrl",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updatedAt": {
+          "autoincrement": false,
+          "name": "updatedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "profiles_id": {
+          "name": "profiles_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "profiles_ibfk_1": {
+          "name": "profiles_ibfk_1",
+          "tableFrom": "profiles",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "uniqueConstraints": {
+        "userId": {
+          "name": "userId",
+          "columns": [
+            "userId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "role_actions": {
+      "name": "role_actions",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "roleId": {
+          "autoincrement": false,
+          "name": "roleId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "autoincrement": false,
+          "name": "action",
+          "type": "enum('INSERT_USER','DELETE_USER','UPDATE_USER')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "role_actions_id": {
+          "name": "role_actions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "roleId": {
+          "name": "roleId",
+          "columns": [
+            "roleId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "role_actions_ibfk_1": {
+          "name": "role_actions_ibfk_1",
+          "tableFrom": "role_actions",
+          "tableTo": "roles",
+          "columnsFrom": [
+            "roleId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "roles": {
+      "name": "roles",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rolename": {
+          "autoincrement": false,
+          "name": "rolename",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_deleted": {
+          "default": "'0'",
+          "autoincrement": false,
+          "name": "is_deleted",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updatedAt": {
+          "autoincrement": false,
+          "name": "updatedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "roles_id": {
+          "name": "roles_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "rolename": {
+          "name": "rolename",
+          "columns": [
+            "rolename"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "user_roles": {
+      "name": "user_roles",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "autoincrement": false,
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "roleId": {
+          "autoincrement": false,
+          "name": "roleId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_roles_id": {
+          "name": "user_roles_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "roleId": {
+          "name": "roleId",
+          "columns": [
+            "roleId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "user_roles_ibfk_1": {
+          "name": "user_roles_ibfk_1",
+          "tableFrom": "user_roles",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "user_roles_ibfk_2": {
+          "name": "user_roles_ibfk_2",
+          "tableFrom": "user_roles",
+          "tableTo": "roles",
+          "columnsFrom": [
+            "roleId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "uniqueConstraints": {
+        "user_roles_roleId_userId_unique": {
+          "name": "user_roles_roleId_userId_unique",
+          "columns": [
+            "userId",
+            "roleId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "autoincrement": false,
+          "name": "username",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isDeleted": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "isDeleted",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updatedAt": {
+          "autoincrement": false,
+          "name": "updatedAt",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "users_id": {
+          "name": "users_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "username": {
+          "name": "username",
+          "columns": [
+            "username"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}

@@ -1,22 +1,38 @@
-import { Sequelize } from "sequelize-typescript";
-import { Role } from "../entities/Role.entity";
-import { UserRole } from "../entities/UserRole.entity";
-import { User } from "../entities/User.entity";
-import { Game } from "../entities/Game.entity";
-import { Move } from "../entities/Move.entity";
-import { Profile } from "../entities/Profile.entity";
-import { RoleAction } from "../entities/RoleAction.entity";
+import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
 import * as envService from "../services/env.service";
 
-declare type Dialect = "mysql" | "mssql" | "postgres" | "sqlite" | "mariadb" | "oracle";
+// Import Drizzle models
+import { users } from "../entities/User.entity";
+import { roles } from "../entities/Role.entity";
+import { userRoles } from "../entities/UserRole.entity";
+import { games } from "../entities/Game.entity";
+import { profiles } from "../entities/Profile.entity";
+import { moves } from "../entities/Move.entity";
+import { roleActions } from "../entities/RoleAction.entity";
 
-export const sequelize = new Sequelize({
-  dialect: envService.getDatabaseDialect() as Dialect,
+// Create MySQL2 connection pool
+const pool = mysql.createPool({
   host: envService.getDatabaseHost(),
   port: envService.getDatabasePort(),
-  username: envService.getDatabaseUsername(),
+  user: envService.getDatabaseUsername(),
   password: envService.getDatabasePassword(),
   database: envService.getDatabaseName(),
-  models: [User, Role, UserRole, Game, Profile, Move, RoleAction],
-  logging: true,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+// Initialize Drizzle ORM
+export const db = drizzle(pool, {
+  schema: {
+    users,
+    roles,
+    userRoles,
+    games,
+    profiles,
+    moves,
+    roleActions,
+  },
+  mode: "default",
 });

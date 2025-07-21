@@ -2,13 +2,13 @@ import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import ENV_KEYS from "../constants/env.keys";
 
-import dotenv from "dotenv";
-dotenv.config();
-
 function getEnvVariable(key: string): string {
   const value = process.env[key];
   if (!value) {
-    throw new Exception(ErrorCode.INTERNAL_SERVER_ERROR, "Internal Server Error");
+    throw new Exception(
+      ErrorCode.INTERNAL_SERVER_ERROR,
+      "Internal Server Error"
+    );
   }
   return value;
 }
