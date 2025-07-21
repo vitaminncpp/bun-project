@@ -1,0 +1,7 @@
+export enum Action {
+  SUPER_USER = "SUPER_USER",
+
+  INSERT_USER = "INSERT_USER",
+  DELETE_USER = "DELETE_USER",
+  UPDATE_USER = "UPDATE_USER",
+}
