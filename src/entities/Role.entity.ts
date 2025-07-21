@@ -1,6 +1,6 @@
 import { mysqlTable, varchar, boolean } from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
-import { userRoles } from "./UserRole.entity";
+import { users } from "./User.entity";
 import { roleActions } from "./RoleAction.entity";
 import { randomUUID } from "crypto";
 
@@ -12,6 +12,6 @@ export const roles = mysqlTable("roles", {
 });
 
 export const rolesRelations = relations(roles, ({ many }) => ({
-  users: many(userRoles),
+  users: many(users),
   actions: many(roleActions),
 }));

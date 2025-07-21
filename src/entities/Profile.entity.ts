@@ -5,7 +5,10 @@ import { randomUUID } from "crypto";
 
 export const profiles = mysqlTable("profiles", {
   id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  userId: varchar("userId", { length: 36 }).notNull().unique(),
+  userId: varchar("userId", { length: 36 })
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
   rating: int("rating").notNull().default(400),
   gamesPlayed: int("gamesPlayed").notNull().default(0),
   wins: int("wins").notNull().default(0),
