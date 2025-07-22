@@ -6,8 +6,12 @@ import { randomUUID } from "crypto";
 
 export const userRoles = mysqlTable("user_roles", {
   id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  userId: varchar("userId", { length: 36 }).notNull(),
-  roleId: varchar("roleId", { length: 36 }).notNull(),
+  userId: varchar("userId", { length: 36 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  roleId: varchar("roleId", { length: 36 })
+    .notNull()
+    .references(() => roles.id, { onDelete: "cascade", onUpdate: "cascade" }),
   description: varchar("description", { length: 255 }),
 });
 

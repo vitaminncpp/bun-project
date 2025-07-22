@@ -13,7 +13,7 @@ import { randomUUID } from "crypto";
 
 export const moves = mysqlTable("moves", {
   id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  gameId: varchar("gameId", { length: 36 }).notNull(),
+  gameId: varchar("gameId", { length: 36 }).notNull().references(() => games.id, { onDelete: "cascade", onUpdate: "cascade" }),
   moveNumber: int("moveNumber").notNull(),
   player: mysqlEnum(
     "player",

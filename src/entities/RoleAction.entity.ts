@@ -6,7 +6,9 @@ import { randomUUID } from "crypto";
 
 export const roleActions = mysqlTable("role_actions", {
   id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  roleId: varchar("roleId", { length: 36 }).notNull(),
+  roleId: varchar("roleId", { length: 36 })
+    .notNull()
+    .references(() => roles.id, { onDelete: "cascade", onUpdate: "cascade" }),
   action: mysqlEnum(
     "action",
     Object.values(Action) as [string, ...string[]]

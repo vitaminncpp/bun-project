@@ -13,8 +13,12 @@ import { randomUUID } from "crypto";
 
 export const games = mysqlTable("games", {
   id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  playerW: varchar("playerW", { length: 36 }).notNull(),
-  playerB: varchar("playerB", { length: 36 }).notNull(),
+  playerW: varchar("playerW", { length: 36 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  playerB: varchar("playerB", { length: 36 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
   status: mysqlEnum("status", Object.values(GameSatus) as [string, ...string[]])
     .notNull()
     .default(GameSatus.PENDING),
