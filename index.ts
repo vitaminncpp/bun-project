@@ -18,7 +18,6 @@ const io = new Server(httpServer, {
     origin: "*",
   },
 });
-console.log(process.env);
 
 io.on(Constants.CONNECTION, (socket: Socket) => {
   setInterval(() => {

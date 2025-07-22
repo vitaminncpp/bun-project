@@ -16,10 +16,10 @@ router.post(
   authController.login
 );
 
-// router.post(
-//   APIEndpoints.REFRESH!,
-//   authValidations.validateRefresh,
-//   authController.refreshToken
-// );
+router.post(
+  APIEndpoints.REFRESH!,
+  authValidations.validateRefresh,
+  authController.refreshToken
+);
 
 export default router;

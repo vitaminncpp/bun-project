@@ -8,7 +8,10 @@ import { eq } from "drizzle-orm";
 
 export async function insertOne(user: UserModel) {
   try {
-    const [inserted] = await db.insert(usersTable).values(user as any);
+    const inserted = await db
+      .insert(usersTable)
+      .values(user as any)
+      .$returningId();
     if (!inserted) {
       throw new Exception(
         ErrorCode.USER_INSERTION_FAILED,
@@ -49,8 +52,7 @@ export async function findById(id: string) {
 
 export async function insertUsers(users: Array<UserModel>) {
   try {
-    const entities = users.map(toUserEntity);
-    const inserted = await db.insert(usersTable).values(entities);
+    const inserted = await db.insert(usersTable).values(users as any);
     // if (!inserted || inserted.length === 0) {
     //   throw new Exception(
     //     ErrorCode.USER_INSERTION_FAILED,
@@ -69,15 +71,13 @@ export async function insertUsers(users: Array<UserModel>) {
   }
 }
 
-export async function findByUsername(
-  username: string,
-  password?: boolean
-): Promise<UserModel> {
+export async function findByUsername(username: string, password?: boolean) {
   try {
     const [user] = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.username, username));
+    console.log(user);
     if (!user) {
       throw new Exception(
         ErrorCode.USER_NOT_EXIST,
@@ -85,7 +85,7 @@ export async function findByUsername(
         username
       );
     }
-    return toUserDTO(user, password);
+    return user;
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

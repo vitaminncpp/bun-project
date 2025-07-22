@@ -7,23 +7,33 @@ import { User as UserModel } from "../models/User.model";
 import * as envService from "./env.service";
 import Constants from "../constants/constants";
 
-export async function login(username: string, password: string): Promise<AuthToken> {
+export async function login(
+  username: string,
+  password: string
+): Promise<AuthToken> {
   const salt = envService.getPasswordSalt();
 
-  const user: UserModel = await userRepository.findByUsername(username, true);
+  const user = await userRepository.findByUsername(username, true);
   const saltedPassword = password + salt;
   const match = await tokenService.comparePass(saltedPassword, user.password!);
   if (!match)
     throw new Exception(ErrorCode.INVALID_PASSWORD, "Invalid Password", {
       username: user.username,
     });
-  user.password = null;
 
   const accessSecret = envService.getAccessSecret();
   const refreshSecret = envService.getRefreshSecret();
 
-  const accessToken = tokenService.generateToken(user, accessSecret, Constants.accessTokenExp);
-  const refreshToken = tokenService.generateToken(user, refreshSecret, Constants.refreshTokenExp);
+  const accessToken = tokenService.generateToken(
+    user,
+    accessSecret,
+    Constants.accessTokenExp
+  );
+  const refreshToken = tokenService.generateToken(
+    user,
+    refreshSecret,
+    Constants.refreshTokenExp
+  );
 
   return new AuthToken(accessToken, refreshToken);
 }
