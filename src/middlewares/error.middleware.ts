@@ -1,24 +1,21 @@
-import { Request, Response, NextFunction } from "express";
+interface test {
+  id: number;
+  status: string;
+}
+import type { Context, Next } from "hono";
 import { Exception } from "../exceptions/app.exception";
 import ErrorResponse from "../models/ErrorResponse.model";
 import ErrorCode from "../enums/errorcodes.enum";
+import type { StatusCode } from "hono/utils/http-status";
 
-export function errorHandler(
-  err: Exception | Error | any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  if (res.headersSent) {
-    return next(err);
-  }
-  let status = 500;
+export async function errorHandler(err: Error, c: Context) {
+  let status: StatusCode = 500;
   let errorMsg = "Internal Server Error";
-  let data = req.body;
+  let data = c.req.json ? await c.req.json().catch(() => ({})) : {};
 
   if (err instanceof Exception) {
     errorMsg = err.message;
-    data = err.data || req.body;
+    data = err.data || data;
     switch (err.code) {
       case ErrorCode.USERNAME_NOT_EXIST:
       case ErrorCode.USER_NOT_EXIST:
@@ -49,16 +46,17 @@ export function errorHandler(
     errorMsg = err.message;
     status = 500;
   }
-
-  res.status(status).json(new ErrorResponse(status, errorMsg, err, data));
+  c.status(status);
+  return c.json(new ErrorResponse(status, errorMsg, err, data));
 }
 
-export function error404(req: Request, res: Response) {
+export function error404(c: Context) {
   const message = "Resource Not found";
-  res.status(404).json(
+  return c.json(
     new ErrorResponse(404, message, new Error(message), {
-      resource: req.url,
-      method: req.method,
-    })
+      resource: c.req.path,
+      method: c.req.method,
+    }),
+    404
   );
 }

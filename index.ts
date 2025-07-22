@@ -4,11 +4,12 @@ import APIEndpoints from "./src/constants/apiEndpoints";
 import { Server, Socket } from "socket.io";
 import { createAdaptorServer } from "@hono/node-server";
 import Constants from "./src/constants/constants";
-import { db } from "./src/database/database.connection";
+import { showRoutes } from "hono/dev";
+import { errorHandler } from "./src/middlewares/error.middleware";
 
 const app = new Hono();
 app.route(APIEndpoints.API!, routes);
-
+app.onError(errorHandler);
 const httpServer = createAdaptorServer(app);
 let i = 0;
 
@@ -17,7 +18,6 @@ const io = new Server(httpServer, {
     origin: "*",
   },
 });
-
 console.log(process.env);
 
 io.on(Constants.CONNECTION, (socket: Socket) => {
@@ -30,3 +30,5 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
 httpServer.listen(4000, () => {
   console.log("Server Started");
 });
+
+showRoutes(app);

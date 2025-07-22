@@ -31,6 +31,6 @@ export async function sysInfo(c: Context) {
   return c.json(metaInfo);
 }
 
-export async function test(req: Request, res: Response) {
-  res.status(200).send("Hello World !!");
-}
+// export async function test(req: Request, res: Response) {
+//   res.status(200 as Status).send("Hello World !!");
+// }

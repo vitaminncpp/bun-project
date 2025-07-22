@@ -1,7 +1,6 @@
 import { Hono, type Context } from "hono";
 import {
   sysInfo as sysInfoController,
-  test,
 } from "../controllers/app.controller";
 import APIEndpoints from "../constants/apiEndpoints";
 import authRouter from "./auth.router";
@@ -15,7 +14,7 @@ import type { HandlerInterface } from "hono/types";
 const router = new Hono();
 
 router.get(APIEndpoints.SYS_INFO!, sysInfoController);
-// router.use(APIEndpoints.AUTH, authRouter);
+router.route(APIEndpoints.AUTH!, authRouter);
 // router.use(userRouter);
 // router.use(roleRouter);
 // router.use(gameRouter);

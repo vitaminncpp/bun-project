@@ -5,10 +5,10 @@ import ENV_KEYS from "../constants/env.keys";
 function getEnvVariable(key: string): string {
   const value = process.env[key];
   if (!value) {
-    throw new Exception(
-      ErrorCode.INTERNAL_SERVER_ERROR,
-      "Internal Server Error"
-    );
+    throw new Exception(ErrorCode.ENV_ERROR, "Environment Varibale Error", {
+      key,
+      value,
+    });
   }
   return value;
 }

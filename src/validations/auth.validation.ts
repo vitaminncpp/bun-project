@@ -1,60 +1,78 @@
-import { Request, Response, NextFunction } from "express";
+import type { Context, Next } from "hono";
 import ErrorResponse from "../models/ErrorResponse.model";
 
-export function validateRegistration(req: Request, res: Response, next: NextFunction) {
-  if (!req.body) {
-    res.status(400).json(new ErrorResponse(400, "Reqest Body Expected", new Error()));
-    return;
+export async function validateRegistration(c: Context, next: Next) {
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json(
+      new ErrorResponse(400, "Request Body Expected", new Error()),
+      400
+    );
   }
   const errors: { [key: string]: { [key: string]: string } } = {};
-  if (!req.body.username) {
+  if (!body.username) {
     errors["username"] = { required: "field `username` is required" };
   }
-  if (!req.body.name) {
+  if (!body.name) {
     errors["name"] = { required: "field `name` is required" };
   }
-  if (!req.body.password) {
+  if (!body.password) {
     errors["password"] = { required: "field `password` is required" };
   }
-  if (Object.entries(errors).length > 0) {
-    res.status(400).json(new ErrorResponse(400, "Validation(s) failed", new Error(), errors));
-  } else {
-    next();
+  if (Object.keys(errors).length > 0) {
+    return c.json(
+      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      400
+    );
   }
+  // Attach parsed body for downstream handlers if needed
+  c.set("body", body);
+  await next();
 }
 
-export function validateLogin(req: Request, res: Response, next: NextFunction) {
-  if (!req.body) {
-    res.status(400).json(new ErrorResponse(400, "Reqest Body Expected", new Error()));
-    return;
+export async function validateLogin(c: Context, next: Next) {
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json(
+      new ErrorResponse(400, "Request Body Expected", new Error()),
+      400
+    );
   }
   const errors: { [key: string]: { [key: string]: string } } = {};
-  if (!req.body.username) {
+  if (!body.username) {
     errors["username"] = { required: "field `username` is required" };
   }
-  if (!req.body.password) {
+  if (!body.password) {
     errors["password"] = { required: "field `password` is required" };
   }
-  if (Object.entries(errors).length > 0) {
-    res.status(400).json(new ErrorResponse(400, "Validation(s) failed", new Error(), errors));
-  } else {
-    next();
+  if (Object.keys(errors).length > 0) {
+    return c.json(
+      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      400
+    );
   }
+  c.set("body", body);
+  await next();
 }
 
-export function validateRefresh(req: Request, res: Response, next: NextFunction) {
-  if (!req.body) {
-    res.status(400).json(new ErrorResponse(400, "Reqest Body Expected", new Error()));
-    return;
+export async function validateRefresh(c: Context, next: Next) {
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json(
+      new ErrorResponse(400, "Request Body Expected", new Error()),
+      400
+    );
   }
-  const body = req.body;
   const errors: { [key: string]: { [key: string]: string } } = {};
   if (!body.refreshToken) {
     errors["refreshToken"] = { required: "field `refreshToken` is required" };
   }
-  if (Object.entries(errors).length > 0) {
-    res.status(400).json(new ErrorResponse(400, "Validation(s) failed", new Error(), errors));
-  } else {
-    next();
+  if (Object.keys(errors).length > 0) {
+    return c.json(
+      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      400
+    );
   }
+  c.set("body", body);
+  await next();
 }

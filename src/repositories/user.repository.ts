@@ -1,18 +1,24 @@
-import { User as UserEntity } from "../entities/User.entity";
+import { db } from "../database/database.connection";
+import { users as usersTable } from "../entities/User.entity";
 import { User as UserModel } from "../models/User.model";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
-import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
-import Logger from "../utils/logger";
+// import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
+import { eq } from "drizzle-orm";
 
-export async function insertOne(user: UserModel): Promise<UserModel> {
+export async function insertOne(user: UserModel) {
   try {
-    const userSaved: UserEntity = await toUserEntity(user).save();
-    return toUserDTO(userSaved);
-  } catch (err: Error | any) {
-    if (err instanceof Exception) {
-      throw err;
+    const [inserted] = await db.insert(usersTable).values(user as any);
+    if (!inserted) {
+      throw new Exception(
+        ErrorCode.USER_INSERTION_FAILED,
+        "Error Inserting User",
+        user
+      );
     }
+    return inserted;
+  } catch (err: Error | any) {
+    if (err instanceof Exception) throw err;
     throw new Exception(
       ErrorCode.USER_INSERTION_FAILED,
       err?.message || "Error Inserting User",
@@ -21,17 +27,18 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
   }
 }
 
-export async function findById(id: string): Promise<UserModel> {
+export async function findById(id: string) {
   try {
-    const user = await UserEntity.findByPk(id);
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, id));
     if (!user) {
       throw new Exception(ErrorCode.USER_NOT_EXIST, "User does not Exists", id);
     }
-    return toUserDTO(user);
+    return user;
   } catch (err: Exception | Error | any) {
-    if (err instanceof Exception) {
-      throw err;
-    }
+    if (err instanceof Exception) throw err;
     throw new Exception(
       ErrorCode.ERROR_FETCHNG_DATA,
       err?.message || "Error Fetching User Data",
@@ -40,20 +47,20 @@ export async function findById(id: string): Promise<UserModel> {
   }
 }
 
-export async function insertUsers(users: Array<UserModel>): Promise<Array<UserModel>> {
+export async function insertUsers(users: Array<UserModel>) {
   try {
-    const entries = await UserEntity.bulkCreate(users as any, {
-      validate: true,
-      returning: true,
-    });
-    if (!entries) {
-      throw new Exception(ErrorCode.USER_INSERTION_FAILED, "Error Inserting Users", users);
-    }
-    return entries.map((user) => toUserDTO(user));
+    const entities = users.map(toUserEntity);
+    const inserted = await db.insert(usersTable).values(entities);
+    // if (!inserted || inserted.length === 0) {
+    //   throw new Exception(
+    //     ErrorCode.USER_INSERTION_FAILED,
+    //     "Error Inserting Users",
+    //     users
+    //   );
+    // }
+    return inserted;
   } catch (err: Exception | Error | any) {
-    if (err instanceof Exception) {
-      throw err;
-    }
+    if (err instanceof Exception) throw err;
     throw new Exception(
       ErrorCode.ERROR_FETCHNG_DATA,
       err?.message || "Error Inserting Users",
@@ -62,17 +69,25 @@ export async function insertUsers(users: Array<UserModel>): Promise<Array<UserMo
   }
 }
 
-export async function findByUsername(username: string, password?: boolean): Promise<UserModel> {
+export async function findByUsername(
+  username: string,
+  password?: boolean
+): Promise<UserModel> {
   try {
-    const user = await UserEntity.findOne({ where: { username } });
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.username, username));
     if (!user) {
-      throw new Exception(ErrorCode.USER_NOT_EXIST, "User does not Exists", username);
+      throw new Exception(
+        ErrorCode.USER_NOT_EXIST,
+        "User does not Exists",
+        username
+      );
     }
     return toUserDTO(user, password);
   } catch (err: Error | any) {
-    if (err instanceof Exception) {
-      throw err;
-    }
+    if (err instanceof Exception) throw err;
     throw new Exception(
       ErrorCode.ERROR_FETCHNG_DATA,
       err?.message || "Error Fetching User Data",
@@ -81,20 +96,23 @@ export async function findByUsername(username: string, password?: boolean): Prom
   }
 }
 
-export async function findAll(opitons: { page: number; size: number }): Promise<UserModel[]> {
+export async function findAll(options: { page: number; size: number }) {
   try {
-    const users = await UserEntity.findAll({
-      offset: (opitons.page - 1) * opitons.size,
-      limit: opitons.size,
-    });
+    const users = await db
+      .select()
+      .from(usersTable)
+      .offset((options.page - 1) * options.size)
+      .limit(options.size);
     if (!users) {
       throw new Exception(ErrorCode.USER_NOT_EXIST, "Error Getting all users");
     }
-    return users.map((_u) => toUserDTO(_u));
+    return users;
   } catch (err: Error | any) {
-    if (err instanceof Exception) {
-      throw err;
-    }
-    throw new Exception(ErrorCode.ERROR_FETCHNG_DATA, err?.message || "Error Fetching Users", err);
+    if (err instanceof Exception) throw err;
+    throw new Exception(
+      ErrorCode.ERROR_FETCHNG_DATA,
+      err?.message || "Error Fetching Users",
+      err
+    );
   }
 }
