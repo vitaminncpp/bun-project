@@ -6,7 +6,7 @@ import * as authService from "../services/auth.service";
 import AuthToken from "../models/AuthToken.model";
 
 export async function register(c: Context) {
-  const body = c.get("body");
+  const body = await c.req.json();
   const user = await userService.createUser(
     body.username,
     body.name,
@@ -19,7 +19,7 @@ export async function register(c: Context) {
 }
 
 export async function login(c: Context) {
-  const body = c.get("body");
+  const body = await c.req.json();
   const token: AuthToken = await authService.login(
     body.username,
     body.password
@@ -28,7 +28,7 @@ export async function login(c: Context) {
 }
 
 export async function refreshToken(c: Context) {
-  const body = c.get("body");
+  const body = await c.req.json();
   const token: AuthToken = await authService.refreshToken(body.refreshToken);
   return c.json(
     new SuccessResponse(200, "Token Refreshed Successfully", token),

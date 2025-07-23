@@ -59,6 +59,5 @@ export async function validateAddUsers(c: Context, next: Next) {
       400
     );
   }
-  c.set("body", body);
   await next();
 }

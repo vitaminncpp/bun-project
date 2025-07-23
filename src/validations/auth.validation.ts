@@ -25,7 +25,6 @@ export async function validateRegistration(c: Context, next: Next) {
       400
     );
   }
-  c.set("body", body);
   await next();
 }
 
@@ -50,7 +49,6 @@ export async function validateLogin(c: Context, next: Next) {
       400
     );
   }
-  c.set("body", body);
   await next();
 }
 
@@ -72,6 +70,5 @@ export async function validateRefresh(c: Context, next: Next) {
       400
     );
   }
-  c.set("body", body);
   await next();
 }

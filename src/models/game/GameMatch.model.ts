@@ -3,6 +3,8 @@ import { User as UserModel } from "../User.model";
 
 export interface GameMatch {
   status: GameStatus;
-  connectionId: string;
-  opponent?: UserModel;
+  userId: string;
+  playerConnection: string;
+  opponentConnection?: string;
+  opponentId?: string;
 }
