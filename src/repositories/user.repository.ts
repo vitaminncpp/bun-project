@@ -6,7 +6,7 @@ import { Exception } from "../exceptions/app.exception";
 // import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
 import { eq } from "drizzle-orm";
 
-export async function insertOne(user: UserModel) {
+export async function insertOne(user: UserModel): Promise<UserModel> {
   try {
     const inserted = await db
       .insert(usersTable)
@@ -19,7 +19,8 @@ export async function insertOne(user: UserModel) {
         user
       );
     }
-    return inserted;
+    user.id = inserted[0]!.id;
+    return user;
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

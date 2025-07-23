@@ -2,14 +2,13 @@ export class User {
   public id?: string;
   public username: string;
   public name: string;
-  public password: string | null;
+  public password?: string;
   public createdAt: Date | null;
   public updatedAt: Date | null;
   public metaInfo?: any;
   constructor() {
     this.username = "";
     this.name = "";
-    this.password = null;
     this.createdAt = null;
     this.updatedAt = null;
     this.metaInfo = undefined;
@@ -19,7 +18,7 @@ export class User {
     id?: string;
     username: string;
     name: string;
-    password: string | null;
+    password?: string;
     createdAt?: Date | null;
     updatedAt?: Date | null;
     metaInfo?: any;
@@ -28,7 +27,7 @@ export class User {
     user.id = userObj.id;
     user.username = userObj.username;
     user.name = userObj.name;
-    user.password = userObj.password ?? null;
+    user.password = userObj.password;
     user.createdAt = userObj.createdAt ?? null;
     user.updatedAt = userObj.updatedAt ?? null;
     user.metaInfo = userObj.metaInfo;

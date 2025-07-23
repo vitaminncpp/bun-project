@@ -6,14 +6,16 @@ export async function createUser(
   username: string,
   name: string,
   password: string
-) {
+): Promise<UserModel> {
   const hash = await tokenService.hash(password, envService.getPasswordSalt());
   const user: UserModel = UserModel.from({
     username: username,
     name: name,
     password: hash,
   });
-  return await userReposiotry.insertOne(user);
+  const savedUser: UserModel = await userReposiotry.insertOne(user);
+  delete savedUser.password;
+  return savedUser;
 }
 
 // export async function getAllUsers(

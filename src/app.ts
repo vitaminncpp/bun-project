@@ -1,10 +1,14 @@
-import express from "express";
-import router from "./routers/router";
+import { Hono } from "hono";
+import routes from "./routers/router";
 import APIEndpoints from "./constants/apiEndpoints";
 
-const app = express();
+import { showRoutes } from "hono/dev";
+import { errorHandler } from "./middlewares/error.middleware";
 
-app.use(express.json());
-app.use(APIEndpoints.API, router);
+const app = new Hono();
+app.route(APIEndpoints.API!, routes);
+app.onError(errorHandler);
+
+showRoutes(app);
 
 export default app;
