@@ -14,20 +14,23 @@ export class User {
     this.metaInfo = undefined;
   }
 
-  static from(userObj: {
-    id?: string;
-    username: string;
-    name: string;
-    password?: string;
-    createdAt?: Date | null;
-    updatedAt?: Date | null;
-    metaInfo?: any;
-  }): User {
+  static from(
+    userObj: {
+      id?: string;
+      username: string;
+      name: string;
+      password?: string;
+      createdAt?: Date | null;
+      updatedAt?: Date | null;
+      metaInfo?: any;
+    },
+    password?: boolean
+  ): User {
     const user = new User();
     user.id = userObj.id;
     user.username = userObj.username;
     user.name = userObj.name;
-    user.password = userObj.password;
+    user.password = password ? userObj.password : undefined;
     user.createdAt = userObj.createdAt ?? null;
     user.updatedAt = userObj.updatedAt ?? null;
     user.metaInfo = userObj.metaInfo;

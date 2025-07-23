@@ -1,4 +1,4 @@
-export enum GameSatus {
+export enum GameStatus {
   PENDING = "PENDING",
   ACTIVE = "ACTIVE",
   FINISHED = "FINISHED",

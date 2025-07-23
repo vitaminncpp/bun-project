@@ -1,20 +1,20 @@
-import { Request, Response, NextFunction } from "express";
+import type { Context, Next } from "hono";
 import ErrorResponse from "../models/ErrorResponse.model";
 import * as authService from "../services/auth.service";
 import { User as UserModel } from "../models/User.model";
 
-export function authenticate(req: Request, res: Response, next: NextFunction) {
-  if (req.headers.authorization) {
-    const token: string = req.headers.authorization;
-    const user: UserModel = authService.authenticate(token.split(" ")[1]);
-    if (user) {
-      req.authData = user;
-      next();
-    } else {
-      res.status(401).json(new ErrorResponse(401, "Unauthorized", new Error()));
+export async function authenticate(c: Context, next: Next) {
+  const authHeader = c.req.header("authorization");
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+    if (token) {
+      const user: UserModel = authService.authenticate(token);
+      if (user) {
+        c.set("authData", user);
+        await next();
+        return;
+      }
     }
-  } else {
-    res.status(401).json(new ErrorResponse(401, "Unauthorized", new Error()));
-    next();
   }
+  return c.json(new ErrorResponse(401, "Unauthorized", new Error()), 401);
 }

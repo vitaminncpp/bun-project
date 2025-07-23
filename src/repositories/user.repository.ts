@@ -1,6 +1,6 @@
 import { db } from "../database/database.connection";
 import { users as usersTable } from "../entities/User.entity";
-import { User as UserModel } from "../models/User.model";
+import { User, User as UserModel } from "../models/User.model";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
 // import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
@@ -51,6 +51,7 @@ export async function findById(id: string) {
   }
 }
 
+// TODO fix type matchin
 export async function insertUsers(users: Array<UserModel>) {
   try {
     const inserted = await db.insert(usersTable).values(users as any);
@@ -72,7 +73,10 @@ export async function insertUsers(users: Array<UserModel>) {
   }
 }
 
-export async function findByUsername(username: string, password?: boolean) {
+export async function findByUsername(
+  username: string,
+  password?: boolean
+): Promise<UserModel> {
   try {
     const [user] = await db
       .select()
@@ -86,7 +90,7 @@ export async function findByUsername(username: string, password?: boolean) {
         username
       );
     }
-    return user;
+    return UserModel.from(user!, true);
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
@@ -97,7 +101,10 @@ export async function findByUsername(username: string, password?: boolean) {
   }
 }
 
-export async function findAll(options: { page: number; size: number }) {
+export async function findAll(options: {
+  page: number;
+  size: number;
+}): Promise<Array<UserModel>> {
   try {
     const users = await db
       .select()
@@ -107,7 +114,7 @@ export async function findAll(options: { page: number; size: number }) {
     if (!users) {
       throw new Exception(ErrorCode.USER_NOT_EXIST, "Error Getting all users");
     }
-    return users;
+    return users.map((_u) => UserModel.from(_u));
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

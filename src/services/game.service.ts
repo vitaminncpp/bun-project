@@ -3,8 +3,8 @@ import { pendingRequests } from "../sessions/game.session";
 import { activeConnections } from "../sessions/socket.session";
 import Logger from "../utils/logger";
 import Constants from "../constants/constants";
-import { GameSatus } from "../lib/chess/games.enum";
-import { GameMatch } from "../models/game/GameMatch.model";
+import { GameStatus } from "../lib/chess/games.enum";
+import type { GameMatch } from "../models/game/GameMatch.model";
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Game as GameModel } from "../models/game/Game.model";
@@ -15,38 +15,49 @@ export function findMatch(user: UserModel, guest?: boolean): GameMatch {
   Logger.debug("Size of Map", pendingRequests.size);
   if (pendingRequests.size === 0) {
     if (!activeConnections.has(connectionId)) {
-      throw new Exception(ErrorCode.BAD_CONNECTION, "No Associated Socket Connection Found", {
-        connectionId,
-        user,
-      });
+      throw new Exception(
+        ErrorCode.BAD_CONNECTION,
+        "No Associated Socket Connection Found",
+        {
+          connectionId,
+          user,
+        }
+      );
     }
-    pendingRequests.set(connectionId, { socket: activeConnections.get(connectionId)!, user });
-    return { status: GameSatus.PENDING, connectionId };
+    pendingRequests.set(connectionId, {
+      socket: activeConnections.get(connectionId)!,
+      user,
+    });
+    return { status: GameStatus.PENDING, connectionId };
   } else {
     const [match] = [...pendingRequests.values()];
-    if (connectionId === match.user.metaInfo.connectionId) {
+    if (connectionId === match!.user.metaInfo.connectionId) {
       throw new Exception(
         ErrorCode.REQUEST_ALREADY_PROCESSING,
         "Request is Already in progress ! Please wait..",
         { connectionId, user }
       );
     }
-    match.socket.emit(Constants.MATCH_FOUND, { opponent: user });
+    match!.socket.emit(Constants.MATCH_FOUND, { opponent: user });
     Logger.debug("Matched", match);
-    activeConnections.get(connectionId)!.emit(Constants.MATCH_FOUND, { opponent: match.user });
-    Logger.debug("Match Found", match.user);
-    pendingRequests.delete(match.user.metaInfo.connectionId);
-    startGame(user, match.user);
-    return { status: GameSatus.ACTIVE, opponent: match.user, connectionId };
+    activeConnections
+      .get(connectionId)!
+      .emit(Constants.MATCH_FOUND, { opponent: match!.user });
+    Logger.debug("Match Found", match!.user);
+    pendingRequests.delete(match!.user.metaInfo.connectionId);
+    startGame(user, match!.user);
+    return { status: GameStatus.ACTIVE, opponent: match!.user, connectionId };
   }
 }
 
 export function cancelRequest(connectionId: string): GameMatch {
   if (!pendingRequests.has(connectionId)) {
-    throw new Exception(ErrorCode.REQUEST_NOT_FOUND, "Request Not found", { connectionId });
+    throw new Exception(ErrorCode.REQUEST_NOT_FOUND, "Request Not found", {
+      connectionId,
+    });
   }
   pendingRequests.delete(connectionId);
-  return { status: GameSatus.CANCELED, connectionId };
+  return { status: GameStatus.CANCELED, connectionId };
 }
 
 function startGame(user1: UserModel, user2: UserModel) {

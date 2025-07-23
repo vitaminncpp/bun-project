@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
+import type { Context } from "hono";
 import * as roleService from "../services/role.service";
 import SuccessResponse from "../models/SuccessResponse.model";
 import { Role as RoleModel } from "../models/Role.model";
 
-export async function getAllRoles(req: Request, res: Response) {
+export async function getAllRoles(c: Context) {
   let options = undefined;
-  const page = req.query.page;
-  const size = req.query.size;
+  const page = c.req.query("page");
+  const size = c.req.query("size");
   if (page && size) {
     options = {
       page: Number(page),
@@ -14,16 +14,27 @@ export async function getAllRoles(req: Request, res: Response) {
     };
   }
   const roles = await roleService.getAllRoles(options);
-  res.status(200).json(new SuccessResponse(200, "All users fetched successfully", roles));
+  return c.json(new SuccessResponse(200, "All users fetched successfully", roles), 200);
 }
-export async function getRole(req: Request, res: Response) {
-  const roleId = req.params.id;
+
+export async function getRole(c: Context) {
+  const roleId = c.req.param("id");
   const role = await roleService.getRole(roleId);
-  res.status(200).json(new SuccessResponse(200, "All users fetched successfully", role));
+  return c.json(new SuccessResponse(200, "All users fetched successfully", role), 200);
 }
-export async function createRole(req: Request, res: Response) {
-  const role: RoleModel = await roleService.createRole(req.body.rolename, req.body.description);
-  res.status(200).json(new SuccessResponse(200, "All users fetched successfully", role));
+
+export async function createRole(c: Context) {
+  const body = await c.req.json();
+  const role: RoleModel = await roleService.createRole(body.rolename, body.description);
+  return c.json(new SuccessResponse(200, "All users fetched successfully", role), 200);
 }
-export function updateRole(req: Request, res: Response) {}
-export function deleteRole(req: Request, res: Response) {}
+
+export function updateRole(c: Context) {
+  // Implement update logic here
+  return c.json({ message: "Not implemented" }, 200);
+}
+
+export function deleteRole(c: Context) {
+  // Implement delete logic here
+  return c.json({ message: "Not implemented" }, 200);
+}

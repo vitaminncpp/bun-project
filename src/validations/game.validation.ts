@@ -1,18 +1,18 @@
-import { NextFunction, Request, Response } from "express";
+import type { Context, Next } from "hono";
 import ErrorResponse from "../models/ErrorResponse.model";
 
-export function validateStartGame(req: Request, res: Response, next: NextFunction) {
-  if (!req.body) {
-    res.status(400).json(new ErrorResponse(400, "Reqest Body Expected", new Error()));
-    return;
+export async function validateStartGame(c: Context, next: Next) {
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json(new ErrorResponse(400, "Request Body Expected", new Error()), 400);
   }
   const errors: { [key: string]: { [key: string]: string } } = {};
-  if (!req.body.connectionId) {
+  if (!body.connectionId) {
     errors["connectionId"] = { required: "field `connectionId` is required" };
   }
   if (Object.entries(errors).length > 0) {
-    res.status(400).json(new ErrorResponse(400, "Validation(s) failed", new Error(), errors));
-  } else {
-    next();
+    return c.json(new ErrorResponse(400, "Validation(s) failed", new Error(), errors), 400);
   }
+  c.set("body", body);
+  await next();
 }

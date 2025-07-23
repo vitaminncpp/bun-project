@@ -7,7 +7,7 @@ import { pendingRequests } from "../sessions/game.session";
 import { randomUUID } from "crypto";
 
 const io = new Server({
-  path: "/ws",
+  path: "/socket.io",
   cors: {
     origin: "*",
   },

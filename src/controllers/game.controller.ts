@@ -1,29 +1,35 @@
-import { Request, Response } from "express";
+import type { Context } from "hono";
 import * as gameService from "../services/game.service";
 import SuccessResponse from "../models/SuccessResponse.model";
 import { User as UserModel } from "../models/User.model";
-import { GameMatch } from "../models/game/GameMatch.model";
-import { GameSatus } from "../lib/chess/games.enum";
+import type { GameMatch } from "../models/game/GameMatch.model";
+import { GameStatus } from "../lib/chess/games.enum";
 
-export async function startMatch(req: Request, res: Response) {
-  console.log(req, res);
+export async function startMatch(c: Context) {
+  // Implement your logic here, using c.req for request data
+  // Example: const body = await c.req.json();
+  return c.json(new SuccessResponse(200, "Not implemented", null), 200);
 }
 
-export async function startMatchGuest(req: Request, res: Response) {
+export async function startMatchGuest(c: Context) {
+  const body = await c.req.json();
   const user: UserModel = new UserModel();
-  user.name = req.body.name || "Anonymous";
-  user.metaInfo = { connectionId: req.body.connectionId };
+  user.name = body.name || "Anonymous";
+  user.metaInfo = { connectionId: body.connectionId };
   const resData: GameMatch = gameService.findMatch(user, true);
-  const statusCode = resData.status === GameSatus.PENDING ? 202 : 200;
+  const statusCode = resData.status === GameStatus.PENDING ? 202 : 200;
   const success =
-    resData.status === GameSatus.PENDING
+    resData.status === GameStatus.PENDING
       ? "Match request is created Succesfully"
       : "Match Found Succesfully";
-  res.status(statusCode).json(new SuccessResponse(statusCode, success, resData));
+  return c.json(new SuccessResponse(statusCode, success, resData), statusCode);
 }
 
-export async function cancelMatchRequest(req: Request, res: Response) {
-  const connectionId: string = req.params.connectionId;
+export async function cancelMatchRequest(c: Context) {
+  const connectionId: string = c.req.param("connectionId");
   const resData = gameService.cancelRequest(connectionId);
-  res.status(200).json(new SuccessResponse(200, "Request canceled sucessfully", resData));
+  return c.json(
+    new SuccessResponse(200, "Request canceled sucessfully", resData),
+    200
+  );
 }

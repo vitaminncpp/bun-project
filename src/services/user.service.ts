@@ -8,34 +8,40 @@ export async function createUser(
   password: string
 ): Promise<UserModel> {
   const hash = await tokenService.hash(password, envService.getPasswordSalt());
-  const user: UserModel = UserModel.from({
-    username: username,
-    name: name,
-    password: hash,
-  });
+  const user: UserModel = UserModel.from(
+    {
+      username: username,
+      name: name,
+      password: hash,
+    },
+    true
+  );
   const savedUser: UserModel = await userReposiotry.insertOne(user);
   delete savedUser.password;
   return savedUser;
 }
 
-// export async function getAllUsers(
-//   options: {
-//     page: number;
-//     size: number;
-//   } = { page: 1, size: 10 }
-// ): Promise<UserModel[]> {
-//   return userReposiotry.findAll(options);
-// }
+export async function getAllUsers(
+  options: {
+    page: number;
+    size: number;
+  } = { page: 1, size: 10 }
+): Promise<UserModel[]> {
+  return userReposiotry.findAll(options);
+}
 
-// export async function getUser(id: string) {
-//   return userReposiotry.findById(id);
-// }
+export async function getUser(id: string) {
+  return userReposiotry.findById(id);
+}
 
-// export async function addUsers(users: Array<UserModel>) {
-//   const promises: Array<Promise<UserModel>> = users.map(async (user) => {
-//     user.password = await tokenService.hash(user.password!, envService.getPasswordSalt());
-//     return user;
-//   });
-//   await Promise.all(promises);
-//   return userReposiotry.insertUsers(users);
-// }
+export async function addUsers(users: Array<UserModel>) {
+  const promises: Array<Promise<UserModel>> = users.map(async (user) => {
+    user.password = await tokenService.hash(
+      user.password!,
+      envService.getPasswordSalt()
+    );
+    return user;
+  });
+  await Promise.all(promises);
+  return userReposiotry.insertUsers(users);
+}

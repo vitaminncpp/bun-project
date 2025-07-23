@@ -8,7 +8,7 @@ import {
 import { relations } from "drizzle-orm";
 import { users } from "./User.entity";
 import { moves } from "./Move.entity";
-import { GameResult, GameSatus } from "../lib/chess/games.enum";
+import { GameResult, GameStatus } from "../lib/chess/games.enum";
 import { randomUUID } from "crypto";
 
 export const games = mysqlTable("games", {
@@ -19,9 +19,9 @@ export const games = mysqlTable("games", {
   playerB: varchar("playerB", { length: 36 })
     .notNull()
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-  status: mysqlEnum("status", Object.values(GameSatus) as [string, ...string[]])
+  status: mysqlEnum("status", Object.values(GameStatus) as [string, ...string[]])
     .notNull()
-    .default(GameSatus.PENDING),
+    .default(GameStatus.PENDING),
   result: mysqlEnum(
     "result",
     Object.values(GameResult) as [string, ...string[]]

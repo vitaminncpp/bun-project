@@ -1,10 +1,10 @@
-import { GameSatus, GameResult } from "../../lib/chess/games.enum";
+import { GameStatus, GameResult } from "../../lib/chess/games.enum";
 
 export class Game {
   id?: string;
   playerW!: string;
   playerB!: string;
-  status!: GameSatus;
+  status!: GameStatus;
 
   result!: GameResult;
   ratingChangeW!: number;
@@ -20,7 +20,7 @@ export class Game {
     id?: string;
     playerW: string;
     playerB: string;
-    status: GameSatus;
+    status: GameStatus;
 
     result: GameResult;
     ratingChangeW: number;

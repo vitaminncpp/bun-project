@@ -25,7 +25,6 @@ export async function validateRegistration(c: Context, next: Next) {
       400
     );
   }
-  // Attach parsed body for downstream handlers if needed
   c.set("body", body);
   await next();
 }
