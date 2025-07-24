@@ -1,6 +1,6 @@
 import { db } from "../database/database.connection";
 import { users as usersTable } from "../entities/User.entity";
-import { User, User as UserModel } from "../models/User.model";
+import { User as UserModel } from "../models/User.model";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
 // import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
@@ -11,7 +11,7 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
     const inserted = await db
       .insert(usersTable)
       .values(user as any)
-      .$returningId();
+      .returning();
     if (!inserted) {
       throw new Exception(
         ErrorCode.USER_INSERTION_FAILED,
@@ -90,7 +90,7 @@ export async function findByUsername(
         username
       );
     }
-    return UserModel.from(user!, true);
+    return UserModel.from(user!, password);
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

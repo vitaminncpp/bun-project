@@ -42,7 +42,7 @@ export async function findById(id: string): Promise<RoleModel> {
 export async function insertOne(role: RoleModel): Promise<RoleModel> {
   try {
     const entity = toRoleEntity(role);
-    const result = await db.insert(roles).values(entity).$returningId();
+    const result = await db.insert(roles).values(entity).returning();
     if (!result || result.length === 0) {
       throw new Exception(
         ErrorCode.ROLE_INSERTION_FAILED,
