@@ -33,6 +33,7 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.2",
     "pino": "^9.7.0",
+    "postgres": "^3.4.7",
     "socket.io": "^4.8.1"
   }
 }

@@ -56,5 +56,5 @@ export enum MoveType {
   CASTLE = "CASTLE",
   EN_PASSANT = "EN_PASSANT",
   CHECK = "CHECK",
-  CHECKMATE = "EN_PASSANT",
+  CHECKMATE = "CHECKMATE",
 }

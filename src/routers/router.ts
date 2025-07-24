@@ -5,6 +5,7 @@ import authRouter from "./auth.router";
 import userRouter from "./user.router";
 import roleRouter from "./role.router";
 import gameRouter from "./game.router";
+import { testGrpc } from "../controllers/grpc.controller";
 
 const router = new Hono();
 
@@ -13,7 +14,9 @@ router.route(APIEndpoints.AUTH!, authRouter);
 router.route(APIEndpoints.ROOT!, userRouter);
 router.route(APIEndpoints.ROOT!, gameRouter);
 // router.use(roleRouter);
+// router.use(gameRouter);
 
 // router.use(authenticate, error404);
 // router.use(errorHandler);
+router.get("/grpc/test", testGrpc);
 export default router;

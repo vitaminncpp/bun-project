@@ -1,8 +1,8 @@
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as envService from "../services/env.service";
 
-// Import Drizzle models
+// Import all your Drizzle schemas
 import { users } from "../entities/User.entity";
 import { roles } from "../entities/Role.entity";
 import { userRoles } from "../entities/UserRole.entity";
@@ -11,20 +11,14 @@ import { profiles } from "../entities/Profile.entity";
 import { moves } from "../entities/Move.entity";
 import { roleActions } from "../entities/RoleAction.entity";
 
-// Create MySQL2 connection pool
-const pool = mysql.createPool({
-  host: envService.getDatabaseHost(),
-  port: envService.getDatabasePort(),
-  user: envService.getDatabaseUsername(),
-  password: envService.getDatabasePassword(),
-  database: envService.getDatabaseName(),
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+// Create a single PostgreSQL client instance.
+// The 'postgres' library automatically handles connection pooling.
+const client = postgres(envService.getDatabaseUrl(), {
+  max: 10, // Sets the maximum number of connections in the pool
 });
 
-// Initialize Drizzle ORM
-export const db = drizzle(pool, {
+// Initialize Drizzle ORM for PostgreSQL
+export const db = drizzle(client, {
   schema: {
     users,
     roles,
@@ -34,5 +28,6 @@ export const db = drizzle(pool, {
     moves,
     roleActions,
   },
-  mode: "default",
+  // It's a good practice to enable logging in development for debugging SQL queries
+  logger: process.env.NODE_ENV === "development",
 });

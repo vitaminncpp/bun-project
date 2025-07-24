@@ -1,12 +1,11 @@
-import { mysqlTable, varchar, boolean } from "drizzle-orm/mysql-core";
+import { pgTable, varchar, boolean, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { roles } from "./Role.entity";
 import { games } from "./Game.entity";
 import { profiles } from "./Profile.entity";
-import { randomUUID } from "crypto";
 
-export const users = mysqlTable("users", {
-  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
   username: varchar("username", { length: 255 }).notNull().unique(),
   name: varchar("name", { length: 255 }).notNull(),
   password: varchar("password", { length: 255 }).notNull(),

@@ -1,21 +1,20 @@
-import { mysqlTable, varchar, int } from "drizzle-orm/mysql-core";
+import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./User.entity";
-import { randomUUID } from "crypto";
 
-export const profiles = mysqlTable("profiles", {
-  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  userId: varchar("userId", { length: 36 })
+export const profiles = pgTable("profiles", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
     .notNull()
     .unique()
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-  rating: int("rating").notNull().default(400),
-  gamesPlayed: int("gamesPlayed").notNull().default(0),
-  wins: int("wins").notNull().default(0),
-  losses: int("losses").notNull().default(0),
-  draws: int("draws").notNull().default(0),
+  rating: integer("rating").notNull().default(400),
+  gamesPlayed: integer("games_played").notNull().default(0),
+  wins: integer("wins").notNull().default(0),
+  losses: integer("losses").notNull().default(0),
+  draws: integer("draws").notNull().default(0),
   bio: varchar("bio", { length: 255 }),
-  avatarUrl: varchar("avatarUrl", { length: 255 }),
+  avatarUrl: varchar("avatar_url", { length: 255 }),
 });
 
 export const profilesRelations = relations(profiles, ({ one }) => ({

@@ -53,8 +53,12 @@ export function getDatabasePassword(): string {
   return getEnvVariable(ENV_KEYS.DATABASE_PASSWORD);
 }
 
+export function getDatabaseProtocol(): string {
+  return getEnvVariable(ENV_KEYS.DATABASE_PROTOCOL);
+}
+
 export function getDatabaseUrl(): string {
-  return `${getDatabaseDialect()}://${getDatabaseUsername()}:${getDatabasePassword()}@${getDatabaseHost()}:${getDatabasePort()}/${getDatabaseName()}`;
+  return `${ getDatabaseProtocol() }://${ getDatabaseUsername() }:${ getDatabasePassword() }@${ getDatabaseHost() }:${ getDatabasePort() }/${ getDatabaseName() }`;
 }
 
 export function getDatabaseConfig(): {

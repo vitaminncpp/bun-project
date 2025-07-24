@@ -1,17 +1,17 @@
-import { mysqlTable, varchar, boolean } from "drizzle-orm/mysql-core";
+import { boolean, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { users } from "./User.entity";
+import { userRoles } from "./UserRole.entity";
 import { roleActions } from "./RoleAction.entity";
-import { randomUUID } from "crypto";
 
-export const roles = mysqlTable("roles", {
-  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
+export const roles = pgTable("roles", {
+  id: uuid("id").primaryKey().defaultRandom(),
   rolename: varchar("rolename", { length: 255 }).notNull().unique(),
   description: varchar("description", { length: 255 }),
-  isDeleted: boolean("isDeleted").notNull().default(false),
+  isDeleted: boolean("is_deleted").notNull().default(false),
 });
 
+// Correctly define relations through the join table `userRoles` for many-to-many
 export const rolesRelations = relations(roles, ({ many }) => ({
-  users: many(users),
+  userRoles: many(userRoles),
   actions: many(roleActions),
 }));

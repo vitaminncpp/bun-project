@@ -1,15 +1,14 @@
-import { mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./User.entity";
 import { roles } from "./Role.entity";
-import { randomUUID } from "crypto";
 
-export const userRoles = mysqlTable("user_roles", {
-  id: varchar("id", { length: 36 }).primaryKey().$default(randomUUID),
-  userId: varchar("userId", { length: 36 })
+export const userRoles = pgTable("user_roles", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-  roleId: varchar("roleId", { length: 36 })
+  roleId: uuid("role_id")
     .notNull()
     .references(() => roles.id, { onDelete: "cascade", onUpdate: "cascade" }),
   description: varchar("description", { length: 255 }),
