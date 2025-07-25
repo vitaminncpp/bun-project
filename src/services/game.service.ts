@@ -1,7 +1,6 @@
 import { User as UserModel } from "../models/User.model";
 import { pendingRequests } from "../sessions/game.session";
 import { activeConnections } from "../sessions/socket.session";
-import Logger from "../utils/logger";
 import Constants from "../constants/constants";
 import { GameStatus } from "../lib/chess/games.enum";
 import type { GameMatch } from "../models/game/GameMatch.model";
@@ -37,10 +36,10 @@ export function findMatch(user: UserModel, connectionId: string, guest?: boolean
         { connectionId, user }
       );
     }
-    match![1].socket.emit(Constants.MATCH_FOUND, { opponent: user });
+    match![1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user });
     activeConnections
       .get(connectionId)!
-      .emit(Constants.MATCH_FOUND, { opponent: match![1].user });
+      .emit(Constants.MATCH_FOUND, { opponentConnection: match![0], opponent: match![1].user });
     pendingRequests.delete(match![0]!);
     startGame(user, match![1].user);
     return { status: GameStatus.ACTIVE, playerConnection: connectionId, opponentConnection: match![0], userId: user.id!, opponentId: match![1].user.id! };

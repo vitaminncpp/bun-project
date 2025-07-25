@@ -17,6 +17,7 @@
   },
   "scripts": {
     "dev": "bun --watch server.ts",
+    "dev-debug": "bun server.ts",
     "build": "bun build server.ts --outdir dist --minify --target bun",
     "test": "vitest",
     "test:ui": "vitest --ui",
