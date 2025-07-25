@@ -19,17 +19,7 @@ export async function startMatch(c: Context) {
 }
 
 export async function startMatchGuest(c: Context) {
-  // const body = await c.req.json();
-  // const user: UserModel = new UserModel();
-  // user.name = body.name || "Anonymous";
-  // user.metaInfo = { connectionId: body.connectionId };
-  // const resData: GameMatch = gameService.findMatch(user, true);
-  // const statusCode = resData.status === GameStatus.PENDING ? 202 : 200;
-  // const success =
-  //   resData.status === GameStatus.PENDING
-  //     ? "Match request is created Succesfully"
-  //     : "Match Found Succesfully";
-  // return c.json(new SuccessResponse(statusCode, success, resData), statusCode);
+
 }
 
 export async function cancelMatchRequest(c: Context) {

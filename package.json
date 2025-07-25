@@ -1,6 +1,6 @@
 {
   "name": "bun-project",
-  "module": "index.ts",
+  "module": "server.ts",
   "type": "module",
   "private": true,
   "sideEffects": false,
