@@ -40,8 +40,8 @@ export const games = pgTable("games", {
     .notNull()
     .defaultNow(),
   // `endedAt` should be nullable as it's not set when a game starts.
-  endedAt: timestamp("ended_at", { withTimezone: true }),
-  timeControl: integer("time_control").notNull(),
+  endedAt: timestamp("ended_at", { withTimezone: true }).defaultNow(),
+  timeControl: integer("time_control").notNull().default(600),
 });
 
 export const gamesRelations = relations(games, ({ one, many }) => ({

@@ -1,5 +1,5 @@
 import { User as UserModel } from "../models/User.model";
-import { pendingRequests } from "../sessions/game.session";
+import { activeGames, pendingRequests } from "../sessions/game.session";
 import { activeConnections } from "../sessions/socket.session";
 import Constants from "../constants/constants";
 import { GameStatus } from "../lib/chess/games.enum";
@@ -10,7 +10,7 @@ import { Game as GameModel } from "../models/game/Game.model";
 import * as gameRepository from "../repositories/game.repository";
 import { Game } from "../lib/chess/Game";
 
-export function findMatch(user: UserModel, connectionId: string, guest?: boolean): GameMatch {
+export async function findMatch(user: UserModel, connectionId: string, guest?: boolean): Promise<GameMatch> {
   if (pendingRequests.size === 0) {
     if (!activeConnections.has(connectionId)) {
       throw new Exception(
@@ -36,13 +36,20 @@ export function findMatch(user: UserModel, connectionId: string, guest?: boolean
         { connectionId, user }
       );
     }
-    match![1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user });
+    const game: GameModel = await startGame(user, match![1].user);
+    match![1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user, game });
     activeConnections
       .get(connectionId)!
-      .emit(Constants.MATCH_FOUND, { opponentConnection: match![0], opponent: match![1].user });
+      .emit(Constants.MATCH_FOUND, { opponentConnection: match![0], opponent: match![1].user, game });
     pendingRequests.delete(match![0]!);
-    startGame(user, match![1].user);
-    return { status: GameStatus.ACTIVE, playerConnection: connectionId, opponentConnection: match![0], userId: user.id!, opponentId: match![1].user.id! };
+    return {
+      status: GameStatus.ACTIVE,
+      playerConnection: connectionId,
+      opponentConnection: match![0],
+      userId: user.id!,
+      opponentId: match![1].user.id!,
+      game
+    };
   }
 }
 
@@ -56,14 +63,18 @@ export function cancelRequest(connectionId: string, user: UserModel): GameMatch 
   return { status: GameStatus.CANCELED, playerConnection: connectionId, userId: user.id! };
 }
 
-function startGame(user1: UserModel, user2: UserModel) {
-  const game = new GameModel();
+async function startGame(user1: UserModel, user2: UserModel): Promise<GameModel> {
+  const gameModel = new GameModel();
   const players = toss(user1, user2);
 
-  game.playerW = players.white.id!;
-  game.playerB = players.black.id!;
+  gameModel.playerW = players.white.id!;
+  gameModel.playerB = players.black.id!;
 
-  const startedGame: GameModel = gameRepository.insertOne(game);
+  const game = new Game();
+
+  const savedGame = await gameRepository.insertOne(gameModel);
+  activeGames.set(savedGame.id!, { game, gameModel });
+  return savedGame;
 }
 
 function toss(

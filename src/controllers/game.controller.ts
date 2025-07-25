@@ -9,7 +9,7 @@ import Constants from "../constants/constants";
 export async function startMatch(c: Context) {
   const body = await c.req.json();
   const user: UserModel = c.get(Constants.AUTH_DATA);
-  const match: GameMatch = gameService.findMatch(user, body.connectionId, false);
+  const match: GameMatch = await gameService.findMatch(user, body.connectionId, false);
   const statusCode = match.status === GameStatus.PENDING ? 202 : 200;
   const success =
     match.status === GameStatus.PENDING

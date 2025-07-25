@@ -14,7 +14,7 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
       .returning();
     if (!inserted) {
       throw new Exception(
-        ErrorCode.USER_INSERTION_FAILED,
+        ErrorCode.RECORD_INSERTION_FAILED,
         "Error Inserting User",
         user
       );
@@ -24,7 +24,7 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
-      ErrorCode.USER_INSERTION_FAILED,
+      ErrorCode.RECORD_INSERTION_FAILED,
       err?.message || "Error Inserting User",
       err
     );

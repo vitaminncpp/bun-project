@@ -1,7 +1,3 @@
-interface test {
-  id: number;
-  status: string;
-}
 import type { Context, Next } from "hono";
 import { Exception } from "../exceptions/app.exception";
 import ErrorResponse from "../models/ErrorResponse.model";
@@ -34,7 +30,7 @@ export async function errorHandler(err: Error, c: Context) {
       case ErrorCode.INVALID_CONNECTION_ID:
         status = 412;
         break;
-      case ErrorCode.USER_INSERTION_FAILED:
+      case ErrorCode.RECORD_INSERTION_FAILED:
       case ErrorCode.ROLE_INSERTION_FAILED:
         status = 500;
         break;
