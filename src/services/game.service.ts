@@ -9,14 +9,13 @@ import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Game as GameModel } from "../models/game/Game.model";
 import * as gameRepository from "../repositories/game.repository";
+import { Game } from "../lib/chess/Game";
 
-export function findMatch(user: UserModel, guest?: boolean): GameMatch {
-  const connectionId = user.metaInfo.connectionId;
-  Logger.debug("Size of Map", pendingRequests.size);
+export function findMatch(user: UserModel, connectionId: string, guest?: boolean): GameMatch {
   if (pendingRequests.size === 0) {
     if (!activeConnections.has(connectionId)) {
       throw new Exception(
-        ErrorCode.BAD_CONNECTION,
+        ErrorCode.INVALID_CONNECTION_ID,
         "No Associated Socket Connection Found",
         {
           connectionId,
@@ -28,36 +27,34 @@ export function findMatch(user: UserModel, guest?: boolean): GameMatch {
       socket: activeConnections.get(connectionId)!,
       user,
     });
-    return { status: GameStatus.PENDING, connectionId };
+    return { status: GameStatus.PENDING, playerConnection: connectionId, userId: user.id! };
   } else {
-    const [match] = [...pendingRequests.values()];
-    if (connectionId === match!.user.metaInfo.connectionId) {
+    const [match] = pendingRequests.entries();
+    if (connectionId === match![0]!) {
       throw new Exception(
         ErrorCode.REQUEST_ALREADY_PROCESSING,
         "Request is Already in progress ! Please wait..",
         { connectionId, user }
       );
     }
-    match!.socket.emit(Constants.MATCH_FOUND, { opponent: user });
-    Logger.debug("Matched", match);
+    match![1].socket.emit(Constants.MATCH_FOUND, { opponent: user });
     activeConnections
       .get(connectionId)!
-      .emit(Constants.MATCH_FOUND, { opponent: match!.user });
-    Logger.debug("Match Found", match!.user);
-    pendingRequests.delete(match!.user.metaInfo.connectionId);
-    startGame(user, match!.user);
-    return { status: GameStatus.ACTIVE, opponent: match!.user, connectionId };
+      .emit(Constants.MATCH_FOUND, { opponent: match![1].user });
+    pendingRequests.delete(match![0]!);
+    startGame(user, match![1].user);
+    return { status: GameStatus.ACTIVE, playerConnection: connectionId, opponentConnection: match![0], userId: user.id!, opponentId: match![1].user.id! };
   }
 }
 
-export function cancelRequest(connectionId: string): GameMatch {
+export function cancelRequest(connectionId: string, user: UserModel): GameMatch {
   if (!pendingRequests.has(connectionId)) {
     throw new Exception(ErrorCode.REQUEST_NOT_FOUND, "Request Not found", {
       connectionId,
     });
   }
   pendingRequests.delete(connectionId);
-  return { status: GameStatus.CANCELED, connectionId };
+  return { status: GameStatus.CANCELED, playerConnection: connectionId, userId: user.id! };
 }
 
 function startGame(user1: UserModel, user2: UserModel) {

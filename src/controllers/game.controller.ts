@@ -9,7 +9,7 @@ import Constants from "../constants/constants";
 export async function startMatch(c: Context) {
   const body = await c.req.json();
   const user: UserModel = c.get(Constants.AUTH_DATA);
-  const match: GameMatch = gameService.findMatch(user, false);
+  const match: GameMatch = gameService.findMatch(user, body.connectionId, false);
   const statusCode = match.status === GameStatus.PENDING ? 202 : 200;
   const success =
     match.status === GameStatus.PENDING
@@ -34,7 +34,8 @@ export async function startMatchGuest(c: Context) {
 
 export async function cancelMatchRequest(c: Context) {
   const connectionId: string = c.req.param("connectionId");
-  const resData = gameService.cancelRequest(connectionId);
+  const user: UserModel = c.get(Constants.AUTH_DATA);
+  const resData = gameService.cancelRequest(connectionId, user);
   return c.json(
     new SuccessResponse(200, "Request canceled sucessfully", resData),
     200

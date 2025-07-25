@@ -31,7 +31,7 @@ export async function errorHandler(err: Error, c: Context) {
       case ErrorCode.REQUEST_ALREADY_PROCESSING:
         status = 409;
         break;
-      case ErrorCode.BAD_CONNECTION:
+      case ErrorCode.INVALID_CONNECTION_ID:
         status = 412;
         break;
       case ErrorCode.USER_INSERTION_FAILED:
