@@ -12,7 +12,7 @@ router.post(
   gameController.startMatchGuest
 );
 
-router.delete(APIEndpoints.MATCH_GUEST_ID!, gameController.cancelMatchRequest);
+router.delete(APIEndpoints.MATCH_ID!, authMiddleware.authenticate, gameController.cancelMatchRequest);
 
 router.post(
   APIEndpoints.MATCH!,

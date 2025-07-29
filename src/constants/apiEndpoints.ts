@@ -16,6 +16,7 @@ const APIEndpoints: { [key: string]: string } = {
 
   GAME: "/game",
   MATCH: "/game/match",
+  MATCH_ID: "/game/match/:connectionId",
   MATCH_GUEST: "/game/match/guest",
   MATCH_GUEST_ID: "/game/match/guest/:connectionId",
 
