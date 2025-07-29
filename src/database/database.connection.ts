@@ -29,5 +29,5 @@ export const db = drizzle(client, {
     roleActions,
   },
   // It's a good practice to enable logging in development for debugging SQL queries
-  logger: process.env.NODE_ENV === "development",
+  logger: true,
 });

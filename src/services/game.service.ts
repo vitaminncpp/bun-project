@@ -2,7 +2,7 @@ import { User as UserModel } from "../models/User.model";
 import { activeGames, pendingRequests } from "../sessions/game.session";
 import { activeConnections } from "../sessions/socket.session";
 import Constants from "../constants/constants";
-import { GameStatus } from "../lib/chess/games.enum";
+import { GameStatus, Player } from "../lib/chess/games.enum";
 import type { GameMatch } from "../models/game/GameMatch.model";
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
@@ -37,10 +37,10 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
       );
     }
     const game: GameModel = await startGame(user, match![1].user);
-    match![1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user, game });
+    match![1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user, game, turn: game.playerW === match![1].user.id ? Player.WHITE : Player.BLACK });
     activeConnections
       .get(connectionId)!
-      .emit(Constants.MATCH_FOUND, { opponentConnection: match![0], opponent: match![1].user, game });
+      .emit(Constants.MATCH_FOUND, { opponentConnection: match![0], opponent: match![1].user, game, turn: game.playerW === user.id ? Player.WHITE : Player.BLACK });
     pendingRequests.delete(match![0]!);
     return {
       status: GameStatus.ACTIVE,
@@ -48,7 +48,8 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
       opponentConnection: match![0],
       userId: user.id!,
       opponentId: match![1].user.id!,
-      game
+      game,
+      turn: game.playerW === user.id ? Player.WHITE : Player.BLACK
     };
   }
 }
@@ -84,7 +85,9 @@ function toss(
   white: UserModel;
   black: UserModel;
 } {
-  const white = Math.random() < 0.5 ? user1 : user2;
-  const black = white === user1 ? user2 : user1;
-  return { white, black };
+  const isUser1White = Math.random() < 0.5;
+  return {
+    white: isUser1White ? user1 : user2,
+    black: isUser1White ? user2 : user1
+  };
 }

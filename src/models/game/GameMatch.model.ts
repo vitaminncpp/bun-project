@@ -1,4 +1,4 @@
-import { GameStatus } from "../../lib/chess/games.enum";
+import { GameStatus, Player } from "../../lib/chess/games.enum";
 import { Game as GameModel } from "../game/Game.model.ts";
 
 export interface GameMatch {
@@ -8,4 +8,5 @@ export interface GameMatch {
   opponentConnection?: string;
   opponentId?: string;
   game?: GameModel;
+  turn?: Player
 }
