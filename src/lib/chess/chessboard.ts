@@ -17,9 +17,9 @@ export class Chessboard {
   }
 
   move(move: Move): Move {
-    this.board[move.xDest]![move.yDest]!.piece = this.board[move.xSrc]![move.ySrc]!.piece!;
-    this.board[move.xSrc]![move.ySrc]!.piece = null;
-    const retMove: Move = this.board[move.xDest]![move.yDest]!.piece!.moveTo(move.xDest, move.yDest);
+    this.board[move.xDest][move.yDest].piece = this.board[move.xSrc][move.ySrc].piece!;
+    this.board[move.xSrc][move.ySrc].piece = null;
+    const retMove: Move = this.board[move.xDest][move.yDest].piece!.moveTo(move.xDest, move.yDest);
     retMove.setSrc(move.xSrc, move.ySrc);
     return retMove;
   }

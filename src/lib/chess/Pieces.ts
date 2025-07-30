@@ -36,8 +36,8 @@ export abstract class Piece {
       this.moveMap.push([]);
       this.attackMap.push([]);
       for (let j = 0; j < Config.SQUARE_SIZE; j++) {
-        this.moveMap[i]!.push(false);
-        this.attackMap[i]!.push(false);
+        this.moveMap[i].push(false);
+        this.attackMap[i].push(false);
       }
     }
     this.reset();

@@ -42,7 +42,7 @@ export class Game {
 
   getMoveMapFor(x: number, y: number, color: boolean): boolean[][] {
     if (this.state.turn === color) {
-      return this.board.board[x]![y]!.piece!.getMoveMap();
+      return this.board.board[x][y].piece!.getMoveMap();
     }
     return Config.empty;
   }

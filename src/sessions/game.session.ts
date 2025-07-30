@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { User as UserModel } from "../models/User.model";
-import { Game } from "../lib/chess/Game";
+import { Game } from "../lib/chess/game";
 import { Game as GameModel } from "../models/game/Game.model";
 
 export const pendingRequests: Map<string, { socket: Socket; user: UserModel }> = new Map<

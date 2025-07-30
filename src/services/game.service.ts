@@ -8,7 +8,7 @@ import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Game as GameModel } from "../models/game/Game.model";
 import * as gameRepository from "../repositories/game.repository";
-import { Game } from "../lib/chess/Game";
+import { Game } from "../lib/chess/game";
 
 export async function findMatch(user: UserModel, connectionId: string, guest?: boolean): Promise<GameMatch> {
   if (pendingRequests.size === 0) {
@@ -36,18 +36,18 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
         { connectionId, user }
       );
     }
-    const game: GameModel = await startGame(user, match![1].user);
-    match![1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user, game, turn: game.playerW === match![1].user.id ? Player.WHITE : Player.BLACK });
+    const game: GameModel = await startGame(user, match[1].user);
+    match[1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user, game, turn: game.playerW === match[1].user.id ? Player.WHITE : Player.BLACK });
     activeConnections
       .get(connectionId)!
-      .emit(Constants.MATCH_FOUND, { opponentConnection: match![0], opponent: match![1].user, game, turn: game.playerW === user.id ? Player.WHITE : Player.BLACK });
-    pendingRequests.delete(match![0]!);
+      .emit(Constants.MATCH_FOUND, { opponentConnection: match[0], opponent: match[1].user, game, turn: game.playerW === user.id ? Player.WHITE : Player.BLACK });
+    pendingRequests.delete(match[0]);
     return {
       status: GameStatus.ACTIVE,
       playerConnection: connectionId,
-      opponentConnection: match![0],
+      opponentConnection: match[0],
       userId: user.id!,
-      opponentId: match![1].user.id!,
+      opponentId: match[1].user.id!,
       game,
       turn: game.playerW === user.id ? Player.WHITE : Player.BLACK
     };

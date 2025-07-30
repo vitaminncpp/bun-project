@@ -1,7 +1,7 @@
 import { Bishop, King, Knight, Pawn, Piece, Queen, Rook } from "./pieces";
 import { Chessboard } from "./chessboard";
-import { globalConfig } from "../config/global.config";
-import { PiecePosition } from "../type/chess.type";
+import Config from "../config/chess.config";
+import type { PiecePosition } from "../types/chess.types";
 
 export class Player {
   color!: boolean;
@@ -22,7 +22,7 @@ export class Player {
     this.color = color;
 
     const pawns: Piece[] = [];
-    for (let i = 0; i < globalConfig.SQUARE_SIZE; i++) {
+    for (let i = 0; i < Config.SQUARE_SIZE; i++) {
       pawns.push(new Pawn(this.board, this.color ? 1 : 6, i as PiecePosition, this.color));
     }
     this.pieces.push(pawns);
