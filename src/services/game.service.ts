@@ -29,7 +29,7 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
     return { status: GameStatus.PENDING, playerConnection: connectionId, userId: user.id! };
   } else {
     const [match] = pendingRequests.entries();
-    if (connectionId === match![0]!) {
+    if (connectionId === match[0]) {
       throw new Exception(
         ErrorCode.REQUEST_ALREADY_PROCESSING,
         "Request is Already in progress ! Please wait..",
