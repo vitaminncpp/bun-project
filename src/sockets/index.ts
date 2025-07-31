@@ -20,10 +20,10 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
   setTimeout(() => {
     socket.emit(Constants.SERVER_HELLO, { connectionId });
   }, 50);
-  Logger.debug("User connected", connectionId);
+  Logger.info("User connected", connectionId);
   activeConnections.set(connectionId, socket);
   socket.on(Constants.DISCONNECT, () => {
-    Logger.debug("User Disconnected");
+    Logger.warn("User Disconnected", connectionId);
     activeConnections.delete(connectionId);
     pendingRequests.delete(connectionId);
   });
