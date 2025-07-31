@@ -5,7 +5,6 @@ import * as userRepository from "../repositories/user.repository";
 import * as tokenService from "../services/token.service";
 import { User as UserModel } from "../models/User.model";
 import * as envService from "./env.service";
-import Constants from "../constants/constants";
 
 export async function login(
   username: string,
@@ -35,7 +34,7 @@ export async function login(
     envService.getRefreshExpire()
   );
 
-  return new AuthToken(accessToken, refreshToken);
+  return new AuthToken(accessToken, refreshToken, user);
 }
 
 export function refreshToken(refreshToken: string): AuthToken {
@@ -50,7 +49,7 @@ export function refreshToken(refreshToken: string): AuthToken {
     accessSecret,
     envService.getRefreshExpire()
   );
-  return new AuthToken(accessToken, "");
+  return new AuthToken(accessToken, "", user);
 }
 
 export function authenticate(token: string): UserModel {
