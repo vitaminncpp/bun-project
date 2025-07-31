@@ -1,6 +1,4 @@
 const Constants = {
-  accessTokenExp: "8hrs",
-  refreshTokenExp: "7days",
   AUTH_DATA: "authData",
 
   CONNECTION: "connection",

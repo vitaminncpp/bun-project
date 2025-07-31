@@ -21,6 +21,14 @@ export function getRefreshSecret(): string {
   return getEnvVariable(ENV_KEYS.JWT_REFRESH_SECRET);
 }
 
+export function getAccessExpire(): string {
+  return getEnvVariable(ENV_KEYS.JWT_ACCESS_EXPIRE);
+}
+
+export function getRefreshExpire(): string {
+  return getEnvVariable(ENV_KEYS.JWT_REFRESH_EXPIRE);
+}
+
 export function getPasswordSalt(): string {
   return getEnvVariable(ENV_KEYS.PASSWORD_SALT);
 }
@@ -58,7 +66,7 @@ export function getDatabaseProtocol(): string {
 }
 
 export function getDatabaseUrl(): string {
-  return `${ getDatabaseProtocol() }://${ getDatabaseUsername() }:${ getDatabasePassword() }@${ getDatabaseHost() }:${ getDatabasePort() }/${ getDatabaseName() }`;
+  return `${getDatabaseProtocol()}://${getDatabaseUsername()}:${getDatabasePassword()}@${getDatabaseHost()}:${getDatabasePort()}/${getDatabaseName()}`;
 }
 
 export function getDatabaseConfig(): {

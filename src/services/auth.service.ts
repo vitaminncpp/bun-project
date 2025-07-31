@@ -27,12 +27,12 @@ export async function login(
   const accessToken = tokenService.generateToken(
     user,
     accessSecret,
-    Constants.accessTokenExp
+    envService.getAccessExpire()
   );
   const refreshToken = tokenService.generateToken(
     user,
     refreshSecret,
-    Constants.refreshTokenExp
+    envService.getRefreshExpire()
   );
 
   return new AuthToken(accessToken, refreshToken);
@@ -48,7 +48,7 @@ export function refreshToken(refreshToken: string): AuthToken {
   const accessToken: string = tokenService.generateToken(
     user,
     accessSecret,
-    Constants.accessTokenExp
+    envService.getRefreshExpire()
   );
   return new AuthToken(accessToken, "");
 }
