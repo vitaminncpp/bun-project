@@ -20,7 +20,7 @@ export async function login(
     throw new Exception(ErrorCode.INVALID_PASSWORD, "Invalid Password", {
       username: user.username,
     });
-
+  delete user.password;
   const accessSecret = envService.getAccessSecret();
   const refreshSecret = envService.getRefreshSecret();
 
