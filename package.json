@@ -21,7 +21,8 @@
     "build": "bun build server.ts --outdir dist --minify --target bun",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "start": "bun dist/server.js"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"

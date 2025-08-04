@@ -9,8 +9,13 @@ import ErrorCode from "../enums/errorcodes.enum";
 import { Game as GameModel } from "../models/game/Game.model";
 import * as gameRepository from "../repositories/game.repository";
 import { Game } from "../lib/chess/game";
+import type { Server, Socket } from "socket.io";
 
-export async function findMatch(user: UserModel, connectionId: string, guest?: boolean): Promise<GameMatch> {
+export async function findMatch(
+  user: UserModel,
+  connectionId: string,
+  guest?: boolean
+): Promise<GameMatch> {
   if (pendingRequests.size === 0) {
     if (!activeConnections.has(connectionId)) {
       throw new Exception(
@@ -26,7 +31,11 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
       socket: activeConnections.get(connectionId)!,
       user,
     });
-    return { status: GameStatus.PENDING, playerConnection: connectionId, userId: user.id! };
+    return {
+      status: GameStatus.PENDING,
+      playerConnection: connectionId,
+      userId: user.id!,
+    };
   } else {
     const [match] = pendingRequests.entries();
     if (connectionId === match[0]) {
@@ -37,10 +46,18 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
       );
     }
     const game: GameModel = await startGame(user, match[1].user);
-    match[1].socket.emit(Constants.MATCH_FOUND, { opponentConnection: connectionId, opponent: user, game, turn: game.playerW === match[1].user.id ? Player.WHITE : Player.BLACK });
-    activeConnections
-      .get(connectionId)!
-      .emit(Constants.MATCH_FOUND, { opponentConnection: match[0], opponent: match[1].user, game, turn: game.playerW === user.id ? Player.WHITE : Player.BLACK });
+    match[1].socket.emit(Constants.MATCH_FOUND, {
+      opponentConnection: connectionId,
+      opponent: user,
+      game,
+      turn: game.playerW === match[1].user.id ? Player.WHITE : Player.BLACK,
+    });
+    activeConnections.get(connectionId)!.emit(Constants.MATCH_FOUND, {
+      opponentConnection: match[0],
+      opponent: match[1].user,
+      game,
+      turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
+    });
     pendingRequests.delete(match[0]);
     return {
       status: GameStatus.ACTIVE,
@@ -49,22 +66,32 @@ export async function findMatch(user: UserModel, connectionId: string, guest?: b
       userId: user.id!,
       opponentId: match[1].user.id!,
       game,
-      turn: game.playerW === user.id ? Player.WHITE : Player.BLACK
+      turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
     };
   }
 }
 
-export function cancelRequest(connectionId: string, user: UserModel): GameMatch {
+export function cancelRequest(
+  connectionId: string,
+  user: UserModel
+): GameMatch {
   if (!pendingRequests.has(connectionId)) {
     throw new Exception(ErrorCode.REQUEST_NOT_FOUND, "Request Not found", {
       connectionId,
     });
   }
   pendingRequests.delete(connectionId);
-  return { status: GameStatus.CANCELED, playerConnection: connectionId, userId: user.id! };
+  return {
+    status: GameStatus.CANCELED,
+    playerConnection: connectionId,
+    userId: user.id!,
+  };
 }
 
-async function startGame(user1: UserModel, user2: UserModel): Promise<GameModel> {
+async function startGame(
+  user1: UserModel,
+  user2: UserModel
+): Promise<GameModel> {
   const gameModel = new GameModel();
   const players = toss(user1, user2);
 
@@ -88,6 +115,16 @@ function toss(
   const isUser1White = Math.random() < 0.5;
   return {
     white: isUser1White ? user1 : user2,
-    black: isUser1White ? user2 : user1
+    black: isUser1White ? user2 : user1,
   };
+}
+
+export function registerSocket(
+  io: Server,
+  socket: Socket,
+  connectionId: string
+) {
+  socket.on(Constants.DISCONNECT, () => {
+    pendingRequests.delete(connectionId);
+  });
 }

@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import Constants from "../constants/constants";
 import Logger from "../utils/logger";
 import * as chatService from "../services/chat.service";
+import * as gameService from "../services/game.service";
 import { activeConnections } from "../sessions/socket.session";
 import { pendingRequests } from "../sessions/game.session";
 import { randomUUID } from "crypto";
@@ -25,9 +26,9 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
   socket.on(Constants.DISCONNECT, () => {
     Logger.warn("User Disconnected", connectionId);
     activeConnections.delete(connectionId);
-    pendingRequests.delete(connectionId);
   });
   chatService.register(io, socket);
+  gameService.registerSocket(io, socket, connectionId);
 });
 
 export default io;
