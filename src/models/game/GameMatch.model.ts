@@ -8,5 +8,5 @@ export interface GameMatch {
   opponentConnection?: string;
   opponentId?: string;
   game?: GameModel;
-  turn?: Player
+  turn?: Player;
 }
