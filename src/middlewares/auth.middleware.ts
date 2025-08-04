@@ -9,7 +9,7 @@ export async function authenticate(c: Context, next: Next) {
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     if (token) {
-      const user: UserModel = authService.authenticate(token);
+      const user: UserModel = UserModel.from(authService.authenticate(token));
       if (user) {
         c.set(Constants.AUTH_DATA, user);
         await next();
