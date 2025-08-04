@@ -48,11 +48,11 @@ export async function findMatch(
     const game: GameModel = await startGame(user, match[1].user);
     match[1].socket.emit(Constants.MATCH_FOUND, {
       status: GameStatus.ACTIVE,
-      playerConnection: match[0],
+      playerConnection: match[0], 
       opponentConnection: connectionId,
-      userId: match[1].user.id!,
+      userId: match[1].user.id,
 
-      opponent: user,
+      opponentId: user.id,
       game,
       turn: game.playerW === match[1].user.id ? Player.WHITE : Player.BLACK,
     });
@@ -62,7 +62,7 @@ export async function findMatch(
       opponentConnection: match[0],
       userId: user.id!,
 
-      opponent: match[1].user,
+      opponentId: match[1].user.id,
       game,
       turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
     });
