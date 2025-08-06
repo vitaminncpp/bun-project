@@ -1,4 +1,12 @@
-import { integer, pgEnum, pgTable, smallint, timestamp, uuid, varchar, } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  smallint,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { games } from "./Game.entity";
 import { FILE, GamePiece, MoveType, Player } from "../lib/chess/games.enum";
@@ -37,12 +45,6 @@ export const moves = pgTable("moves", {
   capturedPiece: gamePieceEnum("captured_piece"),
   promotion: gamePieceEnum("promotion"),
   notation: varchar("notation", { length: 255 }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
 });
 
 export const movesRelations = relations(moves, ({ one }) => ({

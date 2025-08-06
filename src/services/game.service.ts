@@ -34,7 +34,7 @@ export async function findMatch(
     return {
       status: GameStatus.PENDING,
       playerConnection: connectionId,
-      userId: user.id!,
+      userId: user.id,
     };
   } else {
     const [match] = pendingRequests.entries();
@@ -60,7 +60,7 @@ export async function findMatch(
       status: GameStatus.ACTIVE,
       playerConnection: connectionId,
       opponentConnection: match[0],
-      userId: user.id!,
+      userId: user.id,
 
       opponentId: match[1].user.id,
       game,
@@ -71,9 +71,9 @@ export async function findMatch(
       status: GameStatus.ACTIVE,
       playerConnection: connectionId,
       opponentConnection: match[0],
-      userId: user.id!,
+      userId: user.id,
 
-      opponentId: match[1].user.id!,
+      opponentId: match[1].user.id,
       game,
       turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
     };
@@ -93,7 +93,7 @@ export function cancelRequest(
   return {
     status: GameStatus.CANCELED,
     playerConnection: connectionId,
-    userId: user.id!,
+    userId: user.id,
   };
 }
 
@@ -104,13 +104,14 @@ async function startGame(
   const gameModel = new GameModel();
   const players = toss(user1, user2);
 
-  gameModel.playerW = players.white.id!;
-  gameModel.playerB = players.black.id!;
+  gameModel.playerW = players.white.id;
+  gameModel.playerB = players.black.id;
+  gameModel.status = GameStatus.ACTIVE;
 
   const game = new Game();
 
   const savedGame = await gameRepository.insertOne(gameModel);
-  activeGames.set(savedGame.id!, { game, gameModel });
+  activeGames.set(savedGame.id, { game, gameModel });
   return savedGame;
 }
 
@@ -136,4 +137,6 @@ export function registerSocket(
   socket.on(Constants.DISCONNECT, () => {
     pendingRequests.delete(connectionId);
   });
+
+  socket.on(Constants.GAME_MOVE, () => {});
 }

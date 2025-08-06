@@ -10,7 +10,6 @@ export const roles = pgTable("roles", {
   isDeleted: boolean("is_deleted").notNull().default(false),
 });
 
-// Correctly define relations through the join table `userRoles` for many-to-many
 export const rolesRelations = relations(roles, ({ many }) => ({
   userRoles: many(userRoles),
   actions: many(roleActions),

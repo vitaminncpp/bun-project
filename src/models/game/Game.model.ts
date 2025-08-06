@@ -1,7 +1,7 @@
 import { GameStatus, GameResult } from "../../lib/chess/games.enum";
 
 export class Game {
-  id?: string;
+  id!: string;
   playerW!: string;
   playerB!: string;
   status!: GameStatus;
@@ -17,7 +17,7 @@ export class Game {
   constructor() {}
 
   static from(gameObj: {
-    id?: string;
+    id: string;
     playerW: string;
     playerB: string;
     status: GameStatus;

@@ -1,11 +1,12 @@
 export class Role {
-  public id?: string;
+  public id: string;
   public rolename: string;
   public description?: string;
   public createdAt: Date | null;
   public updatedAt: Date | null;
 
   constructor() {
+    this.id = "";
     this.rolename = "";
     this.description = "";
     this.createdAt = null;
@@ -14,7 +15,7 @@ export class Role {
 
   static from(
     roleObj: {
-      id?: string;
+      id: string;
       rolename: string;
       description?: string;
       createdAt?: Date | null;

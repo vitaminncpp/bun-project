@@ -3,7 +3,6 @@ import { relations } from "drizzle-orm";
 import { roles } from "./Role.entity";
 import { Action } from "../policies/actions.policy";
 
-// Define enum for PostgreSQL
 export const actionEnum = pgEnum(
   "action",
   Object.values(Action) as [string, ...string[]]

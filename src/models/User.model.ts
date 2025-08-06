@@ -1,28 +1,26 @@
 export class User {
-  public id?: string;
+  public id: string;
   public username: string;
   public name: string;
   public password?: string;
   public createdAt: Date | null;
   public updatedAt: Date | null;
-  public metaInfo?: any;
   constructor() {
+    this.id = "";
     this.username = "";
     this.name = "";
     this.createdAt = null;
     this.updatedAt = null;
-    this.metaInfo = undefined;
   }
 
   static from(
     userObj: {
-      id?: string;
+      id: string;
       username: string;
       name: string;
       password?: string;
       createdAt?: Date | null;
       updatedAt?: Date | null;
-      metaInfo?: any;
     },
     password?: boolean
   ): User {
@@ -33,7 +31,6 @@ export class User {
     user.password = password ? userObj.password : undefined;
     user.createdAt = userObj.createdAt ?? null;
     user.updatedAt = userObj.updatedAt ?? null;
-    user.metaInfo = userObj.metaInfo;
     return user;
   }
   getCopy(): User {
@@ -44,7 +41,6 @@ export class User {
       password: this.password,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      metaInfo: this.metaInfo,
     });
   }
 }

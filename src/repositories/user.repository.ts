@@ -19,8 +19,7 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
         user
       );
     }
-    user.id = inserted[0]!.id;
-    return user;
+    return UserModel.from(inserted[0]);
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
