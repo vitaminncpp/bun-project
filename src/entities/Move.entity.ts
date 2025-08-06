@@ -3,7 +3,6 @@ import {
   pgEnum,
   pgTable,
   smallint,
-  timestamp,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -11,7 +10,6 @@ import { relations } from "drizzle-orm";
 import { games } from "./Game.entity";
 import { FILE, GamePiece, MoveType, Player } from "../lib/chess/games.enum";
 
-// Define enums for PostgreSQL before using them in the table
 export const playerEnum = pgEnum(
   "player",
   Object.values(Player) as [string, ...string[]]
