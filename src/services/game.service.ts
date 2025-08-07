@@ -11,6 +11,8 @@ import * as gameRepository from "../repositories/game.repository";
 import { Game } from "../lib/chess/game";
 import type { Server, Socket } from "socket.io";
 
+const onDisconnect = () => {};
+
 export async function findMatch(
   user: UserModel,
   connectionId: string,
@@ -66,6 +68,20 @@ export async function findMatch(
       game,
       turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
     });
+    const sock1 = activeConnections.get(connectionId)!;
+    const sock2 = match[1].socket;
+
+    sock1.on(Constants.DISCONNECT, async () => {
+      game.status = GameStatus.ABORTED;
+      const abortedGame = await gameRepository.updateOne(game.id, game);
+      sock2.emit(Constants.OPPONENT_DISCONNECTED, { game: abortedGame });
+    });
+    sock2.on(Constants.DISCONNECT, async () => {
+      game.status = GameStatus.ABORTED;
+      const abortedGame = await gameRepository.updateOne(game.id, game);
+      sock1.emit(Constants.OPPONENT_DISCONNECTED, {});
+    });
+
     pendingRequests.delete(match[0]);
     return {
       status: GameStatus.ACTIVE,

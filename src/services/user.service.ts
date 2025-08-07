@@ -2,20 +2,12 @@ import { User as UserModel } from "../models/User.model";
 import * as userReposiotry from "../repositories/user.repository";
 import * as tokenService from "./token.service";
 import * as envService from "./env.service";
-export async function createUser(
-  username: string,
-  name: string,
-  password: string
-): Promise<UserModel> {
-  const hash = await tokenService.hash(password, envService.getPasswordSalt());
-  const user: UserModel = UserModel.from(
-    {
-      username: username,
-      name: name,
-      password: hash,
-    },
-    true
+export async function createUser(user: UserModel): Promise<UserModel> {
+  const hash = await tokenService.hash(
+    user.password!,
+    envService.getPasswordSalt()
   );
+  user.password = hash;
   const savedUser: UserModel = await userReposiotry.insertOne(user);
   delete savedUser.password;
   return savedUser;

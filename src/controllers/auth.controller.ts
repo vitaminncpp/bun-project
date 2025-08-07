@@ -7,13 +7,10 @@ import AuthToken from "../models/AuthToken.model";
 
 export async function register(c: Context) {
   const body = await c.req.json();
-  const user = await userService.createUser(
-    body.username,
-    body.name,
-    body.password
-  );
+  const user = UserModel.from(body, true);
+  const savedUser = await userService.createUser(user);
   return c.json(
-    new SuccessResponse(200, "User Registered Successfully", user),
+    new SuccessResponse(200, "User Registered Successfully", savedUser),
     200
   );
 }

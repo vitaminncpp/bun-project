@@ -4,6 +4,7 @@ const Constants = {
   CONNECTION: "connection",
   DISCONNECT: "disconnect",
   SERVER_HELLO: "server-hello",
+  OPPONENT_DISCONNECTED: "opponent-disconnected",
 
   REGISTER_EVENT: "register",
   PRIVATE_CHAT: "private_chat",

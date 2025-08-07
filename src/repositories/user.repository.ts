@@ -43,7 +43,7 @@ export async function findById(id: string) {
   } catch (err: Exception | Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
-      ErrorCode.ERROR_FETCHNG_DATA,
+      ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Fetching User Data",
       err || id
     );
@@ -54,18 +54,18 @@ export async function findById(id: string) {
 export async function insertUsers(users: Array<UserModel>) {
   try {
     const inserted = await db.insert(usersTable).values(users as any);
-    // if (!inserted || inserted.length === 0) {
-    //   throw new Exception(
-    //     ErrorCode.USER_INSERTION_FAILED,
-    //     "Error Inserting Users",
-    //     users
-    //   );
-    // }
+    if (!inserted || inserted.length === 0) {
+      throw new Exception(
+        ErrorCode.USER_INSERTION_FAILED,
+        "Error Inserting Users",
+        users
+      );
+    }
     return inserted;
   } catch (err: Exception | Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
-      ErrorCode.ERROR_FETCHNG_DATA,
+      ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Inserting Users",
       err || users
     );
@@ -93,7 +93,7 @@ export async function findByUsername(
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
-      ErrorCode.ERROR_FETCHNG_DATA,
+      ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Fetching User Data",
       err || username
     );
@@ -117,7 +117,7 @@ export async function findAll(options: {
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(
-      ErrorCode.ERROR_FETCHNG_DATA,
+      ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Fetching Users",
       err
     );

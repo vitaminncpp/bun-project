@@ -22,7 +22,11 @@ export async function findAll(options: {
     }
     return result.map((_r) => toRoleDTO(_r));
   } catch (err) {
-    handleRepositoryError(err, ErrorCode.ERROR_FETCHNG_DATA, "Error Fetching Roles");
+    handleRepositoryError(
+      err,
+      ErrorCode.ERROR_FETCHING_DATA,
+      "Error Fetching Roles"
+    );
   }
 }
 
@@ -35,7 +39,12 @@ export async function findById(id: string): Promise<RoleModel> {
     }
     return toRoleDTO(role);
   } catch (err) {
-    handleRepositoryError(err, ErrorCode.ERROR_FETCHNG_DATA, "Error Fetching Role Data", id);
+    handleRepositoryError(
+      err,
+      ErrorCode.ERROR_FETCHING_DATA,
+      "Error Fetching Role Data",
+      id
+    );
   }
 }
 
@@ -51,11 +60,20 @@ export async function insertOne(role: RoleModel): Promise<RoleModel> {
     }
     return toRoleDTO(result[0]);
   } catch (err) {
-    handleRepositoryError(err, ErrorCode.ROLE_INSERTION_FAILED, "Error Inserting Role");
+    handleRepositoryError(
+      err,
+      ErrorCode.ROLE_INSERTION_FAILED,
+      "Error Inserting Role"
+    );
   }
 }
 
-function handleRepositoryError(err: unknown, defaultErrorCode: ErrorCode, defaultMessage: string, context?: any): never {
+function handleRepositoryError(
+  err: unknown,
+  defaultErrorCode: ErrorCode,
+  defaultMessage: string,
+  context?: any
+): never {
   if (err instanceof Exception) {
     throw err;
   }

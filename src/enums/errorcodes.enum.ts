@@ -1,21 +1,31 @@
 enum ErrorCode {
-  USERNAME_ALREADY_PRESENT,
-  USERNAME_NOT_EXIST,
-  USER_NOT_EXIST,
-  RECORD_INSERTION_FAILED,
-  INTERNAL_SERVER_ERROR,
-  ENV_ERROR,
-  INVALID_PASSWORD,
-  NOT_APLICABLE,
-  ERROR_FETCHNG_DATA,
-  INVALID_TOKEN,
-  ROLE_NOT_EXIST,
-  ROLE_INSERTION_FAILED,
-  INVALID_CONNECTION_ID,
-  GAME_NOT_FOUND,
-  GAME_IS_NOT_ACTIVE,
-  REQUEST_ALREADY_PROCESSING,
-  REQUEST_NOT_FOUND,
+  USERNAME_ALREADY_PRESENT = "auth.username.exists",
+  USERNAME_NOT_EXIST = "auth.username.not_found",
+  USER_NOT_EXIST = "auth.user.not_found",
+  INVALID_PASSWORD = "auth.password.invalid",
+  INVALID_TOKEN = "auth.token.invalid",
+  USER_INSERTION_FAILED = "auth.user.insert_failed",
+
+  RECORD_INSERTION_FAILED = "db.record.insert_failed",
+  ROLE_NOT_EXIST = "db.role.not_found",
+  ROLE_INSERTION_FAILED = "db.role.insert_failed",
+
+  ERROR_FETCHING_DATA = "data.fetch_error",
+  RESOURCE_NOT_FOUND = "resource.not_found",
+
+  GAME_NOT_FOUND = "game.not_found",
+  GAME_IS_NOT_ACTIVE = "game.not_active",
+  GAME_UPDATE_FAILED = "game.update_failed",
+  INVALID_GAME_ID = "game.invalid_id",
+
+  REQUEST_ALREADY_PROCESSING = "request.already_processing",
+  REQUEST_NOT_FOUND = "request.not_found",
+
+  INVALID_CONNECTION_ID = "connection.invalid_id",
+
+  ENV_ERROR = "system.env.error",
+  INTERNAL_SERVER_ERROR = "system.internal_error",
+  NOT_APPLICABLE = "common.not_applicable",
 }
 
 export default ErrorCode;

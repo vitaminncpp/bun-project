@@ -20,9 +20,9 @@ export class Game {
     id: string;
     playerW: string;
     playerB: string;
-    status: GameStatus;
+    status: GameStatus | string;
 
-    result: GameResult;
+    result: GameResult | string;
     ratingChangeW: number;
     ratingChangeB: number;
     startedAt: Date;
@@ -35,9 +35,9 @@ export class Game {
     game.id = gameObj.id;
     game.playerW = gameObj.playerW;
     game.playerB = gameObj.playerB;
-    game.status = gameObj.status;
+    game.status = gameObj.status as GameStatus;
 
-    game.result = gameObj.result;
+    game.result = gameObj.result as GameResult;
     game.ratingChangeW = gameObj.ratingChangeW;
     game.ratingChangeB = gameObj.ratingChangeB;
     game.startedAt = gameObj.startedAt;

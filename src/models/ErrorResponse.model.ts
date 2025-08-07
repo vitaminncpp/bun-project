@@ -1,3 +1,4 @@
+import type ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
 
 interface ErrorDescription {
@@ -12,8 +13,15 @@ export default class ErrorResponse {
   public description: ErrorDescription = {} as ErrorDescription;
   public trace: string[];
   public data?: any;
-  constructor(status: number, error: string, err: Exception | Error, data?: any) {
-    this.status = status;
+  public code: ErrorCode;
+  constructor(
+    code: ErrorCode,
+    status: number,
+    error: string,
+    err: Exception | Error,
+    data?: any
+  ) {
+    (this.code = code), (this.status = status);
     this.error = error;
     this.data = data;
     this.trace = new Error()
