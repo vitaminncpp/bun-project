@@ -1,11 +1,17 @@
 import type { Context, Next } from "hono";
 import ErrorResponse from "../models/ErrorResponse.model";
+import ErrorCode from "../enums/errorcodes.enum";
 
 export async function validateRegistration(c: Context, next: Next) {
   const body = await c.req.json().catch(() => null);
   if (!body) {
     return c.json(
-      new ErrorResponse(400, "Request Body Expected", new Error()),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Request Body Expected",
+        new Error()
+      ),
       400
     );
   }
@@ -21,7 +27,13 @@ export async function validateRegistration(c: Context, next: Next) {
   }
   if (Object.keys(errors).length > 0) {
     return c.json(
-      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Validation(s) failed",
+        new Error(),
+        errors
+      ),
       400
     );
   }
@@ -32,7 +44,12 @@ export async function validateLogin(c: Context, next: Next) {
   const body = await c.req.json().catch(() => null);
   if (!body) {
     return c.json(
-      new ErrorResponse(400, "Request Body Expected", new Error()),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Request Body Expected",
+        new Error()
+      ),
       400
     );
   }
@@ -45,7 +62,13 @@ export async function validateLogin(c: Context, next: Next) {
   }
   if (Object.keys(errors).length > 0) {
     return c.json(
-      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Validation(s) failed",
+        new Error(),
+        errors
+      ),
       400
     );
   }
@@ -56,7 +79,12 @@ export async function validateRefresh(c: Context, next: Next) {
   const body = await c.req.json().catch(() => null);
   if (!body) {
     return c.json(
-      new ErrorResponse(400, "Request Body Expected", new Error()),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Request Body Expected",
+        new Error()
+      ),
       400
     );
   }
@@ -66,7 +94,13 @@ export async function validateRefresh(c: Context, next: Next) {
   }
   if (Object.keys(errors).length > 0) {
     return c.json(
-      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Validation(s) failed",
+        new Error(),
+        errors
+      ),
       400
     );
   }

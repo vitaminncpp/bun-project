@@ -1,5 +1,6 @@
 import type { Context, Next } from "hono";
 import ErrorResponse from "../models/ErrorResponse.model";
+import ErrorCode from "../enums/errorcodes.enum";
 
 export async function validateGetUser(c: Context, next: Next) {
   const errors: { [key: string]: { [key: string]: string } } = {};
@@ -8,7 +9,13 @@ export async function validateGetUser(c: Context, next: Next) {
   }
   if (Object.entries(errors).length > 0) {
     return c.json(
-      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Validation(s) failed",
+        new Error(),
+        errors
+      ),
       400
     );
   }
@@ -20,6 +27,7 @@ export async function validateAddUsers(c: Context, next: Next) {
   if (!Array.isArray(body) || body.length === 0) {
     return c.json(
       new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
         400,
         "Request Body must be a non-empty array of objects",
         new Error()
@@ -55,7 +63,13 @@ export async function validateAddUsers(c: Context, next: Next) {
   });
   if (errors.length > 0) {
     return c.json(
-      new ErrorResponse(400, "Validation(s) failed", new Error(), errors),
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Validation(s) failed",
+        new Error(),
+        errors
+      ),
       400
     );
   }

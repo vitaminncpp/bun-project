@@ -1,4 +1,6 @@
 enum ErrorCode {
+  VALIDATION_FAILED = "common.validation.failed",
+
   USERNAME_ALREADY_PRESENT = "auth.username.exists",
   USERNAME_NOT_EXIST = "auth.username.not_found",
   USER_NOT_EXIST = "auth.user.not_found",
