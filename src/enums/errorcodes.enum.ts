@@ -7,6 +7,7 @@ enum ErrorCode {
   INVALID_PASSWORD = "auth.password.invalid",
   INVALID_TOKEN = "auth.token.invalid",
   USER_INSERTION_FAILED = "auth.user.insert_failed",
+  UNAUTHORIZED = "auth.user.unauthorized",
 
   RECORD_INSERTION_FAILED = "db.record.insert_failed",
   ROLE_NOT_EXIST = "db.role.not_found",

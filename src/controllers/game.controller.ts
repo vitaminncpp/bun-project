@@ -33,5 +33,3 @@ export async function cancelMatchRequest(c: Context) {
     200
   );
 }
-
-export async function makeMove(c: Context) {}

@@ -53,7 +53,10 @@ export async function findById(id: string) {
 // TODO fix type matchin
 export async function insertUsers(users: Array<UserModel>) {
   try {
-    const inserted = await db.insert(usersTable).values(users as any);
+    const inserted = await db
+      .insert(usersTable)
+      .values(users as any)
+      .returning();
     if (!inserted || inserted.length === 0) {
       throw new Exception(
         ErrorCode.USER_INSERTION_FAILED,
@@ -61,7 +64,7 @@ export async function insertUsers(users: Array<UserModel>) {
         users
       );
     }
-    return inserted;
+    return inserted.map((_u) => UserModel.from(_u));
   } catch (err: Exception | Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

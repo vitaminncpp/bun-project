@@ -3,7 +3,7 @@ import { sysInfo as sysInfoController } from "../controllers/app.controller";
 import APIEndpoints from "../constants/apiEndpoints";
 import authRouter from "./auth.router";
 import userRouter from "./user.router";
-import roleRouter from "./role.router";
+// import roleRouter from "./role.router";
 import gameRouter from "./game.router";
 import { testGrpc } from "../controllers/grpc.controller";
 

@@ -10,8 +10,7 @@ import { Game as GameModel } from "../models/game/Game.model";
 import * as gameRepository from "../repositories/game.repository";
 import { Game } from "../lib/chess/game";
 import type { Server, Socket } from "socket.io";
-
-const onDisconnect = () => {};
+import { Move as MoveModel } from "../models/game/Move.model";
 
 export async function findMatch(
   user: UserModel,
@@ -145,6 +144,10 @@ function toss(
   };
 }
 
+export async function makeMove(move: MoveModel) {
+  const { game, gameModel } = activeGames.get(move.gameId)!;
+}
+
 export function registerSocket(
   io: Server,
   socket: Socket,
@@ -154,5 +157,5 @@ export function registerSocket(
     pendingRequests.delete(connectionId);
   });
 
-  socket.on(Constants.GAME_MOVE, () => {});
+  socket.on(Constants.GAME_MOVE, makeMove);
 }
