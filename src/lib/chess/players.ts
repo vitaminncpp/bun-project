@@ -1,7 +1,7 @@
 import { Bishop, King, Knight, Pawn, Piece, Queen, Rook } from "./pieces";
 import { Chessboard } from "./chessboard";
-import Config from "../config/chess.config";
-import type { PiecePosition } from "../types/chess.types";
+import Config from "./chess.config";
+import type { PiecePosition } from "./chess.types";
 
 export class Player {
   color!: boolean;

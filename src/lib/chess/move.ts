@@ -1,4 +1,4 @@
-import type { PiecePosition } from "../types/chess.types";
+import type { PiecePosition } from "./chess.types";
 import { MoveType } from "./games.enum";
 
 export class Move {

@@ -1,5 +1,5 @@
 import { Piece } from "./pieces";
-import Config from "../config/chess.config";
+import Config from "./chess.config";
 import { Move } from "./move";
 
 export class Chessboard {

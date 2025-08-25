@@ -1,4 +1,4 @@
-import type { PieceType, PieceValue } from "../types/chess.types";
+import type { PieceType, PieceValue } from "./chess.types";
 
 const Config = {
     PAWN_VALUE: 1 as PieceValue,
