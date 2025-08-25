@@ -1,4 +1,4 @@
-import type { Context, Next } from "hono";
+import type { Context } from "hono";
 import { Exception } from "../exceptions/app.exception";
 import ErrorResponse from "../models/ErrorResponse.model";
 import ErrorCode from "../enums/errorcodes.enum";

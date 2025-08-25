@@ -37,3 +37,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .vscode
 
 package-lock.json
+
+*.exe
+*.dll
+*.lib
+*.a
+*.so
+*.o
