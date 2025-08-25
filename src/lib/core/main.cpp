@@ -13,7 +13,6 @@ extern "C" __declspec(dllexport) int addNumbersWithLogs(int a, int b, LogCallbac
                       {
                           Sleep(200);
                           cb("test");
-                        //   std::cout << "test" << std::endl;
                       } });
 
     t.detach();
@@ -21,12 +20,10 @@ extern "C" __declspec(dllexport) int addNumbersWithLogs(int a, int b, LogCallbac
     {
         Sleep(500);
 
-        // Build message
         std::string msg = "C++ loop: " + std::to_string(i) +
                           " | a=" + std::to_string(a) +
                           " b=" + std::to_string(b);
 
-        // Send message to Node
         cb(msg.c_str());
     }
 
@@ -37,5 +34,20 @@ BOOL APIENTRY DllMain(HMODULE hModule,
                       DWORD ul_reason_for_call,
                       LPVOID lpReserved)
 {
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        std::cout << "DLL loaded into process\n";
+        break;
+    case DLL_THREAD_ATTACH:
+        std::cout << "DLL thread attach\n";
+        break;
+    case DLL_THREAD_DETACH:
+        std::cout << "DLL thread detattach\n";
+        break;
+    case DLL_PROCESS_DETACH:
+        std::cout << "DLL unloaded from process\n";
+        break;
+    }
     return TRUE;
 }

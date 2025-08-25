@@ -8,7 +8,7 @@ const logCallback = ffi.Callback("void", [charPtr], (msgPtr) => {
   console.log("DLL says:", msg);
 });
 
-const lib = ffi.Library("D:/repos/bun-project/src/lib/core/main.dll", {
+const lib = ffi.Library("./main.dll", {
   addNumbersWithLogs: ["int", ["int", "int", "pointer"]],
 });
 
