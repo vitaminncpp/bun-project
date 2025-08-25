@@ -17,3 +17,7 @@ lib.addNumbersWithLogs.async(5, 7, logCallback, (err, result) => {
   if (err) throw err;
   console.log("Final Result:", result);
 });
+
+while (true) {
+  console.log("this is interval");
+}

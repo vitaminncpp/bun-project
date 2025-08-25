@@ -1,0 +1,1 @@
+x86_64-w64-mingw32-g++ -O2 -Wall -shared -o main.dll main.cpp -static-libgcc -static-libstdc++ -static -pthread -Wl,--export-all-symbols -Wl,--enable-auto-import

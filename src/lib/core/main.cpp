@@ -7,25 +7,14 @@ typedef void(__stdcall *LogCallback)(const char *msg);
 
 extern "C" __declspec(dllexport) int addNumbersWithLogs(int a, int b, LogCallback cb)
 {
-    std::thread t([cb]
+    std::thread t([]
                   {
                       while (true)
                       {
-                          Sleep(200);
-                          cb("test");
+                          std::cout<<"this is DLL============================>\n";
                       } });
 
     t.detach();
-    for (int i = 0; i < 10; i++)
-    {
-        Sleep(500);
-
-        std::string msg = "C++ loop: " + std::to_string(i) +
-                          " | a=" + std::to_string(a) +
-                          " b=" + std::to_string(b);
-
-        cb(msg.c_str());
-    }
 
     return a + b;
 }
