@@ -7,8 +7,8 @@ import type { StatusCode } from "hono/utils/http-status";
 export async function errorHandler(err: Error, c: Context) {
   let status: StatusCode = 500;
   let errorMsg = "Internal Server Error";
-  let data = c.req.json ? await c.req.json().catch(() => ({})) : {};
-  let code!: ErrorCode;
+  let data = await c.req.json().catch(() => ({}));
+  let code: ErrorCode = ErrorCode.INTERNAL_SERVER_ERROR;
 
   if (err instanceof Exception) {
     code = err.code;
