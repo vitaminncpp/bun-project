@@ -11,7 +11,7 @@ export class Game {
   ratingChangeB!: number;
   startedAt!: Date;
 
-  endedAt?: Date;
+  endedAt?: Date | null;
   timeControl!: number;
 
   constructor() {}
@@ -27,7 +27,7 @@ export class Game {
     ratingChangeB: number;
     startedAt: Date;
 
-    endedAt?: Date;
+    endedAt?: Date | null;
     timeControl: number;
   }): Game {
     const game = new Game();

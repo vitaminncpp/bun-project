@@ -18,8 +18,7 @@ export async function insertOne(game: GameModel): Promise<GameModel> {
         game
       );
     }
-    game.id = inserted[0]!.id;
-    return game;
+    return GameModel.from(inserted[0]);
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

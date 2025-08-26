@@ -1,7 +1,7 @@
 export class Project {
   id!: string;
   name!: string;
-  description?: string;
+  description?: string | null;
   userId!: string;
 
   constructor() {}
@@ -9,7 +9,7 @@ export class Project {
   static from(proj: {
     id: string;
     name: string;
-    description?: string;
+    description?: string | null;
     userId: string;
   }): Project {
     const project = new Project();
