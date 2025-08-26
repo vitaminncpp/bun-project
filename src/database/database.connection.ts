@@ -9,6 +9,7 @@ import { games } from "../entities/Game.entity";
 import { profiles } from "../entities/Profile.entity";
 import { moves } from "../entities/Move.entity";
 import { roleActions } from "../entities/RoleAction.entity";
+import { projects } from "../entities/Project.entity";
 
 const client = postgres(envService.getDatabaseUrl(), {
   max: 10,
@@ -23,6 +24,7 @@ export const db = drizzle(client, {
     profiles,
     moves,
     roleActions,
+    projects,
   },
   logger: true,
 });

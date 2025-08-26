@@ -7,23 +7,23 @@ import { Hono } from "hono";
 const router = new Hono();
 
 router.get(
-  APIEndpoints.USERS!,
+  APIEndpoints.USERS,
   authMiddleware.authenticate,
   userController.getAllUsers
 );
 router.get(
-  APIEndpoints.USERNAME!,
+  APIEndpoints.USERNAME,
   authMiddleware.authenticate,
   userValidation.validateGetUser,
   userController.getUser
 );
 router.put(
-  APIEndpoints.USER!,
+  APIEndpoints.USER,
   authMiddleware.authenticate,
   userController.updateUser
 );
 router.post(
-  APIEndpoints.USERS!,
+  APIEndpoints.USERS,
   authMiddleware.authenticate,
   userValidation.validateAddUsers,
   userController.addUsers

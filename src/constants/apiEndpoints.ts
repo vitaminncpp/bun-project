@@ -20,6 +20,9 @@ const APIEndpoints: { [key: string]: string } = {
   MATCH_GUEST: "/game/match/guest",
   MATCH_GUEST_ID: "/game/match/guest/:connectionId",
 
+  FILE: "/file",
+  PROJECT: "/project",
+
   TEST: "/test",
 };
 

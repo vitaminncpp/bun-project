@@ -7,19 +7,19 @@ import * as gameValidations from "../validations/game.validation";
 const router = new Hono();
 
 router.post(
-  APIEndpoints.MATCH_GUEST!,
+  APIEndpoints.MATCH_GUEST,
   gameValidations.validateStartGame,
   gameController.startMatchGuest
 );
 
 router.delete(
-  APIEndpoints.MATCH_ID!,
+  APIEndpoints.MATCH_ID,
   authMiddleware.authenticate,
   gameController.cancelMatchRequest
 );
 
 router.post(
-  APIEndpoints.MATCH!,
+  APIEndpoints.MATCH,
   authMiddleware.authenticate,
   gameValidations.validateStartGame,
   gameController.startMatch

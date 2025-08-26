@@ -6,18 +6,18 @@ import * as authValidations from "../validations/auth.validation";
 const router = new Hono();
 
 router.post(
-  APIEndpoints.REGISTER!,
+  APIEndpoints.REGISTER,
   authValidations.validateRegistration,
   authController.register
 );
 router.post(
-  APIEndpoints.LOGIN!,
+  APIEndpoints.LOGIN,
   authValidations.validateLogin,
   authController.login
 );
 
 router.post(
-  APIEndpoints.REFRESH!,
+  APIEndpoints.REFRESH,
   authValidations.validateRefresh,
   authController.refreshToken
 );
