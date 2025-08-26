@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 import { roles } from "./Role.entity";
 import { games } from "./Game.entity";
 import { profiles } from "./Profile.entity";
-import { workspaces } from "./Project.entity";
+import { projects } from "./Project.entity";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -18,5 +18,5 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   gamesW: many(games, { relationName: "playerW" }),
   gamesB: many(games, { relationName: "playerB" }),
   profile: one(profiles),
-  workspace: many(workspaces),
+  workspace: many(projects),
 }));

@@ -11,7 +11,7 @@ export const projects = pgTable("projects", {
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
-export const workspaceRelations = relations(projects, ({ one, many }) => ({
+export const projectRelations = relations(projects, ({ one, many }) => ({
   user: one(users, {
     fields: [projects.userId],
     references: [users.id],
