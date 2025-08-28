@@ -23,6 +23,8 @@ const APIEndpoints: { [key: string]: string } = {
   FILE: "/file",
   PROJECT: "/project",
 
+  SHELL: "/shell",
+
   TEST: "/test",
 };
 

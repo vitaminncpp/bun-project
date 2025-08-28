@@ -11,6 +11,9 @@ const Constants = {
 
   MATCH_FOUND: "match-found",
   GAME_MOVE: "game-move",
+
+  SHELL_IN: "shell-in",
+  SHELL_OUT: "shell-out",
 };
 
 export default Constants;

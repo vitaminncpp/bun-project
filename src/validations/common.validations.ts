@@ -20,6 +20,11 @@ export async function validateUploadfile(c: Context, next: Next) {
   if (contentType !== "application/zip") {
     errors["file"] = { file_format: "`zip` file format is expected" };
   }
+  const project = c.req.query("project");
+  if (!project) {
+    errors["project"] = { required: "`project` query param is required" };
+  }
+  console.log(project);
   if (Object.keys(errors).length > 0) {
     return c.json(
       new ErrorResponse(

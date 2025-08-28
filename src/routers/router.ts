@@ -7,6 +7,7 @@ import userRouter from "./user.router";
 import gameRouter from "./game.router";
 import utilsRouter from "./utils.router";
 import projectRouter from "./project.router";
+import shelltRouter from "./shell.router";
 import { testGrpc } from "../controllers/grpc.controller";
 
 const router = new Hono();
@@ -17,6 +18,7 @@ router.route(APIEndpoints.ROOT, userRouter);
 router.route(APIEndpoints.ROOT, gameRouter);
 router.route(APIEndpoints.ROOT, utilsRouter);
 router.route(APIEndpoints.ROOT, projectRouter);
+router.route(APIEndpoints.ROOT, shelltRouter);
 // router.use(roleRouter);
 // router.use(gameRouter);
 

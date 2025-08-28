@@ -1,0 +1,41 @@
+import { spawn } from "child_process";
+import { activeConnections } from "../sessions/socket.session";
+import { activeShell } from "../sessions/shell.session";
+import Constants from "../constants/constants";
+import { Server, Socket } from "socket.io";
+
+export function startShell(connectionId: string) {
+  const shell = spawn("cmd", [], { stdio: "pipe" });
+  const sock = activeConnections.get(connectionId);
+  shell.stdout.setEncoding("utf8");
+  shell.stdout.on("data", (data) => {
+    sock?.emit(Constants.SHELL_OUT, {
+      timestamp: Date.now(),
+      data: data.toString(),
+    });
+  });
+  shell.stdout.on("error", (data) => {
+    sock?.emit(Constants.SHELL_OUT, {
+      timestamp: Date.now(),
+      data: data.toString(),
+    });
+  });
+  activeShell.set(connectionId, shell);
+  return shell;
+}
+
+export function registerSocket(
+  io: Server,
+  socket: Socket,
+  connectionId: string
+) {
+  socket.on(Constants.DISCONNECT, () => {
+    const shell = activeShell.get(connectionId);
+    shell?.kill();
+    activeShell.delete(connectionId);
+  });
+  socket.on(Constants.SHELL_IN, (data: { timestamp: number; data: string }) => {
+    const shell = activeShell.get(connectionId);
+    activeShell.get(connectionId)?.stdin?.write(data.data + "\n");
+  });
+}

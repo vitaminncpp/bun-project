@@ -3,8 +3,8 @@ import Constants from "../constants/constants";
 import Logger from "../utils/logger";
 import * as chatService from "../services/chat.service";
 import * as gameService from "../services/game.service";
+import * as shellService from "../services/shell.service";
 import { activeConnections } from "../sessions/socket.session";
-import { pendingRequests } from "../sessions/game.session";
 import { randomUUID } from "crypto";
 
 const io = new Server({
@@ -29,6 +29,7 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
   });
   chatService.register(io, socket);
   gameService.registerSocket(io, socket, connectionId);
+  shellService.registerSocket(io, socket, connectionId);
 });
 
 export default io;
