@@ -17,7 +17,7 @@ export function startShell(connectionId: string) {
   const sock = activeConnections.get(connectionId);
   const shell = spawn("cmd", [], { stdio: "pipe" });
 
-  shell.stdout.setEncoding("utf8");
+  // shell.stdout.setEncoding("utf8");
   shell.stdout.on("data", (data) => {
     sock!.emit(Constants.SHELL_OUT, {
       timestamp: Date.now(),
