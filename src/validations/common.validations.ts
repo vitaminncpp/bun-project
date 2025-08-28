@@ -24,7 +24,28 @@ export async function validateUploadfile(c: Context, next: Next) {
   if (!project) {
     errors["project"] = { required: "`project` query param is required" };
   }
-  console.log(project);
+  if (Object.keys(errors).length > 0) {
+    return c.json(
+      new ErrorResponse(
+        ErrorCode.VALIDATION_FAILED,
+        400,
+        "Validation(s) failed",
+        new Error(),
+        errors
+      ),
+      400
+    );
+  }
+  await next();
+}
+
+export async function validateConnectionId(c: Context, next: Next) {
+  const connectionId: string | undefined = c.req.query("connectionId");
+  const errors: { connectionId?: { required: string } } = {};
+  if (!connectionId) {
+    errors.connectionId = { required: "`connectionId` is required" };
+  }
+
   if (Object.keys(errors).length > 0) {
     return c.json(
       new ErrorResponse(

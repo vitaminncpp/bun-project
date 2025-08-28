@@ -3,19 +3,23 @@ import { activeConnections } from "../sessions/socket.session";
 import { activeShell } from "../sessions/shell.session";
 import Constants from "../constants/constants";
 import { Server, Socket } from "socket.io";
+import { Exception } from "../exceptions/app.exception";
+import ErrorCode from "../enums/errorcodes.enum";
 
 export function startShell(connectionId: string) {
-  const shell = spawn("cmd", [], { stdio: "pipe" });
+  if (!activeConnections.has(connectionId)) {
+    throw new Exception(
+      ErrorCode.INVALID_CONNECTION_ID,
+      "No Associated Socket Connection Found",
+      connectionId
+    );
+  }
   const sock = activeConnections.get(connectionId);
-  shell.stdout.setEncoding("utf8");
+  const shell = spawn("cmd", [], { stdio: "pipe" });
+
+  // shell.stdout.setEncoding("utf8");
   shell.stdout.on("data", (data) => {
-    sock?.emit(Constants.SHELL_OUT, {
-      timestamp: Date.now(),
-      data: data.toString(),
-    });
-  });
-  shell.stdout.on("error", (data) => {
-    sock?.emit(Constants.SHELL_OUT, {
+    sock!.emit(Constants.SHELL_OUT, {
       timestamp: Date.now(),
       data: data.toString(),
     });
@@ -35,7 +39,6 @@ export function registerSocket(
     activeShell.delete(connectionId);
   });
   socket.on(Constants.SHELL_IN, (data: { timestamp: number; data: string }) => {
-    const shell = activeShell.get(connectionId);
     activeShell.get(connectionId)?.stdin?.write(data.data + "\n");
   });
 }
