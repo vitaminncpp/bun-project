@@ -7,7 +7,7 @@ const Constants = {
   OPPONENT_DISCONNECTED: "opponent-disconnected",
 
   REGISTER_EVENT: "register",
-  PRIVATE_CHAT: "private_chat",
+  PRIVATE_CHAT: "private-chat",
 
   MATCH_FOUND: "match-found",
   GAME_MOVE: "game-move",
