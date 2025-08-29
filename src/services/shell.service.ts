@@ -18,12 +18,17 @@ export function startShell(connectionId: string) {
   const shell = spawn("cmd", [], { stdio: "pipe" });
 
   // shell.stdout.setEncoding("utf8");
-  shell.stdout.on("data", (data) => {
+
+  const callback = (data: any) => {
     sock!.emit(Constants.SHELL_OUT, {
       timestamp: Date.now(),
       data: data.toString(),
     });
-  });
+    console.log(data.toString());
+  };
+  shell.stdout.on("data", callback);
+  shell.on("error", callback);
+  shell.stderr.on("data", callback);
   activeShell.set(connectionId, shell);
   return shell;
 }
