@@ -24,7 +24,6 @@ export function startShell(connectionId: string) {
       timestamp: Date.now(),
       data: data.toString(),
     });
-    console.log(data.toString());
   };
   shell.stdout.on("data", callback);
   shell.on("error", callback);
