@@ -6,8 +6,20 @@ import * as projectValidations from "../validations/project.validations";
 
 const router = new Hono();
 
+router.get(
+  APIEndpoints.PROJECTS,
+  authMiddleware.authenticate,
+  projectController.getAllProjects
+);
+
+router.get(
+  APIEndpoints.PROJECT_ID,
+  authMiddleware.authenticate,
+  projectController.getProject
+);
+
 router.post(
-  APIEndpoints.PROJECT,
+  APIEndpoints.PROJECTS,
   authMiddleware.authenticate,
   projectValidations.validateCreateProject,
   projectController.createProject

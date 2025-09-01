@@ -4,10 +4,13 @@ enum ErrorCode {
   USERNAME_ALREADY_PRESENT = "auth.username.exists",
   USERNAME_NOT_EXIST = "auth.username.not_found",
   USER_NOT_EXIST = "auth.user.not_found",
+
   INVALID_PASSWORD = "auth.password.invalid",
   INVALID_TOKEN = "auth.token.invalid",
   USER_INSERTION_FAILED = "auth.user.insert_failed",
   UNAUTHORIZED = "auth.user.unauthorized",
+
+  PROJECT_NOT_EXIST = "auth.project.not_found",
 
   RECORD_INSERTION_FAILED = "db.record.insert_failed",
   ROLE_NOT_EXIST = "db.role.not_found",

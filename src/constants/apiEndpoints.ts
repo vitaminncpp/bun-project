@@ -21,7 +21,8 @@ const APIEndpoints: { [key: string]: string } = {
   MATCH_GUEST_ID: "/game/match/guest/:connectionId",
 
   FILE: "/file",
-  PROJECT: "/project",
+  PROJECTS: "/projects",
+  PROJECT_ID: "/projects/:id",
 
   SHELL: "/shell",
 

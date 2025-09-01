@@ -22,7 +22,7 @@ export async function getAllUsers(
   return userReposiotry.findAll(options);
 }
 
-export async function getUser(id: string) {
+export async function getUser(id: string): Promise<UserModel> {
   return userReposiotry.findById(id);
 }
 

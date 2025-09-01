@@ -1,6 +1,6 @@
 import { db } from "../database/database.connection";
 import { users as usersTable } from "../entities/User.entity";
-import { User as UserModel } from "../models/User.model";
+import { User, User as UserModel } from "../models/User.model";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
 // import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
@@ -30,7 +30,7 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
   }
 }
 
-export async function findById(id: string) {
+export async function findById(id: string): Promise<UserModel> {
   try {
     const [user] = await db
       .select()
@@ -39,7 +39,7 @@ export async function findById(id: string) {
     if (!user) {
       throw new Exception(ErrorCode.USER_NOT_EXIST, "User does not Exists", id);
     }
-    return user;
+    return UserModel.from(user);
   } catch (err: Exception | Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

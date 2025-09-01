@@ -7,11 +7,11 @@ import { GameStatus } from "../lib/chess/games.enum";
 import Constants from "../constants/constants";
 
 export async function startMatch(c: Context) {
-  const body = await c.req.json();
+  const connectionId = c.req.query("connectionId")!;
   const user: UserModel = c.get(Constants.AUTH_DATA);
   const match: GameMatch = await gameService.findMatch(
     user,
-    body.connectionId,
+    connectionId,
     false
   );
   const statusCode = match.status === GameStatus.PENDING ? 202 : 200;

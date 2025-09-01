@@ -20,6 +20,7 @@ export async function errorHandler(err: Error, c: Context) {
       case ErrorCode.ROLE_NOT_EXIST:
       case ErrorCode.REQUEST_NOT_FOUND:
       case ErrorCode.INVALID_GAME_ID:
+      case ErrorCode.PROJECT_NOT_EXIST:
         status = 404;
         break;
       case ErrorCode.INVALID_PASSWORD:

@@ -17,3 +17,29 @@ export async function createProject(c: Context) {
     201
   );
 }
+
+export async function getProject(c: Context) {
+  const projectId = c.req.param("id");
+  const project: ProjectModel = await projectService.getProject(projectId);
+  return c.json(
+    new SuccessResponse(200, "Project Fetched Successfully", project),
+    200
+  );
+}
+
+export async function getAllProjects(c: Context) {
+  let options = undefined;
+  const page = c.req.query("page");
+  const size = c.req.query("size");
+  if (page && size) {
+    options = {
+      page: Number(page),
+      size: Number(size),
+    };
+  }
+  const users = await projectService.getAllProjects(options);
+  return c.json(
+    new SuccessResponse(200, "All Projects fetched successfully", users),
+    200
+  );
+}
