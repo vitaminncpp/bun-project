@@ -3,7 +3,7 @@ import { db } from "../database/database.connection.ts";
 import { projects as projectTable } from "../entities/Project.entity.ts";
 import { Exception } from "../exceptions/app.exception.ts";
 import ErrorCode from "../enums/errorcodes.enum.ts";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export async function insertOne(project: ProjectModel): Promise<ProjectModel> {
   try {
@@ -56,7 +56,12 @@ export async function findById(projectId: string): Promise<ProjectModel> {
 export async function findAll(options: {
   page: number;
   size: number;
-}): Promise<Array<ProjectModel>> {
+}): Promise<{
+  total: number;
+  page: number;
+  size: number;
+  records: Array<ProjectModel>;
+}> {
   try {
     const projects = await db
       .select()
@@ -69,7 +74,15 @@ export async function findAll(options: {
         "Error Getting all Projects"
       );
     }
-    return projects.map(ProjectModel.from);
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(projectTable);
+
+    return {
+      total: Number(count),
+      ...options,
+      records: projects.map(ProjectModel.from),
+    };
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
     throw new Exception(

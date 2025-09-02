@@ -37,13 +37,19 @@ export async function getAllProjects(c: Context) {
       size: Number(size),
     };
   }
-  const projects: ProjectModel[] = await projectService.getAllProjects(options);
+  const projects: {
+    total: number;
+    page: number;
+    size: number;
+    records: Array<ProjectModel>;
+  } = await projectService.getAllProjects(options);
   return c.json(
-    new SuccessResponse<ProjectModel[]>(
-      200,
-      "All Projects fetched successfully",
-      projects
-    ),
+    new SuccessResponse<{
+      total: number;
+      page: number;
+      size: number;
+      records: Array<ProjectModel>;
+    }>(200, "All Projects fetched successfully", projects),
     200
   );
 }

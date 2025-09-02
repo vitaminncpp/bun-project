@@ -16,6 +16,11 @@ export async function getAllProjects(
     page: number;
     size: number;
   } = { page: 1, size: 10 }
-): Promise<ProjectModel[]> {
+): Promise<{
+  total: number;
+  page: number;
+  size: number;
+  records: Array<ProjectModel>;
+}> {
   return projectRepository.findAll(options);
 }
