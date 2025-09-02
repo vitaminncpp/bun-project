@@ -37,9 +37,13 @@ export async function getAllProjects(c: Context) {
       size: Number(size),
     };
   }
-  const users = await projectService.getAllProjects(options);
+  const projects: ProjectModel[] = await projectService.getAllProjects(options);
   return c.json(
-    new SuccessResponse(200, "All Projects fetched successfully", users),
+    new SuccessResponse<ProjectModel[]>(
+      200,
+      "All Projects fetched successfully",
+      projects
+    ),
     200
   );
 }

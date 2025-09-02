@@ -1,10 +1,10 @@
-export default class SuccessResponse {
+export default class SuccessResponse<Data = any> {
   private isSuccessFull = true as const;
   status: number;
   success: string;
-  data: any;
+  data: Data;
 
-  constructor(status: number, success: string, data: any) {
+  constructor(status: number, success: string, data: Data) {
     this.status = status;
     this.success = success;
     this.data = data;

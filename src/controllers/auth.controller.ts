@@ -10,7 +10,11 @@ export async function register(c: Context) {
   const user = UserModel.from(body, true);
   const savedUser = await userService.createUser(user);
   return c.json(
-    new SuccessResponse(200, "User Registered Successfully", savedUser),
+    new SuccessResponse<UserModel>(
+      200,
+      "User Registered Successfully",
+      savedUser
+    ),
     200
   );
 }
@@ -21,14 +25,17 @@ export async function login(c: Context) {
     body.username,
     body.password
   );
-  return c.json(new SuccessResponse(200, "Login successfull", token), 200);
+  return c.json(
+    new SuccessResponse<AuthToken>(200, "Login successfull", token),
+    200
+  );
 }
 
 export async function refreshToken(c: Context) {
   const body = await c.req.json();
   const token: AuthToken = await authService.refreshToken(body.refreshToken);
   return c.json(
-    new SuccessResponse(200, "Token Refreshed Successfully", token),
+    new SuccessResponse<AuthToken>(200, "Token Refreshed Successfully", token),
     200
   );
 }

@@ -19,7 +19,10 @@ export async function startMatch(c: Context) {
     match.status === GameStatus.PENDING
       ? "Match request is created Succesfully"
       : "Match Found Succesfully";
-  return c.json(new SuccessResponse(statusCode, success, match), statusCode);
+  return c.json(
+    new SuccessResponse<GameMatch>(statusCode, success, match),
+    statusCode
+  );
 }
 
 export async function startMatchGuest(c: Context) {}
@@ -27,9 +30,13 @@ export async function startMatchGuest(c: Context) {}
 export async function cancelMatchRequest(c: Context) {
   const connectionId: string = c.req.param("connectionId");
   const user: UserModel = c.get(Constants.AUTH_DATA);
-  const resData = gameService.cancelRequest(connectionId, user);
+  const resData: GameMatch = gameService.cancelRequest(connectionId, user);
   return c.json(
-    new SuccessResponse(200, "Request canceled sucessfully", resData),
+    new SuccessResponse<GameMatch>(
+      200,
+      "Request canceled sucessfully",
+      resData
+    ),
     200
   );
 }
