@@ -4,6 +4,7 @@ import * as projectRepository from "../repositories/project.repository";
 export async function createProject(
   project: ProjectModel
 ): Promise<ProjectModel> {
+  project.icon = `https://robohash.org/${project.name}?size=256x256`;
   return await projectRepository.insertOne(project);
 }
 
@@ -23,4 +24,8 @@ export async function getAllProjects(
   records: Array<ProjectModel>;
 }> {
   return projectRepository.findAll(options);
+}
+
+export async function deleteProject(projectId: string): Promise<ProjectModel> {
+  return projectRepository.removeOne(projectId);
 }

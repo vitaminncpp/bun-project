@@ -6,6 +6,7 @@ export const projects = pgTable("projects", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
+  icon: varchar("icon"),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),

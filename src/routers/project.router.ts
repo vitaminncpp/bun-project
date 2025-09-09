@@ -25,4 +25,10 @@ router.post(
   projectController.createProject
 );
 
+router.delete(
+  APIEndpoints.PROJECT_ID,
+  authMiddleware.authenticate,
+  projectController.deleteProject
+);
+
 export default router;

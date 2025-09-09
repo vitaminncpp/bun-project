@@ -1,16 +1,18 @@
 export class Project {
-  id!: string;
+  id?: string;
   name!: string;
   description?: string | null;
   userId!: string;
+  icon?: string | null;
 
   constructor() {}
 
   static from(proj: {
-    id: string;
+    id?: string;
     name: string;
     description?: string | null;
     userId: string;
+    icon?: string | null;
   }): Project {
     const project = new Project();
 
@@ -18,6 +20,7 @@ export class Project {
     project.name = proj.name;
     project.description = proj.description;
     project.userId = proj.userId;
+    project.icon = proj.icon;
 
     return project;
   }
@@ -27,6 +30,7 @@ export class Project {
       name: this.name,
       description: this.description,
       userId: this.userId,
+      icon: this.icon,
     });
   }
 }

@@ -92,3 +92,11 @@ export async function findAll(options: {
     );
   }
 }
+
+export async function removeOne(projectId: string): Promise<ProjectModel> {
+  const project = await db
+    .delete(projectTable)
+    .where(eq(projectTable.id, projectId))
+    .returning();
+  return ProjectModel.from(project[0]);
+}

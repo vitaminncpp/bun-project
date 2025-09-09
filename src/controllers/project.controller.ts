@@ -51,5 +51,14 @@ export async function getAllProjects(c: Context) {
       records: Array<ProjectModel>;
     }>(200, "All Projects fetched successfully", projects),
     200
+  );  
+}
+
+export async function deleteProject(c: Context) {
+  const projectId = c.req.param("id");
+  const project: ProjectModel = await projectService.deleteProject(projectId);
+  return c.json(
+    new SuccessResponse(200, "Project Deleted Successfully", project),
+    200
   );
 }
