@@ -2,13 +2,13 @@ import { Hono } from "hono";
 import APIEndpoints from "../constants/apiEndpoints";
 import * as authMiddleware from "../middlewares/auth.middleware";
 import * as gameController from "../controllers/game.controller";
-import * as gameValidations from "../validations/game.validation";
+import * as commonValidations from "../validations/common.validations";
 
 const router = new Hono();
 
 router.post(
   APIEndpoints.MATCH_GUEST,
-  gameValidations.validateStartGame,
+  commonValidations.validateConnectionId,
   gameController.startMatchGuest
 );
 
@@ -21,7 +21,7 @@ router.delete(
 router.post(
   APIEndpoints.MATCH,
   authMiddleware.authenticate,
-  gameValidations.validateStartGame,
+  commonValidations.validateConnectionId,
   gameController.startMatch
 );
 
