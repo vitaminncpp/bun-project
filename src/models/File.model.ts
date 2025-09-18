@@ -4,10 +4,8 @@ export class FileModel {
   description?: string | null;
   projectId!: string;
   path!: string;
-
   constructor() {
   }
-
   static from(fileObj: {
     id: string;
     name: string;
@@ -25,7 +23,6 @@ export class FileModel {
 
     return file;
   }
-
   getCopy(): FileModel {
     return FileModel.from({
       id: this.id,
