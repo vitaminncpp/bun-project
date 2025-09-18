@@ -4,7 +4,7 @@ import ErrorCode from "../enums/errorcodes.enum";
 import { validateObjectFields } from "../utils/validationFields";
 import { Exception } from "../exceptions/app.exception";
 
-export async function validateUploadfile(c: Context, next: Next) {
+export async function validateUploadFile(c: Context, next: Next) {
   const blob = await c.req.blob();
   if (blob.size === 0) {
     return c.json(
@@ -22,9 +22,9 @@ export async function validateUploadfile(c: Context, next: Next) {
   if (contentType !== "application/zip") {
     errors["file"] = { file_format: "`zip` file format is expected" };
   }
-  const project = c.req.query("project");
-  if (!project) {
-    errors["project"] = { required: "`project` query param is required" };
+  const projectId = c.req.query("projectId");
+  if (!projectId) {
+    errors["projectId"] = { required: "`projectId` query param is required" };
   }
   if (Object.keys(errors).length > 0) {
     return c.json(

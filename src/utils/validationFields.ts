@@ -1,5 +1,3 @@
-import type { Type } from "typescript";
-
 type ValidationErrors = Record<string, Record<string, string>>;
 
 export function validateObjectFields(
