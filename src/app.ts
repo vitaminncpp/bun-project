@@ -9,7 +9,7 @@ import { error404, errorHandler } from "./middlewares/error.middleware";
 const app = new Hono();
 
 app.use("*", cors());
-app.route(APIEndpoints.API!, routes);
+app.route(APIEndpoints.API, routes);
 app.onError(errorHandler);
 app.notFound(error404);
 
