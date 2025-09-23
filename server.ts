@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import { createServer } from 'node:https'
-import fs from 'node:fs'
+import { getCertificate, getPrivateKey } from "./src/services/utils.service.ts";
 
 import io from "./src/sockets";
 import app from "./src/app";
@@ -13,8 +13,8 @@ const server = serve({
   fetch: app.fetch,
   createServer: createServer,
   serverOptions: {
-    key: fs.readFileSync('D:/ssl certificates/server-ec.key'),
-    cert: fs.readFileSync('D:/ssl certificates/server-ec.crt'),
+    key: getPrivateKey(),
+    cert: getCertificate(),
   },
 })
 

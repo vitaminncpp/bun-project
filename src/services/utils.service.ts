@@ -15,3 +15,11 @@ export async function saveFile(data: ArrayBuffer, projectId: string): Promise<Fi
     projectId
   })
 }
+
+export function getPrivateKey() {
+  return fs.readFileSync(Paths.SSL_KEY_PATH);
+}
+
+export function getCertificate() {
+  return fs.readFileSync(Paths.SSL_CERTIFICATE_PATH);
+}
