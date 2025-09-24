@@ -1,10 +1,10 @@
 import ErrorCode from "../enums/errorcodes.enum";
 
-export class Exception extends Error {
+export class Exception<Data = any> extends Error {
   public readonly code: ErrorCode;
-  public readonly data: any;
+  public readonly data?: Data;
 
-  constructor(code: ErrorCode, message?: string, data?: any) {
+  constructor(code: ErrorCode, message?: string, data?: Data) {
     super(message || "Internal Server Error");
     this.name = "Exception";
     this.code = code;
