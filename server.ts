@@ -16,7 +16,7 @@ const server = serve({
     key: getPrivateKey(),
     cert: getCertificate(),
   },
-})
+});
 
 io.attach(server);
 
