@@ -20,7 +20,7 @@ export function startShell(connectionId: string) {
   // shell.stdout.setEncoding("utf8");
 
   const callback = (data: any) => {
-    sock!.emit(Constants.SHELL_OUT, {
+    sock!.socket.emit(Constants.SHELL_OUT, {
       timestamp: Date.now(),
       data: data.toString(),
     });

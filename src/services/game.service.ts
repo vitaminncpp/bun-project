@@ -29,7 +29,7 @@ export async function findMatch(
       );
     }
     pendingRequests.set(connectionId, {
-      socket: activeConnections.get(connectionId)!,
+      socket: activeConnections.get(connectionId)!.socket,
       user,
     });
     return {
@@ -57,7 +57,7 @@ export async function findMatch(
       game,
       turn: game.playerW === match[1].user.id ? Player.WHITE : Player.BLACK,
     });
-    activeConnections.get(connectionId)!.emit(Constants.MATCH_FOUND, {
+    activeConnections.get(connectionId)!.socket.emit(Constants.MATCH_FOUND, {
       status: GameStatus.ACTIVE,
       playerConnection: connectionId,
       opponentConnection: match[0],
@@ -70,7 +70,7 @@ export async function findMatch(
     const sock1 = activeConnections.get(connectionId)!;
     const sock2 = match[1].socket;
 
-    sock1.on(Constants.DISCONNECT, async () => {
+    sock1.socket.on(Constants.DISCONNECT, async () => {
       game.status = GameStatus.ABORTED;
       const abortedGame = await gameRepository.updateOne(game.id, game);
       sock2.emit(Constants.OPPONENT_DISCONNECTED, { game: abortedGame });
@@ -78,7 +78,7 @@ export async function findMatch(
     sock2.on(Constants.DISCONNECT, async () => {
       game.status = GameStatus.ABORTED;
       const abortedGame = await gameRepository.updateOne(game.id, game);
-      sock1.emit(Constants.OPPONENT_DISCONNECTED, {});
+      sock1.socket.emit(Constants.OPPONENT_DISCONNECTED, {});
     });
 
     pendingRequests.delete(match[0]);
