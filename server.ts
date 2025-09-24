@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import { createServer } from 'node:https'
-import { getCertificate, getPrivateKey } from "./src/services/utils.service.ts";
+import { getCertificate, getPrivateKey } from "./src/services/utils.service";
 
 import io from "./src/sockets";
 import app from "./src/app";

@@ -7,7 +7,7 @@ interface ErrorDescription {
 }
 
 export default class ErrorResponse {
-  private isSuccessFull = false as const;
+  private isSuccessful = false as const;
   public status: number;
   public error: string;
   public description: ErrorDescription = {} as ErrorDescription;

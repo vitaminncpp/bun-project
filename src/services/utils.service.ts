@@ -1,7 +1,7 @@
 import Paths from "../constants/path.constants";
 import fs from "fs";
 import path from "path";
-import { FileModel } from "../models/File.model.ts";
+import { FileModel } from "../models/File.model";
 
 
 export async function saveFile(data: ArrayBuffer, projectId: string): Promise<FileModel> {

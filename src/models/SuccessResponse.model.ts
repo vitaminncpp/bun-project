@@ -1,5 +1,5 @@
 export default class SuccessResponse<Data = any> {
-  private isSuccessFull = true as const;
+  private isSuccessful = true as const;
   status: number;
   success: string;
   data: Data;

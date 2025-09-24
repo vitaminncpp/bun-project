@@ -1,7 +1,7 @@
 import type { Context } from "hono";
-import { saveFile } from "../services/utils.service.ts";
-import SuccessResponse from "../models/SuccessResponse.model.ts";
-import type { FileModel } from "../models/File.model.ts";
+import { saveFile } from "../services/utils.service";
+import SuccessResponse from "../models/SuccessResponse.model";
+import type { FileModel } from "../models/File.model";
 
 export async function uploadFile(c: Context) {
   const projectId = c.req.query("projectId")!;

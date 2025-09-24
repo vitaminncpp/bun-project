@@ -1,8 +1,8 @@
-import { Project as ProjectModel } from "../models/Project.model.ts";
-import { db } from "../database/database.connection.ts";
-import { projects as projectTable } from "../entities/Project.entity.ts";
-import { Exception } from "../exceptions/app.exception.ts";
-import ErrorCode from "../enums/errorcodes.enum.ts";
+import { Project as ProjectModel } from "../models/Project.model";
+import { db } from "../database/database.connection";
+import { projects as projectTable } from "../entities/Project.entity";
+import { Exception } from "../exceptions/app.exception";
+import ErrorCode from "../enums/errorcodes.enum";
 import { eq, sql } from "drizzle-orm";
 
 export async function insertOne(project: ProjectModel): Promise<ProjectModel> {
