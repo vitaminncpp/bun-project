@@ -44,3 +44,5 @@ package-lock.json
 *.a
 *.so
 *.o
+
+static
