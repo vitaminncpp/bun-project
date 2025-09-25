@@ -4,11 +4,7 @@ import ErrorCode from "../enums/errorcodes.enum";
 import type { StringValue } from "ms";
 import bcrypt from "bcrypt";
 
-export function generateToken(
-  payload: any,
-  secret: string,
-  expiresIn: string | number
-): string {
+export function generateToken(payload: any, secret: string, expiresIn: string | number): string {
   let accessToken = "";
   try {
     accessToken = jwt.sign({ ...payload }, secret, {
@@ -41,9 +37,6 @@ export async function hash(password: string, salt: string): Promise<string> {
   return (await bcrypt.hash(saltedPassword, 10)) as string;
 }
 
-export async function comparePass(
-  password: string,
-  hash: string
-): Promise<boolean> {
+export async function comparePass(password: string, hash: string): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }

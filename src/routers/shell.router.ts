@@ -10,7 +10,7 @@ router.post(
   APIEndpoints.SHELL,
   authMiddleware.authenticate,
   validations.validateConnectionId,
-  shellController.startShell
+  shellController.startShell,
 );
 
 export default router;

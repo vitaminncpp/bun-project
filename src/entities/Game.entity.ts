@@ -6,11 +6,11 @@ import { GameResult, GameStatus } from "../lib/chess/games.enum";
 
 export const gameStatusEnum = pgEnum(
   "game_status",
-  Object.values(GameStatus) as [string, ...string[]]
+  Object.values(GameStatus) as [string, ...string[]],
 );
 export const gameResultEnum = pgEnum(
   "game_result",
-  Object.values(GameResult) as [string, ...string[]]
+  Object.values(GameResult) as [string, ...string[]],
 );
 
 export const games = pgTable("games", {
@@ -25,9 +25,7 @@ export const games = pgTable("games", {
   result: gameResultEnum("result").notNull().default(GameResult.PENDING),
   ratingChangeW: integer("rating_change_w").notNull().default(0),
   ratingChangeB: integer("rating_change_b").notNull().default(0),
-  startedAt: timestamp("started_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  startedAt: timestamp("started_at", { withTimezone: true }).notNull().defaultNow(),
   endedAt: timestamp("ended_at", { withTimezone: true }).defaultNow(),
   timeControl: integer("time_control").notNull().default(600),
 });

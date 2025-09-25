@@ -58,10 +58,7 @@ function xorshift32(seed) {
     return x >>> 0;
   };
 }
-function randomBigInt(
-  bits,
-  rnd = xorshift32(Date.now() ^ (performance?.now?.() | 0))
-) {
+function randomBigInt(bits, rnd = xorshift32(Date.now() ^ (performance?.now?.() | 0))) {
   let out = 0n;
   let produced = 0;
   while (produced < bits) {
@@ -78,23 +75,7 @@ function randomBigInt(
 }
 
 // ---------- Miller–Rabin primality (probabilistic) ----------
-const SMALL_PRIMES = [
-  2n,
-  3n,
-  5n,
-  7n,
-  11n,
-  13n,
-  17n,
-  19n,
-  23n,
-  29n,
-  31n,
-  37n,
-  41n,
-  43n,
-  47n,
-];
+const SMALL_PRIMES = [2n, 3n, 5n, 7n, 11n, 13n, 17n, 19n, 23n, 29n, 31n, 37n, 41n, 43n, 47n];
 
 function isProbablePrime(n, rounds = 16) {
   if (n < 2n) return false;
@@ -139,10 +120,7 @@ function generatePrime(bits) {
 
 // ---------- Key generation ----------
 function generateRSAKeyPair(bits = 1024, e = 65537n) {
-  if (bits < 512)
-    throw new Error(
-      "Use >= 512 for demos; still insecure without padding/CSPRNG."
-    );
+  if (bits < 512) throw new Error("Use >= 512 for demos; still insecure without padding/CSPRNG.");
   const half = Math.floor(bits / 2);
   let p, q, n, phi;
   while (true) {
@@ -198,8 +176,7 @@ function rsaEncryptBytes(plainBytes, { e, n }) {
 
 function rsaDecryptBytes(cipherBytes, { d, n }) {
   const k = Math.ceil(bitLength(n) / 8);
-  if (cipherBytes.length % k !== 0)
-    throw new Error("Invalid ciphertext length");
+  if (cipherBytes.length % k !== 0) throw new Error("Invalid ciphertext length");
   const out = [];
   for (let i = 0; i < cipherBytes.length; i += k) {
     const block = cipherBytes.subarray(i, i + k);
@@ -227,9 +204,6 @@ console.log("start");
   const recovered = rsaDecryptBytes(ciphertext, privateKey);
 
   console.log("Public n bits:", bitLength(publicKey.n));
-  console.log(
-    "Ciphertext (hex):",
-    Buffer.from(ciphertext).toString("hex").slice(0, 128) + "..."
-  );
+  console.log("Ciphertext (hex):", Buffer.from(ciphertext).toString("hex").slice(0, 128) + "...");
   console.log("Recovered:", td.decode(recovered));
 })();

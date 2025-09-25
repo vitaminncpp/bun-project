@@ -11,45 +11,31 @@ export async function register(c: Context) {
   const user = UserModel.from(body, true);
   const savedUser = await userService.createUser(user);
   return c.json(
-    new SuccessResponse<UserModel>(
-      200,
-      "User Registered Successfully",
-      savedUser
-    ),
-    200
+    new SuccessResponse<UserModel>(200, "User Registered Successfully", savedUser),
+    200,
   );
 }
 
 export async function login(c: Context) {
   const body = await c.req.json();
-  const token: AuthToken = await authService.login(
-    body.username,
-    body.password
-  );
-  setCookie(c, 'authorization', token.accessToken, {
+  const token: AuthToken = await authService.login(body.username, body.password);
+  setCookie(c, "authorization", token.accessToken, {
     maxAge: 3600, // Cookie expires in 1 hour
     httpOnly: false, // Not accessible via client-side JavaScript
     secure: false, // Only sent over HTTPS
-    path: '/', // Available across the entire domain
+    path: "/", // Available across the entire domain
   });
-  ;
-  setCookie(c, 'refresh', token.refreshToken, {
+  setCookie(c, "refresh", token.refreshToken, {
     maxAge: 3600, // Cookie expires in 1 hour
-    httpOnly:true, // Not accessible via client-side JavaScript
+    httpOnly: true, // Not accessible via client-side JavaScript
     secure: true, // Only sent over HTTPS
-    path: '/', // Available across the entire domain
+    path: "/", // Available across the entire domain
   });
-  return c.json(
-    new SuccessResponse<AuthToken>(200, "Login successfull", token),
-    200
-  );
+  return c.json(new SuccessResponse<AuthToken>(200, "Login successfull", token), 200);
 }
 
 export async function refreshToken(c: Context) {
   const body = await c.req.json();
   const token: AuthToken = await authService.refreshToken(body.refreshToken);
-  return c.json(
-    new SuccessResponse<AuthToken>(200, "Token Refreshed Successfully", token),
-    200
-  );
+  return c.json(new SuccessResponse<AuthToken>(200, "Token Refreshed Successfully", token), 200);
 }

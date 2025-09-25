@@ -6,10 +6,7 @@ import * as tokenService from "../services/token.service";
 import { User as UserModel } from "../models/User.model";
 import * as envService from "./env.service";
 
-export async function login(
-  username: string,
-  password: string
-): Promise<AuthToken> {
+export async function login(username: string, password: string): Promise<AuthToken> {
   const salt = envService.getPasswordSalt();
 
   const user = await userRepository.findByUsername(username, true);
@@ -23,15 +20,11 @@ export async function login(
   const accessSecret = envService.getAccessSecret();
   const refreshSecret = envService.getRefreshSecret();
 
-  const accessToken = tokenService.generateToken(
-    user,
-    accessSecret,
-    envService.getAccessExpire()
-  );
+  const accessToken = tokenService.generateToken(user, accessSecret, envService.getAccessExpire());
   const refreshToken = tokenService.generateToken(
     user,
     refreshSecret,
-    envService.getRefreshExpire()
+    envService.getRefreshExpire(),
   );
 
   return new AuthToken(accessToken, refreshToken, user);
@@ -47,7 +40,7 @@ export function refreshToken(refreshToken: string): AuthToken {
   const accessToken: string = tokenService.generateToken(
     user,
     accessSecret,
-    envService.getRefreshExpire()
+    envService.getRefreshExpire(),
   );
   return new AuthToken(accessToken, "", user);
 }

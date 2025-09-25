@@ -56,16 +56,10 @@ export async function errorHandler(err: Error, c: Context) {
 export function error404(c: Context) {
   const message = "Resource Not found";
   return c.json(
-    new ErrorResponse(
-      ErrorCode.RESOURCE_NOT_FOUND,
-      404,
-      message,
-      new Error(message),
-      {
-        resource: c.req.path,
-        method: c.req.method,
-      }
-    ),
-    404
+    new ErrorResponse(ErrorCode.RESOURCE_NOT_FOUND, 404, message, new Error(message), {
+      resource: c.req.path,
+      method: c.req.method,
+    }),
+    404,
   );
 }

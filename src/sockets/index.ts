@@ -31,20 +31,50 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
   socket.on(Constants.CLIENT_HELLO, (hello: ClientHello) => {
     if (hello.authorization) {
       try {
-        const user = authenticate(hello.authorization)
+        const user = authenticate(hello.authorization);
         if (user) {
           activeConnections.set(connectionId, { socket, authorized: true });
-          socket.emit(Constants.SERVER_HELLO, new SuccessResponse(201, "", { connectionId }))
+          socket.emit(
+            Constants.SERVER_HELLO,
+            new SuccessResponse(201, "Authentication Successful", { connectionId }),
+          );
         } else {
-          socket.emit(Constants.SERVER_HELLO, new ErrorResponse(ErrorCode.INVALID_TOKEN, 401, "Invalid token, authentication failed", new Exception(ErrorCode.INVALID_TOKEN, "Invalid token, authentication failed", hello), { connectionId }));
+          socket.emit(
+            Constants.SERVER_HELLO,
+            new ErrorResponse(
+              ErrorCode.INVALID_TOKEN,
+              401,
+              "Invalid token, authentication failed",
+              new Exception(ErrorCode.INVALID_TOKEN, "Invalid token, authentication failed", hello),
+              { connectionId },
+            ),
+          );
         }
       } catch (error: Exception | any) {
-        socket.emit(Constants.SERVER_HELLO, new ErrorResponse(ErrorCode.INVALID_TOKEN, 401, "Invalid token, authentication failed", error, { connectionId }));
+        socket.emit(
+          Constants.SERVER_HELLO,
+          new ErrorResponse(
+            ErrorCode.INVALID_TOKEN,
+            401,
+            "Invalid token, authentication failed",
+            error,
+            { connectionId },
+          ),
+        );
       }
     } else {
-      socket.emit(Constants.SERVER_HELLO, new ErrorResponse(ErrorCode.INVALID_TOKEN, 401, "Invalid token, authentication failed", new Exception(ErrorCode.INVALID_TOKEN, "Invalid token, authentication failed", hello), { connectionId }));
+      socket.emit(
+        Constants.SERVER_HELLO,
+        new ErrorResponse(
+          ErrorCode.INVALID_TOKEN,
+          401,
+          "Invalid token, authentication failed",
+          new Exception(ErrorCode.INVALID_TOKEN, "Invalid token, authentication failed", hello),
+          { connectionId },
+        ),
+      );
     }
-  })
+  });
   socket.on(Constants.DISCONNECT, () => {
     Logger.warn("User Disconnected", connectionId);
     activeConnections.delete(connectionId);

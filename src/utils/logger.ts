@@ -39,12 +39,8 @@ class Logger {
    */
   private static log(level: LogLevel, message: string, ...args: any[]) {
     const color = COLORS[level] || "";
-    const timestamp = `${
-      PART_COLORS.timestamp
-    }[${Logger.getTimestamp()}]${RESET}`;
-    const levelStr = `${
-      PART_COLORS.level[level]
-    } [${level.toUpperCase()}] ${RESET}`;
+    const timestamp = `${PART_COLORS.timestamp}[${Logger.getTimestamp()}]${RESET}`;
+    const levelStr = `${PART_COLORS.level[level]} [${level.toUpperCase()}] ${RESET}`;
 
     const msg = `${PART_COLORS.message}${message}${RESET}`;
     const output = `${timestamp} ${levelStr}${color}${msg}${RESET}`;
@@ -62,18 +58,12 @@ class Logger {
         }
         break;
       case "info":
-        if (
-          ["debug", "info", "success"].includes(process.env.LOG_LEVEL || "info")
-        ) {
+        if (["debug", "info", "success"].includes(process.env.LOG_LEVEL || "info")) {
           console.info(output, ...args);
         }
         break;
       case "warn":
-        if (
-          ["debug", "info", "warn", "success"].includes(
-            process.env.LOG_LEVEL || "info"
-          )
-        ) {
+        if (["debug", "info", "warn", "success"].includes(process.env.LOG_LEVEL || "info")) {
           console.warn(output, ...args);
         }
         break;

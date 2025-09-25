@@ -1,31 +1,15 @@
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  smallint,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, smallint, uuid, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { games } from "./Game.entity";
 import { FILE, GamePiece, MoveType, Player } from "../lib/chess/games.enum";
 
-export const playerEnum = pgEnum(
-  "player",
-  Object.values(Player) as [string, ...string[]]
-);
-export const fileEnum = pgEnum(
-  "file",
-  Object.values(FILE) as [string, ...string[]]
-);
+export const playerEnum = pgEnum("player", Object.values(Player) as [string, ...string[]]);
+export const fileEnum = pgEnum("file", Object.values(FILE) as [string, ...string[]]);
 export const gamePieceEnum = pgEnum(
   "game_piece",
-  Object.values(GamePiece) as [string, ...string[]]
+  Object.values(GamePiece) as [string, ...string[]],
 );
-export const moveTypeEnum = pgEnum(
-  "move_type",
-  Object.values(MoveType) as [string, ...string[]]
-);
+export const moveTypeEnum = pgEnum("move_type", Object.values(MoveType) as [string, ...string[]]);
 
 export const moves = pgTable("moves", {
   id: uuid("id").primaryKey().defaultRandom(),

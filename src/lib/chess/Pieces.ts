@@ -54,7 +54,7 @@ export abstract class Piece {
   abstract updateAttackMap(): boolean;
 
   resetMoveMap(): boolean {
-    this.moveMap.forEach(rank => {
+    this.moveMap.forEach((rank) => {
       for (let i = 0; i < Config.SQUARE_SIZE; i++) {
         rank[i] = false;
       }
@@ -63,7 +63,7 @@ export abstract class Piece {
   }
 
   resetAttackMap(): boolean {
-    this.attackMap.forEach(rank => {
+    this.attackMap.forEach((rank) => {
       for (let i = 0; i < Config.SQUARE_SIZE; i++) {
         rank[i] = false;
       }

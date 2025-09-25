@@ -6,27 +6,19 @@ import { Hono } from "hono";
 
 const router = new Hono();
 
-router.get(
-  APIEndpoints.USERS,
-  authMiddleware.authenticate,
-  userController.getAllUsers
-);
+router.get(APIEndpoints.USERS, authMiddleware.authenticate, userController.getAllUsers);
 router.get(
   APIEndpoints.USERNAME,
   authMiddleware.authenticate,
   userValidation.validateGetUser,
-  userController.getUser
+  userController.getUser,
 );
-router.put(
-  APIEndpoints.USER,
-  authMiddleware.authenticate,
-  userController.updateUser
-);
+router.put(APIEndpoints.USER, authMiddleware.authenticate, userController.updateUser);
 router.post(
   APIEndpoints.USERS,
   authMiddleware.authenticate,
   userValidation.validateAddUsers,
-  userController.addUsers
+  userController.addUsers,
 );
 
 export default router;

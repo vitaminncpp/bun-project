@@ -25,8 +25,8 @@ export class Chessboard {
   }
 
   update(): boolean {
-    this.board.forEach(rank => {
-      rank.forEach(tile => {
+    this.board.forEach((rank) => {
+      rank.forEach((tile) => {
         tile.piece?.update();
       });
     });

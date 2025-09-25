@@ -22,7 +22,7 @@ export class User {
       createdAt?: Date | null;
       updatedAt?: Date | null;
     },
-    password?: boolean
+    password?: boolean,
   ): User {
     const user = new User();
     user.id = userObj.id;

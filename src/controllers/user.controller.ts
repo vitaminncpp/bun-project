@@ -15,12 +15,8 @@ export async function getAllUsers(c: Context) {
   }
   const users = await userService.getAllUsers(options);
   return c.json(
-    new SuccessResponse<UserModel[]>(
-      200,
-      "All users fetched successfully",
-      users
-    ),
-    200
+    new SuccessResponse<UserModel[]>(200, "All users fetched successfully", users),
+    200,
   );
 }
 
@@ -31,21 +27,14 @@ export async function updateUser(c: Context) {
 
 export async function getUser(c: Context) {
   const user = await userService.getUser(c.req.param("id"));
-  return c.json(
-    new SuccessResponse<UserModel>(200, "User info fetched successfully", user),
-    200
-  );
+  return c.json(new SuccessResponse<UserModel>(200, "User info fetched successfully", user), 200);
 }
 
 export async function addUsers(c: Context) {
   const users: UserModel[] = await c.req.json();
   const records = await userService.addUsers(users);
   return c.json(
-    new SuccessResponse<UserModel[]>(
-      200,
-      "User were Inserted successfully",
-      records
-    ),
-    200
+    new SuccessResponse<UserModel[]>(200, "User were Inserted successfully", records),
+    200,
   );
 }

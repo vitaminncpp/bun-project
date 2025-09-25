@@ -13,11 +13,7 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
       .values(user as any)
       .returning();
     if (!inserted) {
-      throw new Exception(
-        ErrorCode.RECORD_INSERTION_FAILED,
-        "Error Inserting User",
-        user
-      );
+      throw new Exception(ErrorCode.RECORD_INSERTION_FAILED, "Error Inserting User", user);
     }
     return UserModel.from(inserted[0]);
   } catch (err: Error | any) {
@@ -25,17 +21,14 @@ export async function insertOne(user: UserModel): Promise<UserModel> {
     throw new Exception(
       ErrorCode.RECORD_INSERTION_FAILED,
       err?.message || "Error Inserting User",
-      err
+      err,
     );
   }
 }
 
 export async function findById(id: string): Promise<UserModel> {
   try {
-    const [user] = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.id, id));
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, id));
     if (!user) {
       throw new Exception(ErrorCode.USER_NOT_EXIST, "User does not Exists", id);
     }
@@ -45,7 +38,7 @@ export async function findById(id: string): Promise<UserModel> {
     throw new Exception(
       ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Fetching User Data",
-      err || id
+      err || id,
     );
   }
 }
@@ -58,11 +51,7 @@ export async function insertUsers(users: Array<UserModel>) {
       .values(users as any)
       .returning();
     if (!inserted || inserted.length === 0) {
-      throw new Exception(
-        ErrorCode.USER_INSERTION_FAILED,
-        "Error Inserting Users",
-        users
-      );
+      throw new Exception(ErrorCode.USER_INSERTION_FAILED, "Error Inserting Users", users);
     }
     return inserted.map((_u) => UserModel.from(_u));
   } catch (err: Exception | Error | any) {
@@ -70,27 +59,17 @@ export async function insertUsers(users: Array<UserModel>) {
     throw new Exception(
       ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Inserting Users",
-      err || users
+      err || users,
     );
   }
 }
 
-export async function findByUsername(
-  username: string,
-  password?: boolean
-): Promise<UserModel> {
+export async function findByUsername(username: string, password?: boolean): Promise<UserModel> {
   try {
-    const [user] = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.username, username));
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.username, username));
     console.log(user);
     if (!user) {
-      throw new Exception(
-        ErrorCode.USER_NOT_EXIST,
-        "User does not Exists",
-        username
-      );
+      throw new Exception(ErrorCode.USER_NOT_EXIST, "User does not Exists", username);
     }
     return UserModel.from(user!, password);
   } catch (err: Error | any) {
@@ -98,15 +77,12 @@ export async function findByUsername(
     throw new Exception(
       ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Fetching User Data",
-      err || username
+      err || username,
     );
   }
 }
 
-export async function findAll(options: {
-  page: number;
-  size: number;
-}): Promise<Array<UserModel>> {
+export async function findAll(options: { page: number; size: number }): Promise<Array<UserModel>> {
   try {
     const users = await db
       .select()
@@ -119,10 +95,6 @@ export async function findAll(options: {
     return users.map((_u) => UserModel.from(_u));
   } catch (err: Error | any) {
     if (err instanceof Exception) throw err;
-    throw new Exception(
-      ErrorCode.ERROR_FETCHING_DATA,
-      err?.message || "Error Fetching Users",
-      err
-    );
+    throw new Exception(ErrorCode.ERROR_FETCHING_DATA, err?.message || "Error Fetching Users", err);
   }
 }

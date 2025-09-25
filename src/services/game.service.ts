@@ -15,7 +15,7 @@ import { Move as MoveModel } from "../models/game/Move.model";
 export async function findMatch(
   user: UserModel,
   connectionId: string,
-  guest?: boolean
+  guest?: boolean,
 ): Promise<GameMatch> {
   if (pendingRequests.size === 0) {
     if (!activeConnections.has(connectionId)) {
@@ -25,7 +25,7 @@ export async function findMatch(
         {
           connectionId,
           user,
-        }
+        },
       );
     }
     pendingRequests.set(connectionId, {
@@ -43,7 +43,7 @@ export async function findMatch(
       throw new Exception(
         ErrorCode.REQUEST_ALREADY_PROCESSING,
         "Request is Already in progress ! Please wait..",
-        { connectionId, user }
+        { connectionId, user },
       );
     }
     const game: GameModel = await startGame(user, match[1].user);
@@ -95,10 +95,7 @@ export async function findMatch(
   }
 }
 
-export function cancelRequest(
-  connectionId: string,
-  user: UserModel
-): GameMatch {
+export function cancelRequest(connectionId: string, user: UserModel): GameMatch {
   if (!pendingRequests.has(connectionId)) {
     throw new Exception(ErrorCode.REQUEST_NOT_FOUND, "Request Not found", {
       connectionId,
@@ -112,10 +109,7 @@ export function cancelRequest(
   };
 }
 
-async function startGame(
-  user1: UserModel,
-  user2: UserModel
-): Promise<GameModel> {
+async function startGame(user1: UserModel, user2: UserModel): Promise<GameModel> {
   const gameModel = new GameModel();
   const players = toss(user1, user2);
 
@@ -132,7 +126,7 @@ async function startGame(
 
 function toss(
   user1: UserModel,
-  user2: UserModel
+  user2: UserModel,
 ): {
   white: UserModel;
   black: UserModel;
@@ -148,11 +142,7 @@ export async function makeMove(move: MoveModel) {
   const { game, gameModel } = activeGames.get(move.gameId)!;
 }
 
-export function registerSocket(
-  io: Server,
-  socket: Socket,
-  connectionId: string
-) {
+export function registerSocket(io: Server, socket: Socket, connectionId: string) {
   socket.on(Constants.DISCONNECT, () => {
     pendingRequests.delete(connectionId);
   });

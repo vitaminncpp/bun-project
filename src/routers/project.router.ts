@@ -6,29 +6,21 @@ import * as projectValidations from "../validations/project.validations";
 
 const router = new Hono();
 
-router.get(
-  APIEndpoints.PROJECTS,
-  authMiddleware.authenticate,
-  projectController.getAllProjects
-);
+router.get(APIEndpoints.PROJECTS, authMiddleware.authenticate, projectController.getAllProjects);
 
-router.get(
-  APIEndpoints.PROJECT_ID,
-  authMiddleware.authenticate,
-  projectController.getProject
-);
+router.get(APIEndpoints.PROJECT_ID, authMiddleware.authenticate, projectController.getProject);
 
 router.post(
   APIEndpoints.PROJECTS,
   authMiddleware.authenticate,
   projectValidations.validateCreateProject,
-  projectController.createProject
+  projectController.createProject,
 );
 
 router.delete(
   APIEndpoints.PROJECT_ID,
   authMiddleware.authenticate,
-  projectController.deleteProject
+  projectController.deleteProject,
 );
 
 export default router;

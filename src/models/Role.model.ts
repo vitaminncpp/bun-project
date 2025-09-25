@@ -21,7 +21,7 @@ export class Role {
       createdAt?: Date | null;
       updatedAt?: Date | null;
     },
-    genrateId?: boolean
+    genrateId?: boolean,
   ): Role {
     const role = new Role();
     role.id = roleObj.id;

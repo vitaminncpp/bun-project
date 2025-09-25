@@ -10,11 +10,16 @@ export const pendingRequests: Map<string, { socket: Socket; user: UserModel }> =
 >();
 
 // gameId => Game Live Game
-export const activeGames: Map<string, {
-  game: Game;
-  gameModel: GameModel;
-}> = new Map<string, {
-  game: Game;
-  gameModel: GameModel;
-}
+export const activeGames: Map<
+  string,
+  {
+    game: Game;
+    gameModel: GameModel;
+  }
+> = new Map<
+  string,
+  {
+    game: Game;
+    gameModel: GameModel;
+  }
 >();

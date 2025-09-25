@@ -14,14 +14,10 @@ export async function validateGetUser(c: Context, next: Next) {
         ErrorCode.VALIDATION_FAILED,
         400,
         "Validation(s) failed",
-        new Exception(
-          ErrorCode.VALIDATION_FAILED,
-          "Validation(s) failed",
-          errors
-        ),
-        errors
+        new Exception(ErrorCode.VALIDATION_FAILED, "Validation(s) failed", errors),
+        errors,
       ),
-      400
+      400,
     );
 }
 
@@ -35,10 +31,10 @@ export async function validateAddUsers(c: Context, next: Next) {
         "Request Body must be a non-empty array of objects",
         new Exception(
           ErrorCode.VALIDATION_FAILED,
-          "Request Body must be a non-empty array of objects"
-        )
+          "Request Body must be a non-empty array of objects",
+        ),
       ),
-      400
+      400,
     );
   }
   const errors: Array<{
@@ -46,11 +42,7 @@ export async function validateAddUsers(c: Context, next: Next) {
     errors: Record<string, Record<string, string>>;
   }> = [];
   body.forEach((item, idx) => {
-    const validation = validateObjectFields(item, [
-      "username",
-      "name",
-      "password",
-    ]);
+    const validation = validateObjectFields(item, ["username", "name", "password"]);
     if (!validation.valid) {
       errors.push({
         index: idx,
@@ -65,9 +57,9 @@ export async function validateAddUsers(c: Context, next: Next) {
         400,
         "Validation(s) failed",
         new Error(),
-        errors
+        errors,
       ),
-      400
+      400,
     );
   }
   await next();

@@ -3,10 +3,7 @@ import { relations } from "drizzle-orm";
 import { roles } from "./Role.entity";
 import { Action } from "../policies/actions.policy";
 
-export const actionEnum = pgEnum(
-  "action",
-  Object.values(Action) as [string, ...string[]]
-);
+export const actionEnum = pgEnum("action", Object.values(Action) as [string, ...string[]]);
 
 export const roleActions = pgTable("role_actions", {
   id: uuid("id").primaryKey().defaultRandom(),

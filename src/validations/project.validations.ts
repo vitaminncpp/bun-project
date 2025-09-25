@@ -15,12 +15,8 @@ export async function validateCreateProject(c: Context, next: Next) {
         ErrorCode.VALIDATION_FAILED,
         400,
         "Validation(s) failed",
-        new Exception(
-          ErrorCode.VALIDATION_FAILED,
-          "Validation(s) failed",
-          errors
-        )
+        new Exception(ErrorCode.VALIDATION_FAILED, "Validation(s) failed", errors),
       ),
-      400
+      400,
     );
 }

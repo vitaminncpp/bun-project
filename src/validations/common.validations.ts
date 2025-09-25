@@ -8,13 +8,8 @@ export async function validateUploadFile(c: Context, next: Next) {
   const blob = await c.req.blob();
   if (blob.size === 0) {
     return c.json(
-      new ErrorResponse(
-        ErrorCode.VALIDATION_FAILED,
-        400,
-        "Request Body Expected",
-        new Error()
-      ),
-      400
+      new ErrorResponse(ErrorCode.VALIDATION_FAILED, 400, "Request Body Expected", new Error()),
+      400,
     );
   }
   const errors: { [key: string]: { [key: string]: string } } = {};
@@ -33,9 +28,9 @@ export async function validateUploadFile(c: Context, next: Next) {
         400,
         "Validation(s) failed",
         new Error(),
-        errors
+        errors,
       ),
-      400
+      400,
     );
   }
   await next();
@@ -51,13 +46,9 @@ export async function validateConnectionId(c: Context, next: Next) {
         ErrorCode.VALIDATION_FAILED,
         400,
         "Validation(s) failed",
-        new Exception(
-          ErrorCode.VALIDATION_FAILED,
-          "Validation(s) failed",
-          errors
-        ),
-        errors
+        new Exception(ErrorCode.VALIDATION_FAILED, "Validation(s) failed", errors),
+        errors,
       ),
-      400
+      400,
     );
 }

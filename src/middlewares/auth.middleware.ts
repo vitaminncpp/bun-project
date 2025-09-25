@@ -17,8 +17,5 @@ export async function authenticate(c: Context, next: Next) {
       }
     }
   }
-  return c.json(
-    new ErrorResponse(ErrorCode.UNAUTHORIZED, 401, "Unauthorized", new Error()),
-    401
-  );
+  return c.json(new ErrorResponse(ErrorCode.UNAUTHORIZED, 401, "Unauthorized", new Error()), 401);
 }

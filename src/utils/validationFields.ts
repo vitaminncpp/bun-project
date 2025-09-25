@@ -21,7 +21,5 @@ export function validateObjectFields(
     }
   }
 
-  return Object.keys(errors).length > 0
-    ? { valid: false, errors }
-    : { valid: true };
+  return Object.keys(errors).length > 0 ? { valid: false, errors } : { valid: true };
 }

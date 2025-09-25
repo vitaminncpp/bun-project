@@ -10,7 +10,7 @@ router.post(
   APIEndpoints.FILE,
   authMiddleware.authenticate,
   commonValidations.validateUploadFile,
-  utilsController.uploadFile
+  utilsController.uploadFile,
 );
 
 export default router;

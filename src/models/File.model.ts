@@ -4,14 +4,13 @@ export class FileModel {
   description?: string | null;
   projectId!: string;
   path!: string;
-  constructor() {
-  }
+  constructor() {}
   static from(fileObj: {
     id: string;
     name: string;
     description?: string | null;
     projectId: string;
-    path: string
+    path: string;
   }): FileModel {
     const file = new FileModel();
 

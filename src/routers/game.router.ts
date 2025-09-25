@@ -9,20 +9,20 @@ const router = new Hono();
 router.post(
   APIEndpoints.MATCH_GUEST,
   commonValidations.validateConnectionId,
-  gameController.startMatchGuest
+  gameController.startMatchGuest,
 );
 
 router.delete(
   APIEndpoints.MATCH_ID,
   authMiddleware.authenticate,
-  gameController.cancelMatchRequest
+  gameController.cancelMatchRequest,
 );
 
 router.post(
   APIEndpoints.MATCH,
   authMiddleware.authenticate,
   commonValidations.validateConnectionId,
-  gameController.startMatch
+  gameController.startMatch,
 );
 
 export default router;

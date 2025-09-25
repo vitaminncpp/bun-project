@@ -11,7 +11,7 @@ export function startShell(connectionId: string) {
     throw new Exception(
       ErrorCode.INVALID_CONNECTION_ID,
       "No Associated Socket Connection Found",
-      connectionId
+      connectionId,
     );
   }
   const sock = activeConnections.get(connectionId);
@@ -32,11 +32,7 @@ export function startShell(connectionId: string) {
   return shell;
 }
 
-export function registerSocket(
-  io: Server,
-  socket: Socket,
-  connectionId: string
-) {
+export function registerSocket(io: Server, socket: Socket, connectionId: string) {
   socket.on(Constants.DISCONNECT, () => {
     const shell = activeShell.get(connectionId);
     shell?.kill();

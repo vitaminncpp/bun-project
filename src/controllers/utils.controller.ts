@@ -7,7 +7,5 @@ export async function uploadFile(c: Context) {
   const projectId = c.req.query("projectId")!;
   const data = await c.req.arrayBuffer();
   const file: FileModel = await saveFile(data, projectId);
-  return c.json(new SuccessResponse<FileModel>(201, "File Uploaded SuccessFully", file),
-    201
-  );
+  return c.json(new SuccessResponse<FileModel>(201, "File Uploaded SuccessFully", file), 201);
 }

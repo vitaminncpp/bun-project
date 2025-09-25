@@ -9,22 +9,14 @@ export async function createProject(c: Context) {
   const user: UserModel = c.get(Constants.AUTH_DATA);
   const project: ProjectModel = await c.req.json();
   project.userId = user.id;
-  const savedProject: ProjectModel = await projectService.createProject(
-    project
-  );
-  return c.json(
-    new SuccessResponse(201, "Project Created Successfully", savedProject),
-    201
-  );
+  const savedProject: ProjectModel = await projectService.createProject(project);
+  return c.json(new SuccessResponse(201, "Project Created Successfully", savedProject), 201);
 }
 
 export async function getProject(c: Context) {
   const projectId = c.req.param("id");
   const project: ProjectModel = await projectService.getProject(projectId);
-  return c.json(
-    new SuccessResponse(200, "Project Fetched Successfully", project),
-    200
-  );
+  return c.json(new SuccessResponse(200, "Project Fetched Successfully", project), 200);
 }
 
 export async function getAllProjects(c: Context) {
@@ -50,15 +42,12 @@ export async function getAllProjects(c: Context) {
       size: number;
       records: Array<ProjectModel>;
     }>(200, "All Projects fetched successfully", projects),
-    200
-  );  
+    200,
+  );
 }
 
 export async function deleteProject(c: Context) {
   const projectId = c.req.param("id");
   const project: ProjectModel = await projectService.deleteProject(projectId);
-  return c.json(
-    new SuccessResponse(200, "Project Deleted Successfully", project),
-    200
-  );
+  return c.json(new SuccessResponse(200, "Project Deleted Successfully", project), 200);
 }

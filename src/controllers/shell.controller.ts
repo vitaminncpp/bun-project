@@ -6,8 +6,5 @@ export function startShell(c: Context) {
   const connectionId: string = c.req.query("connectionId")!;
 
   const shell = shellService.startShell(connectionId);
-  return c.json(
-    new SuccessResponse(201, "shell started successfully", shell),
-    201
-  );
+  return c.json(new SuccessResponse(201, "shell started successfully", shell), 201);
 }
