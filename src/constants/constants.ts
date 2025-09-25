@@ -3,8 +3,8 @@ const Constants = {
 
   CONNECTION: "connection",
   DISCONNECT: "disconnect",
-  CLIENT_HELLO: 'client-hello',
-  SERVER_HELLO: 'server-hello',
+  CLIENT_HELLO: "client-hello",
+  SERVER_HELLO: "server-hello",
   OPPONENT_DISCONNECTED: "opponent-disconnected",
 
   REGISTER_EVENT: "register",
