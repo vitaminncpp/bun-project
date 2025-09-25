@@ -22,6 +22,7 @@ export default [
       ...ts.configs.recommended.rules,
       "prettier/prettier": "warn",
       "no-undef": "off",
+      "no-explicit-any": "off",
     },
   },
 ];

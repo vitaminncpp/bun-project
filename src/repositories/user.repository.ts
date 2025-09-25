@@ -1,9 +1,8 @@
 import { db } from "../database/database.connection";
 import { users as usersTable } from "../entities/User.entity";
-import { User, User as UserModel } from "../models/User.model";
+import { User as UserModel } from "../models/User.model";
 import ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
-// import { toUserDTO, toUserEntity } from "../mappers/user.mapper";
 import { eq } from "drizzle-orm";
 
 export async function insertOne(user: UserModel): Promise<UserModel> {

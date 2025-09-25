@@ -27,6 +27,7 @@
     "ts-node": "ts-node server",
     "tsc": "tsc",
     "build": "bun build server.ts --outdir dist --minify --target bun",
+    "build:node": "bun build server.ts --outdir dist --minify --target node",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",

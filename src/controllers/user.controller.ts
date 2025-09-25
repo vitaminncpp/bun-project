@@ -26,7 +26,7 @@ export async function updateUser(c: Context) {
 }
 
 export async function getUser(c: Context) {
-  const user = await userService.getUser(c.req.param("id"));
+  const user = await userService.getUserById(c.req.param("id"));
   return c.json(new SuccessResponse<UserModel>(200, "User info fetched successfully", user), 200);
 }
 

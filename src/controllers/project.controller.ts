@@ -4,6 +4,7 @@ import Constants from "../constants/constants";
 import type { User as UserModel } from "../models/User.model";
 import type { Project as ProjectModel } from "../models/Project.model";
 import SuccessResponse from "../models/SuccessResponse.model";
+import type { DataRecord } from "../models/Data.record.ts";
 
 export async function createProject(c: Context) {
   const user: UserModel = c.get(Constants.AUTH_DATA);
@@ -29,19 +30,13 @@ export async function getAllProjects(c: Context) {
       size: Number(size),
     };
   }
-  const projects: {
-    total: number;
-    page: number;
-    size: number;
-    records: Array<ProjectModel>;
-  } = await projectService.getAllProjects(options);
+  const projects: DataRecord<ProjectModel> = await projectService.getAllProjects(options);
   return c.json(
-    new SuccessResponse<{
-      total: number;
-      page: number;
-      size: number;
-      records: Array<ProjectModel>;
-    }>(200, "All Projects fetched successfully", projects),
+    new SuccessResponse<DataRecord<ProjectModel>>(
+      200,
+      "All Projects Fetched Successfully",
+      projects,
+    ),
     200,
   );
 }

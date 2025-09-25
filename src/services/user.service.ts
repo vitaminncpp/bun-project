@@ -1,11 +1,11 @@
 import { User as UserModel } from "../models/User.model";
-import * as userReposiotry from "../repositories/user.repository";
+import * as userRepository from "../repositories/user.repository";
 import * as tokenService from "./token.service";
 import * as envService from "./env.service";
+
 export async function createUser(user: UserModel): Promise<UserModel> {
-  const hash = await tokenService.hash(user.password!, envService.getPasswordSalt());
-  user.password = hash;
-  const savedUser: UserModel = await userReposiotry.insertOne(user);
+  user.password = await tokenService.hash(user.password!, envService.getPasswordSalt());
+  const savedUser: UserModel = await userRepository.insertOne(user);
   delete savedUser.password;
   return savedUser;
 }
@@ -16,11 +16,15 @@ export async function getAllUsers(
     size: number;
   } = { page: 1, size: 10 },
 ): Promise<UserModel[]> {
-  return userReposiotry.findAll(options);
+  return userRepository.findAll(options);
 }
 
-export async function getUser(id: string): Promise<UserModel> {
-  return userReposiotry.findById(id);
+export async function getUser(username: string, password: boolean = false): Promise<UserModel> {
+  return userRepository.findByUsername(username, password);
+}
+
+export async function getUserById(id: string): Promise<UserModel> {
+  return userRepository.findById(id);
 }
 
 export async function addUsers(users: Array<UserModel>) {
@@ -29,5 +33,5 @@ export async function addUsers(users: Array<UserModel>) {
     return user;
   });
   await Promise.all(promises);
-  return userReposiotry.insertUsers(users);
+  return userRepository.insertUsers(users);
 }
