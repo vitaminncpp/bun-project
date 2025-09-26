@@ -1,5 +1,5 @@
 import { serve } from "@hono/node-server";
-import { createServer } from "node:https";
+import { createServer } from "node:http";
 import { getCertificate, getPrivateKey } from "./src/services/utils.service";
 import { serveStatic } from "@hono/node-server/serve-static";
 
@@ -14,10 +14,10 @@ const port = getServerPort();
 const server = serve({
   fetch: app.fetch,
   createServer: createServer,
-  serverOptions: {
-    key: getPrivateKey(),
-    cert: getCertificate(),
-  },
+  // serverOptions: {
+  //   key: getPrivateKey(),
+  //   cert: getCertificate(),
+  // },
   port,
 });
 
