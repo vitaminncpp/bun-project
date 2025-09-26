@@ -14,10 +14,11 @@
     "typeRoots": [
       "@types"
     ],
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "noEmit": true
   },
   "include": [
     "src",
-    "server.ts",
+    "server.ts"
   ]
 }
