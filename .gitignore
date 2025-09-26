@@ -46,3 +46,7 @@ package-lock.json
 *.o
 
 static
+
+*.cache
+cache
+*.log
