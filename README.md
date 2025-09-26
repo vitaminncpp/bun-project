@@ -98,46 +98,46 @@ bun run start
 ```bash
 bun run build:node
 ```
-This produces output in dist/.
+This produces output in `dist/`.
 
 ## API overview
-All routes are mounted under the base path /api.
-Use Authorization: Bearer <token> for endpoints protected by auth.
+All routes are mounted under the base path `/api`.
+Use `Authorization: Bearer <token>` for endpoints protected by auth.
 
 - System
-  - GET /api/sys-info — health/system info
+  - GET `/api/sys-info` — health/system info
 
 - Auth
-  - POST /api/auth/register — register a user
-  - POST /api/auth/login — login (returns access/refresh tokens)
-  - POST /api/auth/refresh — refresh access token
+  - POST `/api/auth/register` — register a user
+  - POST `/api/auth/login` — login (returns access/refresh tokens)
+  - POST `/api/auth/refresh` — refresh access token
 
 - Users (require JWT)
-  - GET /api/users — list users
-  - GET /api/users/:id — get a user by id
-  - PUT /api/user — update the authenticated user
-  - POST /api/users — bulk/add users
+  - GET `/api/users` — list users
+  - GET `/api/users/:id` — get a user by `id`
+  - PUT `/api/user` — update the authenticated user
+  - POST `/api/users` — bulk/add users
 
 - Projects (require JWT)
-  - GET /api/projects — list projects; supports pagination with ?page=<number>&size=<number>
-  - GET /api/projects/:id — get a project by id
-  - POST /api/projects — create a project (userId is taken from the authenticated user)
-  - DELETE /api/projects/:id — delete a project
+  - `GET /api/projects` — list projects; supports pagination with `?page=<number>&size=<number>`
+  - `GET /api/projects/:id` — get a project by `id`
+  - `POST /api/projects` — create a project (`userId` is taken from the authenticated user)
+  - `DELETE /api/projects/:id` — delete a project
 
 - Files (require JWT)
-  - POST /api/file — upload binary content for a project
-    - Query: projectId
-    - Body: raw binary (the service saves it as a .zip file to ZIP_UPLOAD_PATH)
+  - POST `/api/file` — upload binary content for a project
+    - Query: `projectId`
+    - Body: raw binary (the service saves it as a `.zip` file to `ZIP_UPLOAD_PATH`)
 
 - Game (some routes require JWT)
-  - POST /api/game/match/guest — start a guest match
-  - POST /api/game/match — start a match (JWT)
-  - DELETE /api/game/match/:connectionId — cancel a match (JWT)
+  - `POST /api/game/match/guest` — start a guest match
+  - `POST /api/game/match` — start a match (JWT)
+  - `DELETE /api/game/match/:connectionId` — cancel a match (JWT)
 
 - Shell (require JWT)
-  - POST /api/shell — start a shell session
+  - `POST /api/shell` — start a shell session
 
-A more detailed contract (DTOs, validation constraints) can be derived from the code in src/controllers and src/validations.
+A more detailed contract (DTOs, validation constraints) can be derived from the code in `src/controllers` and `src/validations`.
 
 ## Realtime (Socket.IO)
 - Socket.IO is mounted on the same HTTPS server, default path /socket.io.
