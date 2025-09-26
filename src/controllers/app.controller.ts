@@ -14,6 +14,7 @@ export async function sysInfo(c: Context) {
     readableUptime: `${Math.floor(process.uptime() / 60)} mins`,
     hostname: os.hostname(),
     platform: os.platform(),
+    release: os.release(),
     arch: os.arch(),
     machine: os.machine?.(),
     userInfo: os.userInfo(),
