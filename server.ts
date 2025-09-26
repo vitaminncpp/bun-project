@@ -18,10 +18,11 @@ const server = serve({
     key: getPrivateKey(),
     cert: getCertificate(),
   },
+  port,
 });
 
 io.attach(server);
 
-server.listen(port, () => {
-  console.log("Server Started");
-});
+// server.listen(port, () => {
+//   console.log("Server Started");
+// });
