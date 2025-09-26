@@ -50,3 +50,4 @@ static
 *.cache
 cache
 *.log
+.firebase
