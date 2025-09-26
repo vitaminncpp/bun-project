@@ -1,9 +1,10 @@
-import js from "@eslint/js";
-import ts from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import prettier from "eslint-plugin-prettier";
-
-export default [
+const js = require("@eslint/js");
+const ts = require("@typescript-eslint/eslint-plugin");
+const tsParser = require("@typescript-eslint/parser");
+const prettier = require("eslint-plugin-prettier");
+const { defineConfig, globalIgnores } = require("eslint/config");
+const eslintConfigPrettier = require("eslint-config-prettier");
+module.exports = defineConfig([
   js.configs.recommended,
   {
     files: ["**/*.ts"],
@@ -11,7 +12,9 @@ export default [
       parser: tsParser,
       parserOptions: {
         ecmaVersion: "latest",
-        sourceType: "module",
+        project: "./tsconfig.json",
+        tsconfigRootDir: process.cwd(),
+        sourceType: "commonjs",
       },
     },
     plugins: {
@@ -22,7 +25,9 @@ export default [
       ...ts.configs.recommended.rules,
       "prettier/prettier": "warn",
       "no-undef": "off",
-      "no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
-];
+  eslintConfigPrettier,
+  globalIgnores(['eslint.config.js', 'prettier.config.js']),
+]);

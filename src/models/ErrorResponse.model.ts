@@ -14,8 +14,10 @@ export default class ErrorResponse {
   public trace: string[];
   public data?: any;
   public code: ErrorCode;
+
   constructor(code: ErrorCode, status: number, error: string, err: Exception | Error, data?: any) {
-    ((this.code = code), (this.status = status));
+    this.code = code;
+    this.status = status;
     this.error = error;
     this.data = data;
     this.trace = new Error()
