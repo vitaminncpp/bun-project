@@ -5,5 +5,5 @@ interface SocketEntry {
   authorized: boolean;
 }
 
-// connectionId => Active Socket
+// connectionId => Active Socket as SocketEntry
 export const activeConnections: Map<string, SocketEntry> = new Map<string, SocketEntry>();
