@@ -22,7 +22,6 @@ const server = serve({
 });
 
 io.attach(server);
-
 // server.listen(port, () => {
 //   console.log("Server Started");
 // });
