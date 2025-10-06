@@ -4,7 +4,7 @@ import Logger from "../utils/logger";
 import * as chatService from "../services/chat.service";
 import * as gameService from "../services/game.service";
 import * as shellService from "../services/shell.service";
-import { activeConnections } from "../sessions/socket.session";
+import { setIO, activeConnections } from "../sessions/socket.session";
 import { randomUUID } from "crypto";
 import { authenticate } from "../services/auth.service";
 import { Exception } from "../exceptions/app.exception";
@@ -23,6 +23,8 @@ const io = new Server({
     origin: "*",
   },
 });
+
+setIO(io);
 
 io.on(Constants.CONNECTION, (socket: Socket) => {
   const connectionId: string = randomUUID();

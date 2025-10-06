@@ -28,15 +28,12 @@ export async function findMatch(
         },
       );
     }
-    pendingRequests.set(connectionId, {
-      socket: activeConnections.get(connectionId)!.socket,
-      user,
-    });
+    pendingRequests.set(connectionId, user);
     return {
       status: GameStatus.PENDING,
-      playerConnection: connectionId,
       userId: user.id,
-    };
+      connectionId,
+    } satisfies GameMatch;
   } else {
     const [match] = pendingRequests.entries();
     if (connectionId === match[0]) {
@@ -46,52 +43,60 @@ export async function findMatch(
         { connectionId, user },
       );
     }
-    const game: GameModel = await startGame(user, match[1].user);
-    match[1].socket.emit(Constants.MATCH_FOUND, {
+    const mUser = match[1];
+    const mConnection = match[0];
+    const game: GameModel = await startGame(user, match[1]);
+
+    const playerW = user.id === game.playerW ? user : mUser;
+    const playerB = user.id === game.playerB ? user : mUser;
+
+    const connectionW = mUser.id === game.playerW ? mConnection : connectionId;
+    const connectionB = mUser.id === game.playerB ? mConnection : connectionId;
+
+    const sockW = activeConnections.get(connectionW);
+    const sockB = activeConnections.get(connectionB);
+
+    sockW?.socket.emit(Constants.MATCH_FOUND, {
       status: GameStatus.ACTIVE,
-      playerConnection: match[0],
-      opponentConnection: connectionId,
-      userId: match[1].user.id,
-
-      opponentId: user.id,
+      userId: playerW.id!,
+      connectionId: connectionW,
+      connectionW,
+      connectionB,
       game,
-      turn: game.playerW === match[1].user.id ? Player.WHITE : Player.BLACK,
-    });
-    activeConnections.get(connectionId)!.socket.emit(Constants.MATCH_FOUND, {
+      turn: Player.WHITE,
+    } satisfies GameMatch);
+
+    sockB?.socket.emit(Constants.MATCH_FOUND, {
       status: GameStatus.ACTIVE,
-      playerConnection: connectionId,
-      opponentConnection: match[0],
-      userId: user.id,
-
-      opponentId: match[1].user.id,
+      userId: playerB.id!,
+      connectionId: connectionB,
+      connectionW,
+      connectionB,
       game,
-      turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
-    });
-    const sock1 = activeConnections.get(connectionId)!;
-    const sock2 = match[1].socket;
+      turn: Player.WHITE,
+    } satisfies GameMatch);
 
-    sock1.socket.on(Constants.DISCONNECT, async () => {
+    sockW?.socket.on(Constants.DISCONNECT, async () => {
       game.status = GameStatus.ABORTED;
       const abortedGame = await gameRepository.updateOne(game.id, game);
-      sock2.emit(Constants.OPPONENT_DISCONNECTED, { game: abortedGame });
+      sockB?.socket.emit(Constants.OPPONENT_DISCONNECTED, { game: abortedGame });
     });
-    sock2.on(Constants.DISCONNECT, async () => {
+    sockB?.socket.on(Constants.DISCONNECT, async () => {
       game.status = GameStatus.ABORTED;
       const abortedGame = await gameRepository.updateOne(game.id, game);
-      sock1.socket.emit(Constants.OPPONENT_DISCONNECTED, {});
+      sockW?.socket.emit(Constants.OPPONENT_DISCONNECTED, { game: abortedGame });
     });
 
-    pendingRequests.delete(match[0]);
+    pendingRequests.delete(mConnection);
     return {
       status: GameStatus.ACTIVE,
-      playerConnection: connectionId,
-      opponentConnection: match[0],
       userId: user.id,
-
-      opponentId: match[1].user.id,
+      connectionW,
+      connectionB,
+      connectionId,
       game,
-      turn: game.playerW === user.id ? Player.WHITE : Player.BLACK,
-    };
+      turn: Player.WHITE,
+    } satisfies GameMatch;
   }
 }
 
@@ -104,9 +109,9 @@ export function cancelRequest(connectionId: string, user: UserModel): GameMatch 
   pendingRequests.delete(connectionId);
   return {
     status: GameStatus.CANCELED,
-    playerConnection: connectionId,
+    connectionId,
     userId: user.id,
-  };
+  } satisfies GameMatch;
 }
 
 async function startGame(user1: UserModel, user2: UserModel): Promise<GameModel> {
@@ -115,6 +120,7 @@ async function startGame(user1: UserModel, user2: UserModel): Promise<GameModel>
 
   gameModel.playerW = players.white.id;
   gameModel.playerB = players.black.id;
+
   gameModel.status = GameStatus.ACTIVE;
 
   const game = new Game();

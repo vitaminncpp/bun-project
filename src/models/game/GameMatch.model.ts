@@ -4,9 +4,9 @@ import { Game as GameModel } from "../game/Game.model";
 export interface GameMatch {
   status: GameStatus;
   userId: string;
-  playerConnection: string;
-  opponentConnection?: string;
-  opponentId?: string;
+  connectionW?: string;
+  connectionB?: string;
+  connectionId: string;
   game?: GameModel;
   turn?: Player;
 }
