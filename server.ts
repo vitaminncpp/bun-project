@@ -5,9 +5,9 @@ import { serveStatic } from "@hono/node-server/serve-static";
 
 import io from "./src/sockets";
 import app from "./src/app";
+import { getServerPort } from "./src/services/env.service";
 
 app.use("/*", serveStatic({ root: "./static/public" }));
-import { getServerPort } from "./src/services/env.service";
 
 const port = getServerPort();
 
