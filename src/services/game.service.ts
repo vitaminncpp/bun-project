@@ -1,6 +1,6 @@
 import { User as UserModel } from "../models/User.model";
 import { activeGames, pendingRequests } from "../sessions/game.session";
-import { activeConnections } from "../sessions/socket.session";
+import { activeConnections, io } from "../sessions/socket.session";
 import Constants from "../constants/constants";
 import { GameStatus, PLAYER } from "../lib/chess/games.enum";
 import type { GameMatch } from "../models/game/GameMatch.model";
@@ -11,6 +11,9 @@ import * as gameRepository from "../repositories/game.repository";
 import { Game } from "../lib/chess/game";
 import type { Server, Socket } from "socket.io";
 import { Move as MoveModel } from "../models/game/Move.model";
+import { Move } from "../lib/chess/move";
+import Config from "../lib/chess/chess.config";
+import { IPosition } from "../lib/chess/chess.types";
 
 export async function findMatch(
   user: UserModel,
@@ -55,6 +58,9 @@ export async function findMatch(
 
     const sockW = activeConnections.get(connectionW);
     const sockB = activeConnections.get(connectionB);
+
+    sockW?.socket.join(game.id);
+    sockB?.socket.join(game.id);
 
     sockW?.socket.emit(Constants.MATCH_FOUND, {
       status: GameStatus.ACTIVE,
@@ -146,6 +152,16 @@ function toss(
 
 export async function makeMove(move: MoveModel) {
   const { game, gameModel } = activeGames.get(move.gameId)!;
+  const gameMove = new Move(
+    move.player === PLAYER.WHITE,
+    {
+      x: move.fromRank as IPosition,
+      y: Config.fileToIndex(move.fromFile) as IPosition,
+    },
+    { x: move.toRank as IPosition, y: Config.fileToIndex(move.toFile) as IPosition },
+  );
+  const moved = game.move(gameMove);
+  io.to(gameModel.id).emit(Constants.GAME_MOVE, moved);
 }
 
 export function registerSocket(io: Server, socket: Socket, connectionId: string) {
