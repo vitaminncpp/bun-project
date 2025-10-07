@@ -150,18 +150,11 @@ function toss(
   };
 }
 
-export async function makeMove(move: MoveModel) {
-  const { game, gameModel } = activeGames.get(move.gameId)!;
-  const gameMove = new Move(
-    move.player === PLAYER.WHITE,
-    {
-      x: move.fromRank as IPosition,
-      y: Config.fileToIndex(move.fromFile) as IPosition,
-    },
-    { x: move.toRank as IPosition, y: Config.fileToIndex(move.toFile) as IPosition },
-  );
-  const moved = game.move(gameMove);
-  io.to(gameModel.id).emit(Constants.GAME_MOVE, moved);
+export async function makeMove(m: { game: GameModel; move: Move }) {
+  const { game, gameModel } = activeGames.get(m.game.id)!;
+  const moved = game.move(m.move);
+  io.to(m.game.id).emit(Constants.GAME_MOVE, { game: gameModel, move: moved });
+  // TODO Database insertion operation
 }
 
 export function registerSocket(io: Server, socket: Socket, connectionId: string) {
