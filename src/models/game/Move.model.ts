@@ -1,10 +1,10 @@
-import { Player, FILE, GamePiece, MoveType } from "../../lib/chess/games.enum";
+import { PLAYER, FILE, GamePiece, MoveType } from "../../lib/chess/games.enum";
 
 export class Move {
   public id!: string;
   public gameId!: string;
   public moveNumber!: number;
-  public player!: Player;
+  public player!: PLAYER;
   public fromFile!: FILE;
   public fromRank!: number;
   public toFile!: FILE;
@@ -21,7 +21,7 @@ export class Move {
     id: string;
     gameId: string;
     moveNumber: number;
-    player: Player;
+    player: PLAYER;
     fromFile: FILE;
     fromRank: number;
     toFile: FILE;

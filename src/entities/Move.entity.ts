@@ -1,9 +1,9 @@
 import { integer, pgEnum, pgTable, smallint, uuid, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { games } from "./Game.entity";
-import { FILE, GamePiece, MoveType, Player } from "../lib/chess/games.enum";
+import { FILE, GamePiece, MoveType, PLAYER } from "../lib/chess/games.enum";
 
-export const playerEnum = pgEnum("player", Object.values(Player) as [string, ...string[]]);
+export const playerEnum = pgEnum("player", Object.values(PLAYER) as [string, ...string[]]);
 export const fileEnum = pgEnum("file", Object.values(FILE) as [string, ...string[]]);
 export const gamePieceEnum = pgEnum(
   "game_piece",

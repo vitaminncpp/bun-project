@@ -2,7 +2,7 @@ import { User as UserModel } from "../models/User.model";
 import { activeGames, pendingRequests } from "../sessions/game.session";
 import { activeConnections } from "../sessions/socket.session";
 import Constants from "../constants/constants";
-import { GameStatus, Player } from "../lib/chess/games.enum";
+import { GameStatus, PLAYER } from "../lib/chess/games.enum";
 import type { GameMatch } from "../models/game/GameMatch.model";
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
@@ -63,7 +63,7 @@ export async function findMatch(
       connectionW,
       connectionB,
       game,
-      turn: Player.WHITE,
+      turn: PLAYER.WHITE,
     } satisfies GameMatch);
 
     sockB?.socket.emit(Constants.MATCH_FOUND, {
@@ -73,7 +73,7 @@ export async function findMatch(
       connectionW,
       connectionB,
       game,
-      turn: Player.WHITE,
+      turn: PLAYER.WHITE,
     } satisfies GameMatch);
 
     sockW?.socket.on(Constants.DISCONNECT, async () => {
@@ -95,7 +95,7 @@ export async function findMatch(
       connectionB,
       connectionId,
       game,
-      turn: Player.WHITE,
+      turn: PLAYER.WHITE,
     } satisfies GameMatch;
   }
 }
