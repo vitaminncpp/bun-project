@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev": "bun --watch server.ts",
-    "dev-debug": "bun server.ts",
+    "dev-debug": "bun --inspect-brk server.ts",
     "tsc": "tsc",
     "build": "bun build server.ts --outdir dist --minify --target bun",
     "build:node": "bun build server.ts --outdir dist --minify --target node",
