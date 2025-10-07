@@ -2,7 +2,7 @@ import { User as UserModel } from "../models/User.model";
 import { activeGames, pendingRequests } from "../sessions/game.session";
 import { activeConnections, io } from "../sessions/socket.session";
 import Constants from "../constants/constants";
-import { GameStatus, PLAYER } from "../lib/chess/games.enum";
+import { GamePiece, GameStatus, PLAYER } from "../lib/chess/games.enum";
 import type { GameMatch } from "../models/game/GameMatch.model";
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
@@ -13,7 +13,6 @@ import type { Server, Socket } from "socket.io";
 import { Move as MoveModel } from "../models/game/Move.model";
 import { Move } from "../lib/chess/move";
 import Config from "../lib/chess/chess.config";
-import { IPosition } from "../lib/chess/chess.types";
 
 export async function findMatch(
   user: UserModel,
@@ -151,9 +150,22 @@ function toss(
 }
 
 export async function makeMove(m: { game: GameModel; move: Move }) {
-  const { game, gameModel } = activeGames.get(m.game.id)!;
+  const { game } = activeGames.get(m.game.id)!;
   const moved = game.move(m.move);
-  io.to(m.game.id).emit(Constants.GAME_MOVE, { game: gameModel, move: moved });
+  io.to(m.game.id).emit(Constants.GAME_MOVE, { game, move: moved });
+  const moveModel = MoveModel.from({
+    gameId: m.game.id,
+    fromFile: Config.indexToFile(moved.ySrc),
+    toFile: Config.indexToFile(moved.yDest),
+    fromRank: moved.xSrc,
+    toRank: moved.xDest,
+    moveNumber: 0,
+    moveType: moved.type,
+    notation: "",
+    piece: GamePiece.KNIGHT,
+    player: moved.player ? PLAYER.WHITE : PLAYER.BLACK,
+  } as any);
+  await gameRepository.insertMove(moveModel);
   // TODO Database insertion operation
 }
 

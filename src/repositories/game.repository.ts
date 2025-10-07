@@ -1,9 +1,11 @@
 import { Game as GameModel } from "../models/game/Game.model";
 import { db } from "../database/database.connection";
 import { games as gameTable } from "../entities/Game.entity";
+import { moves as moveTable } from "../entities/Move.entity";
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import { eq } from "drizzle-orm";
+import { Move as MoveModel } from "../models/game/Move.model";
 
 export async function insertOne(game: GameModel): Promise<GameModel> {
   try {
@@ -12,7 +14,7 @@ export async function insertOne(game: GameModel): Promise<GameModel> {
       .values(game as any)
       .returning();
     if (!inserted || inserted.length === 0) {
-      throw new Exception(ErrorCode.RECORD_INSERTION_FAILED, "Error Inserting User", game);
+      throw new Exception(ErrorCode.RECORD_INSERTION_FAILED, "Error Inserting Game", game);
     }
     return GameModel.from(inserted[0]);
   } catch (err: Error | any) {
@@ -59,6 +61,26 @@ export async function findById(gameId: string): Promise<GameModel> {
       ErrorCode.ERROR_FETCHING_DATA,
       err?.message || "Error Fetching Game Data",
       err || gameId,
+    );
+  }
+}
+
+export async function insertMove(move: MoveModel): Promise<MoveModel> {
+  try {
+    const inserted = await db
+      .insert(moveTable)
+      .values(move as any)
+      .returning();
+    if (!inserted || inserted.length === 0) {
+      throw new Exception(ErrorCode.RECORD_INSERTION_FAILED, "Error Inserting Move", move);
+    }
+    return MoveModel.from(inserted[0] as any);
+  } catch (err: Error | any) {
+    if (err instanceof Exception) throw err;
+    throw new Exception(
+      ErrorCode.RECORD_INSERTION_FAILED,
+      err?.message || "Error Inserting User",
+      err,
     );
   }
 }
