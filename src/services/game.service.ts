@@ -150,9 +150,11 @@ function toss(
 }
 
 export async function makeMove(m: { game: GameModel; move: Move }) {
-  const { game } = activeGames.get(m.game.id)!;
+  const { game, gameModel } = activeGames.get(m.game.id)!;
   const moved = game.move(m.move);
-  io.to(m.game.id).emit(Constants.GAME_MOVE, { game, move: moved });
+  io.to(m.game.id).emit(Constants.GAME_MOVE, { game: gameModel, move: moved });
+
+  // TODO Database insertion operation
   const moveModel = MoveModel.from({
     gameId: m.game.id,
     fromFile: Config.indexToFile(moved.ySrc),
@@ -166,7 +168,6 @@ export async function makeMove(m: { game: GameModel; move: Move }) {
     player: moved.player ? PLAYER.WHITE : PLAYER.BLACK,
   } as any);
   await gameRepository.insertMove(moveModel);
-  // TODO Database insertion operation
 }
 
 export function registerSocket(io: Server, socket: Socket, connectionId: string) {
