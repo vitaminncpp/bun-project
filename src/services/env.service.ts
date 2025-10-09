@@ -69,7 +69,7 @@ export function getDatabaseProtocol(): string {
 }
 
 export function getDatabaseUrl(): string {
-  return `${ getDatabaseProtocol() }://${ getDatabaseUsername() }:${ getDatabasePassword() }@${ getDatabaseHost() }:${ getDatabasePort() }/${ getDatabaseName() }`;
+  return `${getDatabaseProtocol()}://${getDatabaseUsername()}:${getDatabasePassword()}@${getDatabaseHost()}:${getDatabasePort()}/${getDatabaseName()}`;
 }
 
 export function getDatabaseConfig(): {

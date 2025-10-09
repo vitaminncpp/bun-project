@@ -28,7 +28,6 @@ setIO(io);
 
 io.on(Constants.CONNECTION, (socket: Socket) => {
   const connectionId: string = randomUUID();
-  Logger.info("User connected", connectionId);
   activeConnections.set(connectionId, { socket, authorized: false });
   socket.on(Constants.CLIENT_HELLO, (hello: ClientHello) => {
     if (hello.authorization) {
@@ -77,11 +76,12 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
       );
     }
   });
+  Logger.info("User connected", connectionId);
   socket.on(Constants.DISCONNECT, () => {
     Logger.warn("User Disconnected", connectionId);
     activeConnections.delete(connectionId);
   });
-  chatService.register(io, socket);
+  chatService.registerSocket(io, socket);
   gameService.registerSocket(io, socket, connectionId);
   shellService.registerSocket(io, socket, connectionId);
 });
