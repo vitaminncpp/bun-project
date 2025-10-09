@@ -1,0 +1,4 @@
+[submodule "src/lib/chess"]
+	path = src/lib/chess
+	url = https://github.com/vitaminncpp/chess-js.git
+	branch = master

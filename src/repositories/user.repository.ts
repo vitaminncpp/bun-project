@@ -66,7 +66,6 @@ export async function insertUsers(users: Array<UserModel>) {
 export async function findByUsername(username: string, password?: boolean): Promise<UserModel> {
   try {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.username, username));
-    console.log(user);
     if (!user) {
       throw new Exception(ErrorCode.USER_NOT_EXIST, "User does not Exists", username);
     }

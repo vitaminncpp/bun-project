@@ -1,11 +1,11 @@
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import ENV_KEYS from "../constants/env.keys";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
 dotenv.config();
 
-function getEnvVariable(key: string): string {
+export function getEnvVariable(key: string): string {
   const value = process.env[key];
   if (!value) {
     throw new Exception(ErrorCode.ENV_ERROR, "Environment Varibale Error", {
@@ -69,7 +69,7 @@ export function getDatabaseProtocol(): string {
 }
 
 export function getDatabaseUrl(): string {
-  return `${ getDatabaseProtocol() }://${ getDatabaseUsername() }:${ getDatabasePassword() }@${ getDatabaseHost() }:${ getDatabasePort() }/${ getDatabaseName() }`;
+  return `${getDatabaseProtocol()}://${getDatabaseUsername()}:${getDatabasePassword()}@${getDatabaseHost()}:${getDatabasePort()}/${getDatabaseName()}`;
 }
 
 export function getDatabaseConfig(): {
@@ -88,4 +88,16 @@ export function getDatabaseConfig(): {
     username: getDatabaseUsername(),
     password: getDatabasePassword(),
   };
+}
+
+export function getSSLKeyPath() {
+  return getEnvVariable(ENV_KEYS.SSL_KEY);
+}
+
+export function getSSLCertPath() {
+  return getEnvVariable(ENV_KEYS.SSL_CERT);
+}
+
+export function getFileUploadDir() {
+  return getEnvVariable(ENV_KEYS.FILE_UPLOAD_DIR);
 }

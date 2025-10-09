@@ -29,10 +29,8 @@ export async function errorHandler(err: Error, c: Context) {
         break;
       case ErrorCode.USERNAME_ALREADY_PRESENT:
       case ErrorCode.REQUEST_ALREADY_PROCESSING:
-        status = 409;
-        break;
       case ErrorCode.INVALID_CONNECTION_ID:
-        status = 412;
+        status = 409;
         break;
       case ErrorCode.RECORD_INSERTION_FAILED:
       case ErrorCode.ROLE_INSERTION_FAILED:

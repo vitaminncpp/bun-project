@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev": "bun --watch server.ts",
-    "dev-debug": "bun server.ts",
+    "dev-debug": "bun --inspect-brk server.ts",
     "tsc": "tsc",
     "build": "bun build server.ts --outdir dist --minify --target bun",
     "build:node": "bun build server.ts --outdir dist --minify --target node",
@@ -35,7 +35,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "serve": "node dist/server.js"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"

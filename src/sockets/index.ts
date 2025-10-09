@@ -4,7 +4,7 @@ import Logger from "../utils/logger";
 import * as chatService from "../services/chat.service";
 import * as gameService from "../services/game.service";
 import * as shellService from "../services/shell.service";
-import { activeConnections } from "../sessions/socket.session";
+import { setIO, activeConnections } from "../sessions/socket.session";
 import { randomUUID } from "crypto";
 import { authenticate } from "../services/auth.service";
 import { Exception } from "../exceptions/app.exception";
@@ -24,9 +24,10 @@ const io = new Server({
   },
 });
 
+setIO(io);
+
 io.on(Constants.CONNECTION, (socket: Socket) => {
   const connectionId: string = randomUUID();
-  Logger.info("User connected", connectionId);
   activeConnections.set(connectionId, { socket, authorized: false });
   socket.on(Constants.CLIENT_HELLO, (hello: ClientHello) => {
     if (hello.authorization) {
@@ -75,11 +76,12 @@ io.on(Constants.CONNECTION, (socket: Socket) => {
       );
     }
   });
+  Logger.info("User connected", connectionId);
   socket.on(Constants.DISCONNECT, () => {
     Logger.warn("User Disconnected", connectionId);
     activeConnections.delete(connectionId);
   });
-  chatService.register(io, socket);
+  chatService.registerSocket(io, socket);
   gameService.registerSocket(io, socket, connectionId);
   shellService.registerSocket(io, socket, connectionId);
 });

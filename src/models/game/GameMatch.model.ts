@@ -1,12 +1,12 @@
-import { GameStatus, Player } from "../../lib/chess/games.enum";
+import { GameStatus, PLAYER } from "../../lib/chess/games.enum";
 import { Game as GameModel } from "../game/Game.model";
 
 export interface GameMatch {
   status: GameStatus;
   userId: string;
-  playerConnection: string;
-  opponentConnection?: string;
-  opponentId?: string;
+  connectionW?: string;
+  connectionB?: string;
+  connectionId: string;
   game?: GameModel;
-  turn?: Player;
+  turn?: PLAYER;
 }
