@@ -35,7 +35,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "serve": "node dist/server.js"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
