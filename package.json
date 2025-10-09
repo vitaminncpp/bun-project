@@ -27,7 +27,7 @@
     "tsc": "tsc",
     "build": "bun build server.ts --outdir dist --minify --target bun",
     "build:node": "bun build server.ts --outdir dist --minify --target node",
-    "bundle": "tsc && node bundle.mjs",
+    "bundle": "tsc && node bundle.js",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
