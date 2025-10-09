@@ -1,4 +1,5 @@
-import { build } from "esbuild";
+// eslint-disable-next-line no-undef
+const { build } = require("esbuild");
 // import fs from "fs";
 // import obfuscator from "javascript-obfuscator";
 
