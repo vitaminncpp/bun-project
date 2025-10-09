@@ -45,7 +45,7 @@ package-lock.json
 *.so
 *.o
 
-static
+# static
 
 *.cache
 cache
