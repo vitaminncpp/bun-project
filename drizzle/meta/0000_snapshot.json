@@ -46,7 +46,9 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_username_unique": {
-          "columns": ["username"],
+          "columns": [
+            "username"
+          ],
           "nullsNotDistinct": false,
           "name": "users_username_unique"
         }
@@ -137,8 +139,12 @@
           "tableFrom": "games",
           "tableTo": "users",
           "schemaTo": "public",
-          "columnsFrom": ["player_w"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "player_w"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -147,8 +153,12 @@
           "tableFrom": "games",
           "tableTo": "users",
           "schemaTo": "public",
-          "columnsFrom": ["player_b"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "player_b"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -257,8 +267,12 @@
           "tableFrom": "moves",
           "tableTo": "games",
           "schemaTo": "public",
-          "columnsFrom": ["game_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -341,8 +355,12 @@
           "tableFrom": "profiles",
           "tableTo": "users",
           "schemaTo": "public",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -350,11 +368,72 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "profiles_user_id_unique": {
-          "columns": ["user_id"],
+          "columns": [
+            "user_id"
+          ],
           "nullsNotDistinct": false,
           "name": "profiles_user_id_unique"
         }
       },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.projects": {
+      "name": "projects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "icon": {
+          "name": "icon",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "projects_user_id_users_id_fk": {
+          "name": "projects_user_id_users_id_fk",
+          "tableFrom": "projects",
+          "tableTo": "users",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "checkConstraints": {},
       "policies": {},
       "isRLSEnabled": false
@@ -395,7 +474,9 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "roles_rolename_unique": {
-          "columns": ["rolename"],
+          "columns": [
+            "rolename"
+          ],
           "nullsNotDistinct": false,
           "name": "roles_rolename_unique"
         }
@@ -442,8 +523,12 @@
           "tableFrom": "role_actions",
           "tableTo": "roles",
           "schemaTo": "public",
-          "columnsFrom": ["role_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -491,8 +576,12 @@
           "tableFrom": "user_roles",
           "tableTo": "users",
           "schemaTo": "public",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -501,57 +590,12 @@
           "tableFrom": "user_roles",
           "tableTo": "roles",
           "schemaTo": "public",
-          "columnsFrom": ["role_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {},
-      "isRLSEnabled": false
-    },
-    "public.workspaces": {
-      "name": "workspaces",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "workspaces_user_id_users_id_fk": {
-          "name": "workspaces_user_id_users_id_fk",
-          "tableFrom": "workspaces",
-          "tableTo": "users",
-          "schemaTo": "public",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -566,17 +610,38 @@
   "enums": {
     "public.action": {
       "name": "action",
-      "values": ["SUPER_USER", "INSERT_USER", "DELETE_USER", "UPDATE_USER"],
+      "values": [
+        "SUPER_USER",
+        "INSERT_USER",
+        "DELETE_USER",
+        "UPDATE_USER"
+      ],
       "schema": "public"
     },
     "public.file": {
       "name": "file",
-      "values": ["a", "b", "c", "d", "e", "f", "g", "h"],
+      "values": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
       "schema": "public"
     },
     "public.game_piece": {
       "name": "game_piece",
-      "values": ["PAWN", "KNIGHT", "BISHOP", "ROOK", "QUEEN", "KING"],
+      "values": [
+        "PAWN",
+        "KNIGHT",
+        "BISHOP",
+        "ROOK",
+        "QUEEN",
+        "KING"
+      ],
       "schema": "public"
     },
     "public.game_result": {
@@ -601,7 +666,14 @@
     },
     "public.game_status": {
       "name": "game_status",
-      "values": ["PENDING", "ACTIVE", "FINISHED", "ABORTED", "INVALID", "CANCELED"],
+      "values": [
+        "PENDING",
+        "ACTIVE",
+        "FINISHED",
+        "ABORTED",
+        "INVALID",
+        "CANCELED"
+      ],
       "schema": "public"
     },
     "public.move_type": {
@@ -628,7 +700,10 @@
     },
     "public.player": {
       "name": "player",
-      "values": ["WHITE", "BLACK"],
+      "values": [
+        "WHITE",
+        "BLACK"
+      ],
       "schema": "public"
     }
   },
