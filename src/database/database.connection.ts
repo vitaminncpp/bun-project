@@ -13,6 +13,7 @@ import { projects } from "../entities/Project.entity";
 
 const client = postgres(envService.getDatabaseUrl(), {
   max: 10,
+  ssl: true,
 });
 
 export const db = drizzle(client, {
