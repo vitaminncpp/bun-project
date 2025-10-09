@@ -15,7 +15,7 @@ export function startShell(connectionId: string) {
     );
   }
   const sock = activeConnections.get(connectionId);
-  const shell = spawn("pwsh.exe", [], { stdio: "pipe" });
+  const shell = spawn("bash", [], { stdio: "pipe" });
 
   // shell.stdout.setEncoding("utf8");
 
