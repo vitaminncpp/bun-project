@@ -26,7 +26,7 @@
     "dev": "bun --watch server.ts",
     "dev-debug": "bun --inspect-brk server.ts",
     "tsc": "tsc",
-    "build": "bun build server.ts --outdir dist --minify --target bun",
+    "build": "bun build server.ts --outdir dist --minify --target bun --source-map",
     "build:node": "bun build server.ts --outdir dist --minify --target node",
     "bundle": "tsc && node bundle.js",
     "test": "vitest",
