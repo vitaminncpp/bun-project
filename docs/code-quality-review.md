@@ -27,7 +27,7 @@ Overall quality rating: Good (7/10)
 
 - Clear layering and modularity
   - Controllers, services, repositories, routers, and middlewares are well separated.
-  - Constants centralize api endpoints and other values (src/constants/apiEndpoints.ts, etc.).
+  - Constants centralize api endpoints and other values (src/constants/api.config.ts, etc.).
   - Use of models for SuccessResponse and ErrorResponse standardizes API payloads.
 - TypeScript usage
   - Widespread typing across controllers, services, repositories, and models.

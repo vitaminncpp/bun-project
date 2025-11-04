@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import SuccessResponse from "../models/SuccessResponse.model";
-import * as userService from "../services/user.service";
+import * as userService from "./user.service";
 import { User as UserModel } from "../models/User.model";
 
 export async function getAllUsers(c: Context) {

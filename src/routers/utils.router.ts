@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import APIEndpoints from "../constants/apiEndpoints";
+import ApiConfig from "../config/api.config";
 import * as utilsController from "../controllers/utils.controller";
 import * as authMiddleware from "../middlewares/auth.middleware";
 import * as commonValidations from "../validations/common.validations";
@@ -7,7 +7,7 @@ import * as commonValidations from "../validations/common.validations";
 const router = new Hono();
 
 router.post(
-  APIEndpoints.FILE,
+  ApiConfig.FILE,
   authMiddleware.authenticate,
   commonValidations.validateUploadFile,
   utilsController.uploadFile,

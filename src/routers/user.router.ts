@@ -1,21 +1,21 @@
-import APIEndpoints from "../constants/apiEndpoints";
+import ApiConfig from "../config/api.config";
 import * as authMiddleware from "../middlewares/auth.middleware";
 import * as userValidation from "../validations/user.validation";
-import * as userController from "../controllers/user.controller";
+import * as userController from "../user/user.controller";
 import { Hono } from "hono";
 
 const router = new Hono();
 
-router.get(APIEndpoints.USERS, authMiddleware.authenticate, userController.getAllUsers);
+router.get(ApiConfig.USERS, authMiddleware.authenticate, userController.getAllUsers);
 router.get(
-  APIEndpoints.USERNAME,
+  ApiConfig.USERNAME,
   authMiddleware.authenticate,
   userValidation.validateGetUser,
   userController.getUser,
 );
-router.put(APIEndpoints.USER, authMiddleware.authenticate, userController.updateUser);
+router.put(ApiConfig.USER, authMiddleware.authenticate, userController.updateUser);
 router.post(
-  APIEndpoints.USERS,
+  ApiConfig.USERS,
   authMiddleware.authenticate,
   userValidation.validateAddUsers,
   userController.addUsers,

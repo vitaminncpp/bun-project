@@ -1,10 +1,10 @@
 import ErrorCode from "../enums/errorcodes.enum";
 import { Exception } from "../exceptions/app.exception";
 import AuthToken from "../models/AuthToken.model";
-import * as userService from "../services/user.service";
+import * as userService from "../user/user.service";
 import * as tokenService from "../services/token.service";
 import { User as UserModel } from "../models/User.model";
-import * as envService from "./env.service";
+import * as envService from "../services/env.service";
 
 export async function login(username: string, password: string): Promise<AuthToken> {
   const salt = envService.getPasswordSalt();

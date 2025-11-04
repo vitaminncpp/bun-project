@@ -1,4 +1,4 @@
-const APIEndpoints: { [key: string]: string } = {
+const ApiConfig: { [key: string]: string } = {
   ROOT: "/",
   API: "/api",
   SYS_INFO: "/sys-info",
@@ -29,4 +29,4 @@ const APIEndpoints: { [key: string]: string } = {
   TEST: "/test",
 };
 
-export default APIEndpoints;
+export default ApiConfig;

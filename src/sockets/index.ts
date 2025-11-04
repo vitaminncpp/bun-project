@@ -6,7 +6,7 @@ import * as gameService from "../services/game.service";
 import * as shellService from "../services/shell.service";
 import { setIO, activeConnections } from "../sessions/socket.session";
 import { randomUUID } from "crypto";
-import { authenticate } from "../services/auth.service";
+import { authenticate } from "../auth/auth.service";
 import { Exception } from "../exceptions/app.exception";
 import ErrorCode from "../enums/errorcodes.enum";
 import SuccessResponse from "../models/SuccessResponse.model";

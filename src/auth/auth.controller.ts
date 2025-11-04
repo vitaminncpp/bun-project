@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import SuccessResponse from "../models/SuccessResponse.model";
 import { User as UserModel } from "../models/User.model";
-import * as authService from "../services/auth.service";
+import * as authService from "./auth.service";
 import AuthToken from "../models/AuthToken.model";
 import { setCookie } from "hono/cookie";
 

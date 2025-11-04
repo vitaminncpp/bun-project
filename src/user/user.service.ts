@@ -1,7 +1,7 @@
 import { User as UserModel } from "../models/User.model";
 import * as userRepository from "../repositories/user.repository";
-import * as tokenService from "./token.service";
-import * as envService from "./env.service";
+import * as tokenService from "../services/token.service";
+import * as envService from "../services/env.service";
 
 export async function createUser(user: UserModel): Promise<UserModel> {
   user.password = await tokenService.hash(user.password!, envService.getPasswordSalt());
